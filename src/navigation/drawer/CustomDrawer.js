@@ -14,7 +14,6 @@ const Drawer = createDrawerNavigator();
 
 const CustomDrawer = () => {
   const { selectedTab } = useSelector((state) => state.tab);
-  console.log("selectedTab", selectedTab);
 
   const dispatch = useDispatch();
   const setTab = (tab) => {
