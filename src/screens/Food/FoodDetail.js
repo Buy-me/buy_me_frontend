@@ -8,13 +8,14 @@ import {
     icons,
     SIZES,
 } from "../../constants"
-import { CartQuantityButton, Header, IconButton, IconLabel } from '../../component'
+import { CartQuantityButton, Header, IconButton, IconLabel, TextButton } from '../../component'
 import { useState } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
 
 const FoodDetail = () => {
 
     const [foodItem, setFoodItem] = useState(dummyData.vegBiryani)
+    const [selectedSize, setSelectedSize] = useState(0)
 
     const renderHeader = () => {
         return (
@@ -133,6 +134,45 @@ const FoodDetail = () => {
                             iconStyle={{ tintColor: COLORS.black }}
                             label="Free Shipping"
                         />
+                    </View>
+
+                    {/* sizes */}
+                    <View style={{
+                        flexDirection: "row",
+                        marginTop: SIZES.padding,
+                        alignItems: "center"
+                    }}>
+                        <Text style={{ ...FONTS.h3 }}>
+                            Sizes: 
+                        </Text>
+
+                        <View style={{
+                            flexDirection: "row",
+                            flexWrap: "wrap",
+                            marginLeft: SIZES.padding
+                        }}>
+                            {dummyData.sizes.map((item, index) => (
+                                <TextButton
+                                    key={`size-${index}`}
+                                    buttonStyle={{
+                                        width: 55,
+                                        height: 55,
+                                        margin: SIZES.base,
+                                        borderWidth: 1,
+                                        borderRadius: SIZES.radius,
+                                        borderColor: selectedSize !== item.id ? COLORS.gray2 : COLORS.primary,
+                                        backgroundColor: selectedSize !== item.id ? null : COLORS.primary
+                                    }}
+                                    label={item.label}
+                                    labelStyle={{
+                                        color: selectedSize !== item.id ? COLORS.gray2 : COLORS.white,
+                                        ...FONTS.body2,
+                                        
+                                    }}
+                                    onPress={() => setSelectedSize(item.id)}
+                                />
+                            ))}
+                        </View>
                     </View>
                 </View>
             </View>

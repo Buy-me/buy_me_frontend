@@ -7,6 +7,25 @@ const myProfile = {
   address: "No. 88, Jln Padungan, Kuching",
 };
 
+const sizes = [
+  {
+    id: 0,
+    label: `12"`,
+  },
+  {
+    id: 1,
+    label: `14"`,
+  },
+  {
+    id: 2,
+    label: `16"`,
+  },
+  {
+    id: 3,
+    label: `18"`,
+  }
+]
+
 const categories = [
   {
     id: 1,
@@ -106,5 +125,6 @@ export default {
   myProfile,
   categories,
   menu,
-  vegBiryani
+  vegBiryani,
+  sizes
 };
