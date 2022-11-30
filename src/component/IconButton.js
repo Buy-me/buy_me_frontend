@@ -18,18 +18,15 @@ const IconButton = ({
         >
             <Image
                 source={icon}
-                style={{ ...styles.icon, ...iconStyle }}
+                style={{
+                    width: 30,
+                    height: 30,
+                    tintColor: COLORS.white,
+                    ...iconStyle
+                }}
             />
         </TouchableOpacity>
     )
 }
 
 export default IconButton
-
-const styles = StyleSheet.create({
-    icon: {
-        width: 30,
-        height: 30,
-        tintColor: COLORS.white,
-    }
-})

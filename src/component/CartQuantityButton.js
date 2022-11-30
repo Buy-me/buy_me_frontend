@@ -59,5 +59,3 @@ const CartQuantityButton = ({ containerStyle, iconStyle, quantity = 0, onPress }
 }
 
 export default CartQuantityButton
-
-const styles = StyleSheet.create({})

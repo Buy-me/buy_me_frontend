@@ -106,4 +106,5 @@ export default {
   myProfile,
   categories,
   menu,
+  vegBiryani
 };

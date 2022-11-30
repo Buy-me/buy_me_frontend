@@ -21,6 +21,8 @@ const star = require("../assets/icons/star.png")
 const wallet = require("../assets/icons/wallet.png")
 const help = require("../assets/icons/help.png")
 const back = require("../assets/icons/back.png")
+const clock = require("../assets/icons/clock.png")
+const dollar = require("../assets/icons/dollar.png")
 
 export default {
     coupon,
@@ -45,5 +47,7 @@ export default {
     star,
     wallet,
     help,
-    back
+    back,
+    clock,
+    dollar
 }
