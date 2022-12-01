@@ -6,9 +6,10 @@ import {
     dummyData,
     FONTS,
     icons,
+    images,
     SIZES,
 } from "../../constants"
-import { CartQuantityButton, Header, IconButton, IconLabel, TextButton } from '../../component'
+import { CartQuantityButton, Header, IconButton, IconLabel, LineDivider, Rating, TextButton } from '../../component'
 import { useState } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
 
@@ -143,7 +144,7 @@ const FoodDetail = () => {
                         alignItems: "center"
                     }}>
                         <Text style={{ ...FONTS.h3 }}>
-                            Sizes: 
+                            Sizes:
                         </Text>
 
                         <View style={{
@@ -167,7 +168,7 @@ const FoodDetail = () => {
                                     labelStyle={{
                                         color: selectedSize !== item.id ? COLORS.gray2 : COLORS.white,
                                         ...FONTS.body2,
-                                        
+
                                     }}
                                     onPress={() => setSelectedSize(item.id)}
                                 />
@@ -175,6 +176,36 @@ const FoodDetail = () => {
                         </View>
                     </View>
                 </View>
+            </View>
+        )
+    }
+
+    const renderRestaurant = () => {
+        return (
+            <View style={{
+                flexDirection: "row",
+                marginVertical: SIZES.padding,
+                paddingHorizontal: SIZES.padding,
+                alignItems: "center"
+            }}>
+                <Image
+                    source={images.profile}
+                    style={{
+                        width: 50,
+                        height: 50,
+                        borderRadius: SIZES.radius
+                    }}
+                />
+
+                <View style={{
+                    flex: 1,
+                    marginLeft: SIZES.radius,
+                    justifyContent: "center"
+                }}>
+                    <Text style={{ ...FONTS.h3 }}>This is a restaurant</Text>
+                    <Text style={{ color: COLORS.gray, ...FONTS.body4 }}>1.2 KM away from you</Text>
+                </View>
+                <Rating rating={4} iconStyle={{ marginLeft: 3 }} />
             </View>
         )
     }
@@ -192,11 +223,15 @@ const FoodDetail = () => {
             >
                 {/* detail */}
                 {renderDetails()}
-                {/* restaurant */}
 
+                <LineDivider />
+
+                {/* restaurant */}
+                {renderRestaurant()}
             </ScrollView>
 
             {/* Footer */}
+            <LineDivider />
         </View>
     )
 }

@@ -244,147 +244,147 @@ const MainLayout = ({ navigation }) => {
         style,
       ]}
     >
-      <FoodDetail />
+      {/* <FoodDetail /> */}
+
+      {/* Header */}
+      <Header
+        containerStyle={{
+          height: 50,
+          paddingHorizontal: SIZES.padding,
+          alignItems: "center",
+          marginTop: 40,
+        }}
+        title={selectedTab.toUpperCase()}
+        leftComponent={
+          <TouchableOpacity
+            style={{
+              height: 40,
+              width: 40,
+              alignItems: "center",
+              justifyContent: "center",
+              borderWidth: 1,
+              borderColor: COLORS.gray2,
+              borderRadius: SIZES.radius,
+            }}
+            onPress={() => navigation.openDrawer()}
+          >
+            <Image source={icons.menu} />
+          </TouchableOpacity>
+        }
+        rightComponent={
+          <TouchableOpacity
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: SIZES.radius,
+            }}
+            onPress={() => navigation.openDrawer()}
+          >
+            <Image
+              source={dummyData.myProfile?.profile_image}
+              style={{
+                height: 40,
+                width: 40,
+                borderRadius: SIZES.radius,
+              }}
+            />
+          </TouchableOpacity>
+        }
+      />
+      {/* Content */}
+      <View
+        style={{
+          flex: 1,
+        }}
+      >
+        <Text>Content</Text>
+      </View>
+      {/* Footer */}
+      <View
+        style={{
+          height: 100,
+          justifyContent: "flex-end",
+        }}
+      >
+        <LinearGradient
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 4 }}
+          colors={[COLORS.transparent, COLORS.gray]}
+          style={{
+            position: "absolute",
+            top: -20,
+            left: 0,
+            right: 0,
+            height: 100,
+            borderTopLeftRadius: 15,
+            borderTopRightRadius: 15,
+          }}
+        />
+        {/* Tabs */}
+        <View
+          style={{
+            width: "100%",
+            flex: 1,
+            flexDirection: "row",
+            paddingHorizontal: SIZES.radius,
+            paddingBottom: 10,
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20,
+            backgroundColor: COLORS.white,
+          }}
+        >
+          <TabButton
+            label={constants.screens.home}
+            icon={icons.home}
+            isFocused={selectedTab === constants.screens.home}
+            outerContainerStyle={homeFlexStyle}
+            innerContainerStyle={homeColorStyle}
+            onPress={() => dispatch(setSelectedTab(constants.screens.home))}
+          />
+
+          <TabButton
+            label={constants.screens.search}
+            icon={icons.search}
+            isFocused={selectedTab === constants.screens.search}
+            outerContainerStyle={searchFlexStyle}
+            innerContainerStyle={searchColorStyle}
+            onPress={() => dispatch(setSelectedTab(constants.screens.search))}
+          />
+
+          <TabButton
+            label={constants.screens.cart}
+            icon={icons.cart}
+            isFocused={selectedTab === constants.screens.cart}
+            outerContainerStyle={cartFlexStyle}
+            innerContainerStyle={cartColorStyle}
+            onPress={() => dispatch(setSelectedTab(constants.screens.cart))}
+          />
+
+          <TabButton
+            label={constants.screens.favourite}
+            icon={icons.favourite}
+            isFocused={selectedTab === constants.screens.favourite}
+            outerContainerStyle={favouriteFlexStyle}
+            innerContainerStyle={favouriteColorStyle}
+            onPress={() =>
+              dispatch(setSelectedTab(constants.screens.favourite))
+            }
+          />
+
+          <TabButton
+            label={constants.screens.notification}
+            icon={icons.notification}
+            isFocused={selectedTab === constants.screens.notification}
+            outerContainerStyle={notificationFlexStyle}
+            innerContainerStyle={notificationColorStyle}
+            onPress={() =>
+              dispatch(setSelectedTab(constants.screens.notification))
+            }
+          />
+        </View>
+      </View>
     </Animated.View>
   );
 };
-
-// {/* Header */}
-// <Header
-// containerStyle={{
-//   height: 50,
-//   paddingHorizontal: SIZES.padding,
-//   alignItems: "center",
-//   marginTop: 40,
-// }}
-// title={selectedTab.toUpperCase()}
-// leftComponent={
-//   <TouchableOpacity
-//     style={{
-//       height: 40,
-//       width: 40,
-//       alignItems: "center",
-//       justifyContent: "center",
-//       borderWidth: 1,
-//       borderColor: COLORS.gray2,
-//       borderRadius: SIZES.radius,
-//     }}
-//     onPress={() => navigation.openDrawer()}
-//   >
-//     <Image source={icons.menu} />
-//   </TouchableOpacity>
-// }
-// rightComponent={
-//   <TouchableOpacity
-//     style={{
-//       alignItems: "center",
-//       justifyContent: "center",
-//       borderRadius: SIZES.radius,
-//     }}
-//     onPress={() => navigation.openDrawer()}
-//   >
-//     <Image
-//       source={dummyData.myProfile?.profile_image}
-//       style={{
-//         height: 40,
-//         width: 40,
-//         borderRadius: SIZES.radius,
-//       }}
-//     />
-//   </TouchableOpacity>
-// }
-// />
-// {/* Content */}
-// <View
-// style={{
-//   flex: 1,
-// }}
-// >
-// <Text>Content</Text>
-// </View>
-// {/* Footer */}
-// <View
-// style={{
-//   height: 100,
-//   justifyContent: "flex-end",
-// }}
-// >
-// <LinearGradient
-//   start={{ x: 0, y: 0 }}
-//   end={{ x: 0, y: 4 }}
-//   colors={[COLORS.transparent, COLORS.gray]}
-//   style={{
-//     position: "absolute",
-//     top: -20,
-//     left: 0,
-//     right: 0,
-//     height: 100,
-//     borderTopLeftRadius: 15,
-//     borderTopRightRadius: 15,
-//   }}
-// />
-// {/* Tabs */}
-// <View
-//   style={{
-//     width: "100%",
-//     flex: 1,
-//     flexDirection: "row",
-//     paddingHorizontal: SIZES.radius,
-//     paddingBottom: 10,
-//     borderTopLeftRadius: 20,
-//     borderTopRightRadius: 20,
-//     backgroundColor: COLORS.white,
-//   }}
-// >
-//   <TabButton
-//     label={constants.screens.home}
-//     icon={icons.home}
-//     isFocused={selectedTab === constants.screens.home}
-//     outerContainerStyle={homeFlexStyle}
-//     innerContainerStyle={homeColorStyle}
-//     onPress={() => dispatch(setSelectedTab(constants.screens.home))}
-//   />
-
-//   <TabButton
-//     label={constants.screens.search}
-//     icon={icons.search}
-//     isFocused={selectedTab === constants.screens.search}
-//     outerContainerStyle={searchFlexStyle}
-//     innerContainerStyle={searchColorStyle}
-//     onPress={() => dispatch(setSelectedTab(constants.screens.search))}
-//   />
-
-//   <TabButton
-//     label={constants.screens.cart}
-//     icon={icons.cart}
-//     isFocused={selectedTab === constants.screens.cart}
-//     outerContainerStyle={cartFlexStyle}
-//     innerContainerStyle={cartColorStyle}
-//     onPress={() => dispatch(setSelectedTab(constants.screens.cart))}
-//   />
-
-//   <TabButton
-//     label={constants.screens.favourite}
-//     icon={icons.favourite}
-//     isFocused={selectedTab === constants.screens.favourite}
-//     outerContainerStyle={favouriteFlexStyle}
-//     innerContainerStyle={favouriteColorStyle}
-//     onPress={() =>
-//       dispatch(setSelectedTab(constants.screens.favourite))
-//     }
-//   />
-
-//   <TabButton
-//     label={constants.screens.notification}
-//     icon={icons.notification}
-//     isFocused={selectedTab === constants.screens.notification}
-//     outerContainerStyle={notificationFlexStyle}
-//     innerContainerStyle={notificationColorStyle}
-//     onPress={() =>
-//       dispatch(setSelectedTab(constants.screens.notification))
-//     }
-//   />
-// </View>
-// </View>
 
 export default MainLayout;
