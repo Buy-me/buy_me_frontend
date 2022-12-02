@@ -1,3 +1,4 @@
 import Header from "./Header";
+import TextButton from "./TextButton";
 
-export { Header };
+export { Header, TextButton };
