@@ -1,7 +1,7 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import { COLORS, dummyData, FONTS, icons, SIZES } from '../../constants'
-import { CartQuantityButton, Header, IconButton, StepperInput } from '../../component'
+import { CartQuantityButton, FooterTotal, Header, IconButton, StepperInput } from '../../component'
 import { SwipeListView } from 'react-native-swipe-list-view'
 
 const MyCart = ({ navigation }) => {
@@ -115,6 +115,12 @@ const MyCart = ({ navigation }) => {
             {renderCartList()}
 
             {/* Footer */}
+            <FooterTotal
+                subTotal={40.03}
+                shippingFee={0.00}
+                total={40.03}
+                onPress={() => console.log("yahoo")}
+            />
         </View>
     )
 }
