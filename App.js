@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import { store } from "./src/app/store";
 import CustomDrawer from "./src/navigation/drawer/CustomDrawer";
 import Success from "./src/screens/Cart/Success";
+import DeliveryStatus from "./src/screens/Delivery/DeliveryStatus";
 
 const Stack = createNativeStackNavigator();
 
@@ -29,14 +30,19 @@ const App = () => {
 					screenOptions={{
 						headerShown: false,
 					}}
-					initialRouteName={"Home"}>
-					<Stack.Screen name='Home' component={CustomDrawer} />
+					initialRouteName={"Home"}
+				>
+					<Stack.Screen name="Home" component={CustomDrawer} />
 					<Stack.Screen
-						name='Success'
+						name="Success"
 						component={Success}
 						options={{ gestureEnabled: false }}
 					/>
-					<Stack.Screen name='' />
+					<Stack.Screen
+						name="Delivery Status"
+						component={DeliveryStatus}
+						options={{ gestureEnabled: false }}
+					/>
 				</Stack.Navigator>
 			</NavigationContainer>
 		</Provider>
