@@ -5,6 +5,7 @@ import IconLabel from "./IconLabel";
 import TextButton from "./TextButton";
 import LineDivider from "./LineDivider";
 import Rating from "./Rating";
+import StepperInput from "./StepperInput";
 
 export {
     Header,
@@ -13,5 +14,6 @@ export {
     IconLabel,
     TextButton,
     LineDivider,
-    Rating
+    Rating, 
+    StepperInput
 };

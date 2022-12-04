@@ -9,7 +9,7 @@ import {
     images,
     SIZES,
 } from "../../constants"
-import { CartQuantityButton, Header, IconButton, IconLabel, LineDivider, Rating, TextButton } from '../../component'
+import { CartQuantityButton, Header, IconButton, IconLabel, LineDivider, Rating, StepperInput, TextButton } from '../../component'
 import { useState } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
 
@@ -17,6 +17,7 @@ const FoodDetail = () => {
 
     const [foodItem, setFoodItem] = useState(dummyData.vegBiryani)
     const [selectedSize, setSelectedSize] = useState(0)
+    const [foodQuantity, setFoodQuantity] = useState(1)
 
     const renderHeader = () => {
         return (
@@ -180,6 +181,42 @@ const FoodDetail = () => {
         )
     }
 
+    const renderFooter = () => {
+        return (
+            <View style={{
+                flexDirection: "row",
+                height: 100,
+                alignItems: "center",
+                paddingHorizontal: SIZES.padding,
+                paddingBottom: SIZES.radius,
+            }}>
+                <StepperInput
+                    value={foodQuantity}
+                    onAdd={() => setFoodQuantity(foodQuantity + 1)}
+                    onMinus={() => setFoodQuantity((prev) => {
+                        if(prev > 1) return prev - 1
+                    })}
+                />
+
+                <TextButton
+                    buttonStyle={{
+                        flex: 1,
+                        flexDirection: "row",
+                        height: 60,
+                        marginLeft: SIZES.radius,
+                        paddingHorizontal: SIZES.radius,
+                        borderRadius: SIZES.radius,
+                        backgroundColor: COLORS.primary
+                    }}   
+                    label={"Buy Now"}
+                    label2={"$15.99"}
+                    onPress={() => console.log("alo")}
+                />
+                
+            </View>
+        )
+    }
+
     const renderRestaurant = () => {
         return (
             <View style={{
@@ -232,6 +269,8 @@ const FoodDetail = () => {
 
             {/* Footer */}
             <LineDivider />
+
+            {renderFooter()}
         </View>
     )
 }

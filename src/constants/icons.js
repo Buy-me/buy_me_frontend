@@ -23,6 +23,9 @@ const help = require("../assets/icons/help.png")
 const back = require("../assets/icons/back.png")
 const clock = require("../assets/icons/clock.png")
 const dollar = require("../assets/icons/dollar.png")
+const minus = require("../assets/icons/minus.png")
+const plus = require("../assets/icons/plus.png")
+
 
 export default {
     coupon,
@@ -49,5 +52,7 @@ export default {
     help,
     back,
     clock,
-    dollar
+    dollar,
+    minus,
+    plus,
 }
