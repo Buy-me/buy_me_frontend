@@ -6,6 +6,7 @@ import TextButton from "./TextButton";
 import LineDivider from "./LineDivider";
 import Rating from "./Rating";
 import StepperInput from "./StepperInput";
+import TextIconButton from "./TextIconButton";
 
 export {
     Header,
@@ -15,5 +16,6 @@ export {
     TextButton,
     LineDivider,
     Rating, 
-    StepperInput
+    StepperInput,
+    TextIconButton,
 };

@@ -25,7 +25,8 @@ const clock = require("../assets/icons/clock.png")
 const dollar = require("../assets/icons/dollar.png")
 const minus = require("../assets/icons/minus.png")
 const plus = require("../assets/icons/plus.png")
-
+const check_circle = require("../assets/icons/check_circle.svg");
+const map = require("../assets/icons/map.svg");
 
 export default {
     coupon,
@@ -55,4 +56,6 @@ export default {
     dollar,
     minus,
     plus,
+    check_circle,
+    map,
 }

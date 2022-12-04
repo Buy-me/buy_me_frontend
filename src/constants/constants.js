@@ -104,10 +104,34 @@ const tags = [
   },
 ];
 
+const track_order_status = [
+  {
+    title: "Order Confirmed",
+    sub_title: "Your order has been received",
+  },
+  {
+    title: "Order Prepared",
+    sub_title: "Your order has been prepared",
+  },
+  {
+    title: "Delivery in Progress",
+    sub_title: "Hang on! Your food is on the way",
+  },
+  {
+    title: "Delivered",
+    sub_title: "Enjoy your meal!",
+  },
+  {
+    title: "Rate Us",
+    sub_title: "Help us improve our service",
+  },
+];
+
 export default {
   screens,
   bottom_tabs,
   delivery_time,
   ratings,
   tags,
+  track_order_status,
 };
