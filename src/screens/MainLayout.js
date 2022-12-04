@@ -357,7 +357,10 @@ const MainLayout = ({ navigation }) => {
             isFocused={selectedTab === constants.screens.cart}
             outerContainerStyle={cartFlexStyle}
             innerContainerStyle={cartColorStyle}
-            onPress={() => dispatch(setSelectedTab(constants.screens.cart))}
+            onPress={() => {
+              dispatch(setSelectedTab(constants.screens.cart))
+              navigation.navigate("FoodDetail")
+            }}
           />
 
           <TabButton

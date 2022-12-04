@@ -88,6 +88,21 @@ const wrapSandwich = {
   image: require("../assets/dummyData/wrap_sandwich.png"),
 };
 
+const myCart = [
+  {
+    qty: 1,
+    ...wrapSandwich,
+  },
+  {
+    qty: 2,
+    ...vegBiryani
+  },
+  {
+    qty: 3,
+    ...hotTacos
+  }
+]
+
 const menu = [
   {
     id: 1,
@@ -126,5 +141,6 @@ export default {
   categories,
   menu,
   vegBiryani,
-  sizes
+  sizes,
+  myCart
 };
