@@ -26,6 +26,7 @@ import {
   SIZES,
 } from "../constants";
 import { setSelectedTab } from "../features/tab/tabSlice";
+import FoodDetail from "./Food/FoodDetail";
 
 const TabButton = ({
   label,
@@ -243,6 +244,8 @@ const MainLayout = ({ navigation }) => {
         style,
       ]}
     >
+      {/* <FoodDetail /> */}
+
       {/* Header */}
       <Header
         containerStyle={{
