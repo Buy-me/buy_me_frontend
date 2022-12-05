@@ -1,15 +1,10 @@
-import { Image } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { Image, TouchableOpacity } from "react-native";
+import React from "react";
 import { COLORS } from "../constants";
 
 const IconButton = ({ containerStyle, icon, iconStyle, onPress }) => {
 	return (
-		<TouchableOpacity
-			style={{
-				...containerStyle,
-			}}
-			onPress={onPress}
-		>
+		<TouchableOpacity style={{ ...containerStyle }} onPress={onPress}>
 			<Image
 				source={icon}
 				style={{

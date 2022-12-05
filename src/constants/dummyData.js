@@ -7,6 +7,25 @@ const myProfile = {
   address: "No. 88, Jln Padungan, Kuching",
 };
 
+const sizes = [
+  {
+    id: 0,
+    label: `12"`,
+  },
+  {
+    id: 1,
+    label: `14"`,
+  },
+  {
+    id: 2,
+    label: `16"`,
+  },
+  {
+    id: 3,
+    label: `18"`,
+  }
+]
+
 const categories = [
   {
     id: 1,
@@ -50,7 +69,7 @@ const hotTacos = {
 const vegBiryani = {
   id: 3,
   name: "Veg Biryani",
-  description: "Indian Vegetable Biryani",
+  description: "Indian Vegetable Biryani Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum",
   categories: [1, 2, 3],
   price: 10.99,
   calories: 78,
@@ -68,6 +87,21 @@ const wrapSandwich = {
   isFavourite: true,
   image: require("../assets/dummyData/wrap_sandwich.png"),
 };
+
+const myCart = [
+  {
+    qty: 1,
+    ...wrapSandwich,
+  },
+  {
+    qty: 2,
+    ...vegBiryani
+  },
+  {
+    qty: 3,
+    ...hotTacos
+  }
+]
 
 const menu = [
   {
@@ -102,8 +136,27 @@ const menu = [
   },
 ];
 
+const myCards = [
+  {
+    id: 0,
+    name: "Google Pay",
+    icon: icons.google,
+    card_no: "0123456789"
+  },
+  {
+    id: 1,
+    name: "Visa",
+    icon: icons.visa,
+    card_no: "0123456789"
+  }
+]
+
 export default {
   myProfile,
   categories,
   menu,
+  vegBiryani,
+  sizes,
+  myCart,
+  myCards
 };

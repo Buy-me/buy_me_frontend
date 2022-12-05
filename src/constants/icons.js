@@ -20,6 +20,11 @@ const setting = require("../assets/icons/setting.png");
 const star = require("../assets/icons/star.png");
 const wallet = require("../assets/icons/wallet.png");
 const help = require("../assets/icons/help.png");
+const back = require("../assets/icons/back.png");
+const clock = require("../assets/icons/clock.png");
+const dollar = require("../assets/icons/dollar.png");
+const minus = require("../assets/icons/minus.png");
+const plus = require("../assets/icons/plus.png");
 const check_circle = require("../assets/icons/check_circle.svg");
 const map = require("../assets/icons/map.svg");
 const back = require("../assets/icons/back.svg");
@@ -27,6 +32,11 @@ const correct = require("../assets/icons/correct.svg");
 const cancel = require("../assets/icons/cancel.svg");
 const check_on = require("../assets/icons/check_on.svg");
 const check_off = require("../assets/icons/check_off.svg");
+const delete_icon = require("../assets/icons/delete-icon.png");
+const google = require("../assets/icons/google.png");
+const visa = require("../assets/icons/visa.png");
+const apple = require("../assets/icons/apple.png");
+const paypal = require("../assets/icons/paypal.png");
 
 export default {
 	coupon,
@@ -58,4 +68,13 @@ export default {
 	cancel,
 	check_on,
 	check_off,
+	clock,
+	dollar,
+	minus,
+	plus,
+	delete_icon,
+	google,
+	visa,
+	apple,
+	paypal,
 };

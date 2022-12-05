@@ -8,6 +8,9 @@ import { store } from "./src/app/store";
 import CustomDrawer from "./src/navigation/drawer/CustomDrawer";
 import Success from "./src/screens/Cart/Success";
 import DeliveryStatus from "./src/screens/Delivery/DeliveryStatus";
+import FoodDetail from "./src/screens/Food/FoodDetail";
+import MyCart from "./src/screens/Cart/MyCart";
+import MyCard from "./src/screens/Card/MyCard";
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +36,19 @@ const App = () => {
 					initialRouteName={"Home"}
 				>
 					<Stack.Screen name="Home" component={CustomDrawer} />
+					<Stack.Screen
+						name="FoodDetail"
+						component={FoodDetail}
+
+					/>
+					<Stack.Screen
+						name="MyCart"
+						component={MyCart}
+					/>
+					<Stack.Screen
+						name="MyCard"
+						component={MyCard}
+					/>
 					<Stack.Screen
 						name="Success"
 						component={Success}
