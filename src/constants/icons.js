@@ -28,6 +28,10 @@ const plus = require("../assets/icons/plus.png")
 const check_circle = require("../assets/icons/check_circle.svg");
 const map = require("../assets/icons/map.svg");
 const delete_icon = require("../assets/icons/delete-icon.png")
+const google = require("../assets/icons/google.png")
+const visa = require("../assets/icons/visa.png")
+const apple = require("../assets/icons/apple.png")
+const paypal = require("../assets/icons/paypal.png")
 
 export default {
     coupon,
@@ -59,5 +63,9 @@ export default {
     plus,
     check_circle,
     map,
-    delete_icon
+    delete_icon,
+    google,
+    visa,
+    apple,
+    paypal
 }

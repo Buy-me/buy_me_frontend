@@ -31,7 +31,7 @@ const FooterTotal = ({ subTotal, shippingFee, total, onPress }) => {
                 {/* Total */}
                 <View style={{ flexDirection: "row", marginTop: SIZES.padding }}>
                     <Text style={{ flex: 1, ...FONTS.h2 }}>Total</Text>
-                    <Text style={{ ...FONTS.h2 }}>${shippingFee.toFixed(2)}</Text>
+                    <Text style={{ ...FONTS.h2 }}>${total.toFixed(2)}</Text>
                 </View>
 
                 {/* Button */}

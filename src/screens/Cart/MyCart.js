@@ -29,11 +29,7 @@ const MyCart = ({ navigation }) => {
         return (
             <Header
                 title={"MY CART"}
-                containerStyle={{
-                    height: 50,
-                    marginHorizontal: SIZES.padding,
-                    marginTop: 40
-                }}
+                containerStyle={headerStyles.container}
                 leftComponent={
                     <IconButton
                         icon={icons.back}
@@ -119,7 +115,7 @@ const MyCart = ({ navigation }) => {
                 subTotal={40.03}
                 shippingFee={0.00}
                 total={40.03}
-                onPress={() => console.log("yahoo")}
+                onPress={() => navigation.navigate("MyCard")}
             />
         </View>
     )

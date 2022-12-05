@@ -6,11 +6,13 @@ const TextButton = ({
     buttonStyle,
     label, labelStyle,
     label2 = "", label2Style,
-    onPress
+    onPress,
+    disabled=false
 }) => {
 
     return (
         <TouchableOpacity
+            disabled={disabled}
             style={{
                 alignItems: "center",
                 justifyContent: "center",

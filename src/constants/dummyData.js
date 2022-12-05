@@ -136,11 +136,27 @@ const menu = [
   },
 ];
 
+const myCards = [
+  {
+    id: 0,
+    name: "Google Pay",
+    icon: icons.google,
+    card_no: "0123456789"
+  },
+  {
+    id: 1,
+    name: "Visa",
+    icon: icons.visa,
+    card_no: "0123456789"
+  }
+]
+
 export default {
   myProfile,
   categories,
   menu,
   vegBiryani,
   sizes,
-  myCart
+  myCart,
+  myCards
 };

@@ -10,6 +10,7 @@ import Success from "./src/screens/Cart/Success";
 import DeliveryStatus from "./src/screens/Delivery/DeliveryStatus";
 import FoodDetail from "./src/screens/Food/FoodDetail";
 import MyCart from "./src/screens/Cart/MyCart";
+import MyCard from "./src/screens/Card/MyCard";
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +44,10 @@ const App = () => {
 					<Stack.Screen
 						name="MyCart"
 						component={MyCart}
+					/>
+					<Stack.Screen
+						name="MyCard"
+						component={MyCard}
 					/>
 					<Stack.Screen
 						name="Success"
