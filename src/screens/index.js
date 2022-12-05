@@ -15,11 +15,14 @@ import Favourite from "./Favourite/Favourite";
 // Notification
 import Notification from "./Notification/Notification"
 
+import MyCard from "./Card/MyCard";
+
 export {
     MainLayout,
     Home,
     Search,
     CartTab,
     Favourite,
-    Notification
+    Notification,
+    MyCard
 }

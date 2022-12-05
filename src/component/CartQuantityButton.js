@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
 import {
     COLORS,
@@ -6,8 +6,6 @@ import {
     icons,
     SIZES
 } from '../constants'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-
 
 const CartQuantityButton = ({ containerStyle, iconStyle, quantity = 0, onPress }) => {
 

@@ -13,7 +13,7 @@ import { CartQuantityButton, Header, IconButton, IconLabel, LineDivider, Rating,
 import { useState } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
 
-const FoodDetail = () => {
+const FoodDetail = ({ navigation }) => {
 
     const [foodItem, setFoodItem] = useState(dummyData.vegBiryani)
     const [selectedSize, setSelectedSize] = useState(0)
@@ -29,7 +29,7 @@ const FoodDetail = () => {
                         icon={icons.back}
                         containerStyle={headerStyles.leftContainer}
                         iconStyle={headerStyles.leftIcon}
-                        onPress={() => console.log("go back")}
+                        onPress={() => navigation.goBack()}
                     />
                 }
                 rightComponent={
@@ -210,7 +210,7 @@ const FoodDetail = () => {
                     }}   
                     label={"Buy Now"}
                     label2={"$15.99"}
-                    onPress={() => console.log("alo")}
+                    onPress={() => navigation.navigate("MyCart")}
                 />
                 
             </View>

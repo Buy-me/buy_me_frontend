@@ -88,6 +88,21 @@ const wrapSandwich = {
   image: require("../assets/dummyData/wrap_sandwich.png"),
 };
 
+const myCart = [
+  {
+    qty: 1,
+    ...wrapSandwich,
+  },
+  {
+    qty: 2,
+    ...vegBiryani
+  },
+  {
+    qty: 3,
+    ...hotTacos
+  }
+]
+
 const menu = [
   {
     id: 1,
@@ -121,10 +136,27 @@ const menu = [
   },
 ];
 
+const myCards = [
+  {
+    id: 0,
+    name: "Google Pay",
+    icon: icons.google,
+    card_no: "0123456789"
+  },
+  {
+    id: 1,
+    name: "Visa",
+    icon: icons.visa,
+    card_no: "0123456789"
+  }
+]
+
 export default {
   myProfile,
   categories,
   menu,
   vegBiryani,
-  sizes
+  sizes,
+  myCart,
+  myCards
 };
