@@ -13,7 +13,8 @@ import FormInput from "./FormInput";
 import FormInputCheck from "./FormInputCheck";
 import RadioButton from "./RadioButton";
 import FooterTotal from "./FooterTotal";
-import CardItem from "../screens/Card/CardItem";
+import CardItem from "./CardItem";
+import InfoView from "./InfoView";
 
 export {
 	Header,
@@ -30,4 +31,5 @@ export {
 	StepperInput,
 	FooterTotal,
 	CardItem,
+	InfoView,
 };

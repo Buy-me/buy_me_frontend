@@ -37,6 +37,7 @@ const google = require("../assets/icons/google.png");
 const visa = require("../assets/icons/visa.png");
 const apple = require("../assets/icons/apple.png");
 const paypal = require("../assets/icons/paypal.png");
+const right = require("../assets/icons/right.svg");
 
 export default {
 	coupon,
@@ -77,4 +78,5 @@ export default {
 	visa,
 	apple,
 	paypal,
+	right,
 };
