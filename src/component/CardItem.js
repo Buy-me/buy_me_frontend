@@ -1,38 +1,35 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { COLORS, FONTS, SIZES } from '../../constants'
+import { COLORS, FONTS, SIZES } from "../constants";
 
 const CardItem = ({ item, isSelected, onPress }) => {
+	return (
+		<TouchableOpacity
+			style={{
+				...styles.container,
+				borderColor: isSelected ? COLORS.primary : COLORS.lightGray2,
+			}}
+			onPress={onPress}>
+			<View style={styles.imageView}>
+				<Image
+					source={item.icon}
+					resizeMode='center'
+					style={{ width: 35, height: 35 }}
+				/>
+			</View>
 
-    return (
-        <TouchableOpacity
-            style={{
-                ...styles.container,
-                borderColor: isSelected ? COLORS.primary : COLORS.lightGray2
-            }}
-            onPress={onPress}
-        >
-            <View style={styles.imageView}>
-                <Image
-                    source={item.icon}
-                    resizeMode="center"
-                    style={{ width: 35, height: 35 }}
-                />
-            </View>
+			<Text style={styles.text}>{item.name}</Text>
 
-            <Text style={styles.text}>
-                {item.name}
-            </Text>
-
-            <View style={{
-                ...styles.radioBtn,
-                borderColor: isSelected ? COLORS.primary : COLORS.lightGray1
-            }}>
-                <View style={isSelected ? styles.selected : styles.unselected} />
-            </View>
-        </TouchableOpacity>
-    )
-}
+			<View
+				style={{
+					...styles.radioBtn,
+					borderColor: isSelected ? COLORS.primary : COLORS.lightGray1,
+				}}>
+				<View style={isSelected ? styles.selected : styles.unselected} />
+			</View>
+		</TouchableOpacity>
+	);
+};
 
 export default CardItem
 

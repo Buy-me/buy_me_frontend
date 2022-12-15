@@ -10,7 +10,7 @@ import {
 	TextButton,
 } from "../../component";
 import { COLORS, FONTS, icons, images, SIZES } from "../../constants";
-import { utils } from "../../utils";
+import Utils from "../../utils";
 
 const AddCard = ({ navigation, route }) => {
 	const [selectedCard, setSelectedCard] = useState(null);
@@ -45,7 +45,7 @@ const AddCard = ({ navigation, route }) => {
 	const renderHeader = () => {
 		return (
 			<Header
-				title="ADD NEW CARD"
+				title='ADD NEW CARD'
 				containerStyle={{
 					height: 50,
 					marginHorizontal: SIZES.padding,
@@ -91,12 +91,11 @@ const AddCard = ({ navigation, route }) => {
 					marginTop: SIZES.radius,
 					borderRadius: SIZES.radius,
 					overflow: "hidden",
-				}}
-			>
+				}}>
 				{/* Logo */}
 				<Image
 					source={selectedCard?.icons}
-					resizeMode="contain"
+					resizeMode='contain'
 					style={{
 						position: "absolute",
 						bottom: 12,
@@ -112,22 +111,19 @@ const AddCard = ({ navigation, route }) => {
 						left: 10,
 						right: 0,
 						paddingHorizontal: SIZES.padding,
-					}}
-				>
+					}}>
 					<Text
 						style={{
-							color: COLORS.white,
+							color: COLORS.black,
 							...FONTS.h3,
-						}}
-					>
+						}}>
 						{cardName}
 					</Text>
 					<View
 						style={{
 							flexDirection: "row",
-						}}
-					>
-						<Text style={{ flex: 1, color: COLORS.white, ...FONTS.body3 }}>
+						}}>
+						<Text style={{ flex: 1, color: COLORS.black, ...FONTS.body3 }}>
 							{cardNumber}
 						</Text>
 					</View>
@@ -136,11 +132,12 @@ const AddCard = ({ navigation, route }) => {
 		);
 	};
 	const renderForm = () => {
+		const { utils } = Utils;
 		return (
 			<View style={{ marginTop: SIZES.padding * 2 }}>
 				<FormInput
-					label="Card Number"
-					keyboardType="number-pad"
+					label='Card Number'
+					keyboardType='number-pad'
 					maxLength={19}
 					value={cardNumber}
 					onChange={(value) => {
@@ -159,7 +156,7 @@ const AddCard = ({ navigation, route }) => {
 				/>
 
 				<FormInput
-					label="Cardholder Name"
+					label='Cardholder Name'
 					value={cardName}
 					containerStyle={{
 						marginTop: SIZES.radius,
@@ -178,12 +175,11 @@ const AddCard = ({ navigation, route }) => {
 					style={{
 						flexDirection: "row",
 						marginTop: SIZES.radius,
-					}}
-				>
+					}}>
 					<FormInput
-						label="Expire Date"
+						label='Expire Date'
 						value={expiryDate}
-						placeholder="MM/YY"
+						placeholder='MM/YY'
 						maxLength={5}
 						containerStyle={{
 							flex: 1,
@@ -197,7 +193,7 @@ const AddCard = ({ navigation, route }) => {
 						}
 					/>
 					<FormInput
-						label="CVV"
+						label='CVV'
 						value={cvv}
 						maxLength={3}
 						containerStyle={{
@@ -215,10 +211,9 @@ const AddCard = ({ navigation, route }) => {
 					style={{
 						alignItems: "flex-start",
 						marginTop: SIZES.padding,
-					}}
-				>
+					}}>
 					<RadioButton
-						label="Remember this card details"
+						label='Remember this card details'
 						isSelected={isRemember}
 						onPress={() => setIsRemember(!isRemember)}
 					/>
@@ -233,12 +228,11 @@ const AddCard = ({ navigation, route }) => {
 					paddingTop: SIZES.radius,
 					paddingBottom: SIZES.padding,
 					paddingHorizontal: SIZES.padding,
-				}}
-			>
+				}}>
 				<TextButton
-					label="Add Card"
+					label='Add Card'
 					disabled={!isEnableAddCard()}
-					buttonContainerStyle={{
+					buttonStyle={{
 						height: 60,
 						borderRadius: SIZES.radius,
 						backgroundColor: isEnableAddCard()
@@ -255,20 +249,18 @@ const AddCard = ({ navigation, route }) => {
 			style={{
 				flex: 1,
 				backgroundColor: COLORS.white,
-			}}
-		>
+			}}>
 			{renderHeader()}
 			<KeyboardAwareScrollView
-				keyboardDismissMode="on-drag"
+				keyboardDismissMode='on-drag'
 				contentContainerStyle={{
 					flexGrow: 1,
 					paddingHorizontal: SIZES.padding,
-				}}
-			>
+				}}>
 				{renderCard()}
 				{renderForm()}
 			</KeyboardAwareScrollView>
-			{renderFooter}
+			{renderFooter()}
 		</View>
 	);
 };

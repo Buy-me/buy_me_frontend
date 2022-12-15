@@ -24,8 +24,7 @@ const FormInput = ({
 				style={{
 					flexDirection: "row",
 					justifyContent: "space-between",
-				}}
-			>
+				}}>
 				<Text style={{ color: COLORS.gray, ...FONTS.body4 }}>{label}</Text>
 				<Text style={{ color: COLORS.red, ...FONTS.body4 }}>{errorMsg}</Text>
 			</View>
@@ -38,14 +37,12 @@ const FormInput = ({
 					borderRadius: SIZES.radius,
 					backgroundColor: COLORS.lightGray2,
 					...inputContainerStyle,
-				}}
-			>
+				}}>
 				{prependComponent}
 				<TextInput
 					style={{ flex: 1, ...inputStyle }}
 					value={value}
 					placeholder={placeholder}
-					placeholderTextColor={placeholderTextColor}
 					secureTextEntry={secureTextEntry}
 					keyboardType={keyboardType}
 					autoComplete={autoCompleteType}
