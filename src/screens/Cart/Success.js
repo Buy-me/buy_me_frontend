@@ -44,17 +44,17 @@ const Success = ({ navigation }) => {
 					}}>
 					Payment was successfully made!
 				</Text>
-				<TextButton
-					label='Done'
-					buttonContainerStyle={{
-						height: 55,
-						marginBottom: SIZES.padding,
-						borderRadius: SIZES.radius,
-						backgroundColor: COLORS.primary,
-					}}
-					onPress={() => navigation.navigate("Delivery Status")}
-				/>
 			</View>
+			<TextButton
+				label='Done'
+				buttonStyle={{
+					height: 55,
+					marginBottom: SIZES.padding,
+					borderRadius: SIZES.radius,
+					backgroundColor: COLORS.primary,
+				}}
+				onPress={() => navigation.navigate("Delivery Status")}
+			/>
 		</View>
 	);
 };

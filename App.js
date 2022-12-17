@@ -12,6 +12,7 @@ import FoodDetail from "./src/screens/Food/FoodDetail";
 import MyCart from "./src/screens/Cart/MyCart";
 import MyCard from "./src/screens/Card/MyCard";
 import AddCard from "./src/screens/Card/AddCard";
+import Checkout from "./src/screens/Cart/Checkout";
 
 const Stack = createNativeStackNavigator();
 
@@ -40,6 +41,7 @@ const App = () => {
 					<Stack.Screen name='MyCart' component={MyCart} />
 					<Stack.Screen name='MyCard' component={MyCard} />
 					<Stack.Screen name='Add Card' component={AddCard} />
+					<Stack.Screen name='Checkout' component={Checkout} />
 					<Stack.Screen
 						name='Success'
 						component={Success}

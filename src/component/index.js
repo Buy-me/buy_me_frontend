@@ -12,7 +12,7 @@ import FormInputCheck from "./FormInputCheck";
 import RadioButton from "./RadioButton";
 import FooterTotal from "./FooterTotal";
 import CardItem from "./CardItem";
-import InfoView from "./InfoView";
+import InfoCard from "./InfoCard";
 
 export {
 	Header,
@@ -29,5 +29,5 @@ export {
 	StepperInput,
 	FooterTotal,
 	CardItem,
-	InfoView,
+	InfoCard,
 };
