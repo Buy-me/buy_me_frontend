@@ -66,22 +66,31 @@ const MyCard = ({ navigation }) => {
 
     const renderFooter = () => {
         return (
-            <View style={{
-                paddingTop: SIZES.radius,
-                paddingBottom: SIZES.padding,
-                paddingHorizontal: SIZES.padding
-            }}>
-                <TextButton
-                    disabled={selectedCard == null}
-                    buttonStyle={{
-                        height: 60,
-                        borderRadius: SIZES.radius,
-                        backgroundColor: selectedCard == null ? COLORS.gray : COLORS.primary
-                    }}
-                    label={selectedCard?.key == "NewCard" ? "Add" : "Proceed to Checkout"}
-                />
-            </View>
-        )
+					<View
+						style={{
+							paddingTop: SIZES.radius,
+							paddingBottom: SIZES.padding,
+							paddingHorizontal: SIZES.padding,
+						}}>
+						<TextButton
+							disabled={selectedCard == null}
+							buttonStyle={{
+								height: 60,
+								borderRadius: SIZES.radius,
+								backgroundColor:
+									selectedCard == null ? COLORS.gray : COLORS.primary,
+							}}
+							label={
+								selectedCard?.key == "NewCard" ? "Add" : "Proceed to Checkout"
+							}
+							onPress={
+								selectedCard?.key == "NewCard"
+									? () => navigation.navigate("Add Card", { selectedCard })
+									: () => navigation.navigate("Checkout", { selectedCard })
+							}
+						/>
+					</View>
+				);
     }
 
     return (

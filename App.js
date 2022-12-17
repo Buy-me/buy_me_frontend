@@ -11,6 +11,8 @@ import DeliveryStatus from "./src/screens/Delivery/DeliveryStatus";
 import FoodDetail from "./src/screens/Food/FoodDetail";
 import MyCart from "./src/screens/Cart/MyCart";
 import MyCard from "./src/screens/Card/MyCard";
+import AddCard from "./src/screens/Card/AddCard";
+import Checkout from "./src/screens/Cart/Checkout";
 
 const Stack = createNativeStackNavigator();
 
@@ -33,29 +35,20 @@ const App = () => {
 					screenOptions={{
 						headerShown: false,
 					}}
-					initialRouteName={"Home"}
-				>
-					<Stack.Screen name="Home" component={CustomDrawer} />
+					initialRouteName={"Home"}>
+					<Stack.Screen name='Home' component={CustomDrawer} />
+					<Stack.Screen name='FoodDetail' component={FoodDetail} />
+					<Stack.Screen name='MyCart' component={MyCart} />
+					<Stack.Screen name='MyCard' component={MyCard} />
+					<Stack.Screen name='Add Card' component={AddCard} />
+					<Stack.Screen name='Checkout' component={Checkout} />
 					<Stack.Screen
-						name="FoodDetail"
-						component={FoodDetail}
-
-					/>
-					<Stack.Screen
-						name="MyCart"
-						component={MyCart}
-					/>
-					<Stack.Screen
-						name="MyCard"
-						component={MyCard}
-					/>
-					<Stack.Screen
-						name="Success"
+						name='Success'
 						component={Success}
 						options={{ gestureEnabled: false }}
 					/>
 					<Stack.Screen
-						name="Delivery Status"
+						name='Delivery Status'
 						component={DeliveryStatus}
 						options={{ gestureEnabled: false }}
 					/>
