@@ -13,21 +13,25 @@ import RadioButton from "./RadioButton";
 import FooterTotal from "./FooterTotal";
 import CardItem from "./CardItem";
 import InfoCard from "./InfoCard";
+import HorizontalFoodCard from "./HorizontalFoodCard";
+import VerticalFoodCard from "./VerticalFoodCard";
 
 export {
-	Header,
-	TextButton,
-	TextIconButton,
-	IconButton,
-	LineDivider,
-	FormInput,
-	FormInputCheck,
-	RadioButton,
-	CartQuantityButton,
-	IconLabel,
-	Rating,
-	StepperInput,
-	FooterTotal,
-	CardItem,
-	InfoCard,
+  Header,
+  TextButton,
+  TextIconButton,
+  IconButton,
+  LineDivider,
+  FormInput,
+  FormInputCheck,
+  RadioButton,
+  CartQuantityButton,
+  IconLabel,
+  Rating,
+  StepperInput,
+  FooterTotal,
+  CardItem,
+  HorizontalFoodCard,
+  VerticalFoodCard,
+  InfoCard,
 };

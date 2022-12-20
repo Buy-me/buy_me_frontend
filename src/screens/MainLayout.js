@@ -27,6 +27,7 @@ import {
 } from "../constants";
 import { setSelectedTab } from "../features/tab/tabSlice";
 import FoodDetail from "./Food/FoodDetail";
+import Home from "./Home/Home";
 
 const TabButton = ({
   label,
@@ -85,7 +86,6 @@ const TabButton = ({
                 ...FONTS.h3,
               }}
             >
-              {console.log("come here")}
               {label}
             </Text>
           )}
@@ -297,7 +297,7 @@ const MainLayout = ({ navigation }) => {
           flex: 1,
         }}
       >
-        <Text>Content</Text>
+        <Home />
       </View>
       {/* Footer */}
       <View
@@ -358,8 +358,8 @@ const MainLayout = ({ navigation }) => {
             outerContainerStyle={cartFlexStyle}
             innerContainerStyle={cartColorStyle}
             onPress={() => {
-              dispatch(setSelectedTab(constants.screens.cart))
-              navigation.navigate("FoodDetail")
+              dispatch(setSelectedTab(constants.screens.cart));
+              navigation.navigate("FoodDetail");
             }}
           />
 
