@@ -13,6 +13,8 @@ import RadioButton from "./RadioButton";
 import FooterTotal from "./FooterTotal";
 import CardItem from "./CardItem";
 import InfoCard from "./InfoCard";
+import GrayLayout from "./GrayLayout";
+import InfoRow from "./InfoRow";
 
 export {
 	Header,
@@ -30,4 +32,6 @@ export {
 	FooterTotal,
 	CardItem,
 	InfoCard,
+	GrayLayout,
+	InfoRow
 };

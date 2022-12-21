@@ -15,7 +15,12 @@ import Favourite from "./Favourite/Favourite";
 // Notification
 import Notification from "./Notification/Notification"
 
+//MyCard
 import MyCard from "./Card/MyCard";
+
+import MyAccount from "./Account/MyAccount";
+
+import EditAccount from "./Account/EditAccount";
 
 export {
     MainLayout,
@@ -24,5 +29,7 @@ export {
     CartTab,
     Favourite,
     Notification,
-    MyCard
+    MyCard,
+    MyAccount,
+    EditAccount
 }
