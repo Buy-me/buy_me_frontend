@@ -88,9 +88,7 @@ const EditAccount = ({ navigation }) => {
                             label={"Full Name"}
                             maxLength={50}
                             value={fullName}
-                            inputContainerStyle={{
-                                backgroundColor: "white",
-                            }}
+                            inputContainerStyle={{ backgroundColor: "white" }}
                             onChange={(value) => {
                                 setFullName(value)
                                 utils.validateInput(value, 0, setErrorMsg)
@@ -189,6 +187,7 @@ const EditAccount = ({ navigation }) => {
                         <FormInput
                             label={"Email"}
                             value={email}
+                            keyboardType={"email-address"}
                             containerStyle={{ marginTop: 15 }}
                             inputContainerStyle={{
                                 backgroundColor: "white",

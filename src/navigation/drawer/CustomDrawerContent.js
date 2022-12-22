@@ -143,7 +143,7 @@ const CustomDrawerContent = ({ navigation, setSelectedTab, selectedTab }) => {
           <CustomDrawerItem label={"Track Your Order"} icon={icons.location} />
           <CustomDrawerItem label={"Coupons"} icon={icons.coupon} />
           <CustomDrawerItem label={"Settings"} icon={icons.setting} onPress={() => navigation.navigate("MyAccount")}/>
-          <CustomDrawerItem label={"Invite a  Friend"} icon={icons.profile} />
+          <CustomDrawerItem label={"Invite a  Friend"} icon={icons.profile}  onPress={() => navigation.navigate("ChangePassword")}/>
           <CustomDrawerItem label={"Help Center"} icon={icons.help} />
         </View>
 

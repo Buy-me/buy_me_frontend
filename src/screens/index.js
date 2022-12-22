@@ -22,6 +22,8 @@ import MyAccount from "./Account/MyAccount";
 
 import EditAccount from "./Account/EditAccount";
 
+import ChangePassword from "./Account/ChangePassword";
+
 export {
     MainLayout,
     Home,
@@ -31,5 +33,6 @@ export {
     Notification,
     MyCard,
     MyAccount,
-    EditAccount
+    EditAccount,
+    ChangePassword
 }
