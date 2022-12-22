@@ -15,23 +15,27 @@ import CardItem from "./CardItem";
 import InfoCard from "./InfoCard";
 import HorizontalFoodCard from "./HorizontalFoodCard";
 import VerticalFoodCard from "./VerticalFoodCard";
+import GrayLayout from "./GrayLayout";
+import InfoRow from "./InfoRow";
 
 export {
-  Header,
-  TextButton,
-  TextIconButton,
-  IconButton,
-  LineDivider,
-  FormInput,
-  FormInputCheck,
-  RadioButton,
-  CartQuantityButton,
-  IconLabel,
-  Rating,
-  StepperInput,
-  FooterTotal,
-  CardItem,
+	Header,
+	TextButton,
+	TextIconButton,
+	IconButton,
+	LineDivider,
+	FormInput,
+	FormInputCheck,
+	RadioButton,
+	CartQuantityButton,
+	IconLabel,
+	Rating,
+	StepperInput,
+	FooterTotal,
+	CardItem,
+	InfoCard,
+	GrayLayout,
   HorizontalFoodCard,
   VerticalFoodCard,
-  InfoCard,
+	InfoRow
 };
