@@ -2,50 +2,52 @@ import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { COLORS, FONTS } from "../constants";
 
 const TextIconButton = ({
-	containerStyle,
-	label,
-	labelStyle,
-	icon,
-	iconPosition,
-	iconStyle,
-	onPress,
+  containerStyle,
+  label,
+  labelStyle,
+  icon,
+  iconPosition,
+  iconStyle,
+  onPress,
 }) => {
-	return (
-		<TouchableOpacity
-			style={{
-				flexDirection: "row",
-				alignItems: "center",
-				justifyContent: "center",
-				...containerStyle,
-			}}
-			onPress={onPress}>
-			{iconPosition == "LEFT" && (
-				<Image
-					source={icon}
-					style={{
-						...style.image,
-						...iconStyle,
-					}}
-				/>
-			)}
-			<Text
-				style={{
-					...FONTS.body3,
-					...labelStyle,
-				}}>
-				{label}
-			</Text>
-			{iconPosition == "RIGHT" && (
-				<Image
-					source={icon}
-					style={{
-						...style.image,
-						...iconStyle,
-					}}
-				/>
-			)}
-		</TouchableOpacity>
-	);
+  return (
+    <TouchableOpacity
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        ...containerStyle,
+      }}
+      onPress={onPress}
+    >
+      {iconPosition == "LEFT" && (
+        <Image
+          source={icon}
+          style={{
+            ...style.image,
+            ...iconStyle,
+          }}
+        />
+      )}
+      <Text
+        style={{
+          ...FONTS.body3,
+          ...labelStyle,
+        }}
+      >
+        {label}
+      </Text>
+      {iconPosition == "RIGHT" && (
+        <Image
+          source={icon}
+          style={{
+            ...style.image,
+            ...iconStyle,
+          }}
+        />
+      )}
+    </TouchableOpacity>
+  );
 };
 
 const style = StyleSheet.create({

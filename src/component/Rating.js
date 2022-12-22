@@ -1,33 +1,32 @@
-import { Image, StyleSheet, View } from 'react-native'
-import React from 'react'
-import { icons, COLORS } from "../constants"
+import { Image, StyleSheet, View } from "react-native";
+import React from "react";
+import { icons, COLORS } from "../constants";
 
 const Rating = ({
-    rating,
-    iconStyle,
-    activeColor = COLORS.orange,
-    inactiveColor = COLORS.lightOrange3
+  rating,
+  iconStyle,
+  activeColor = COLORS.orange,
+  inactiveColor = COLORS.lightOrange3,
 }) => {
+  const renderStars = () => {
+    const arrs = [1, 2, 3, 4, 5];
 
-    const renderStars = () => {
-        const arrs = [1, 2, 3, 4, 5]
+    return arrs.map((item, index) => (
+      <Image
+        key={index}
+        source={icons.star}
+        style={{
+          tintColor: item <= rating ? activeColor : inactiveColor,
+          ...styles.rateIcon,
+          ...iconStyle,
+        }}
+      />
+    ));
+  };
 
-        return arrs.map((item, index) => (
-            <Image
-                key={index}
-                source={icons.star}
-                style={{
-                    tintColor: item <= rating ? activeColor : inactiveColor,
-                    ...styles.rateIcon,
-                    ...iconStyle
-                }}
-            />
-        ))
-    }
-
-    return (
-        <View style={{ flexDirection: "row" }}>
-            {/* {new Array(5).map((item, index) => (
+  return (
+    <View style={{ flexDirection: "row" }}>
+      {/* {new Array(5).map((item, index) => (
                 <Image
                     source={icons.star}
                     style={{
@@ -37,16 +36,16 @@ const Rating = ({
                     }}
                 />
             ))} */}
-            {renderStars()}
-        </View>
-    )
-}
+      {renderStars()}
+    </View>
+  );
+};
 
-export default Rating
+export default Rating;
 
 const styles = StyleSheet.create({
-    rateIcon: {
-        height: 15,
-        width: 15
-    }
-})
+  rateIcon: {
+    height: 15,
+    width: 15,
+  },
+});

@@ -113,7 +113,7 @@ const menu = [
     id: 2,
     name: "Nearby you",
     list: [hamburger, vegBiryani, wrapSandwich],
-  },
+  }, 
   {
     id: 3,
     name: "Popular",

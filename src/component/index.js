@@ -13,6 +13,8 @@ import RadioButton from "./RadioButton";
 import FooterTotal from "./FooterTotal";
 import CardItem from "./CardItem";
 import InfoCard from "./InfoCard";
+import HorizontalFoodCard from "./HorizontalFoodCard";
+import VerticalFoodCard from "./VerticalFoodCard";
 import GrayLayout from "./GrayLayout";
 import InfoRow from "./InfoRow";
 
@@ -33,5 +35,7 @@ export {
 	CardItem,
 	InfoCard,
 	GrayLayout,
+  HorizontalFoodCard,
+  VerticalFoodCard,
 	InfoRow
 };
