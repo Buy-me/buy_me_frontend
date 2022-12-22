@@ -1,9 +1,11 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { COLORS, icons, SIZES } from '../../constants'
-import { FormInput, FormInputCheck, GrayLayout, Header, IconButton, TextButton } from '../../component'
+import { FormInput, GrayLayout, Header, IconButton, TextButton } from '../../component'
 import { useState } from 'react'
 import Utils from "../../utils";
+import RNDateTimePicker from '@react-native-community/datetimepicker';
+import { Picker } from '@react-native-picker/picker'
 
 const EditAccount = ({ navigation }) => {
     const { utils } = Utils
@@ -11,12 +13,23 @@ const EditAccount = ({ navigation }) => {
     const [fullName, setFullName] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
     const [idCard, setIdCard] = useState("")
-    //date of birth
-    //gender
+    const [dateOfBirth, setDateOfBirth] = useState(new Date())
+    const [gender, setGender] = useState("male")
     const [email, setEmail] = useState("")
     const [address, setAddress] = useState("")
 
     const [errorMsg, setErrorMsg] = useState("")
+
+    const [showDatePicker, setShowDatePicker] = useState(false)
+    const showPicker = () => {
+        setShowDatePicker(!showDatePicker)
+    }
+
+    const onPickDate = (event, selectedDate) => {
+        setShowDatePicker(false)
+        // utils.convertToDateString(selectedDate)
+        setDateOfBirth(selectedDate)
+    }
 
     const renderHeader = () => {
         return (
@@ -119,33 +132,59 @@ const EditAccount = ({ navigation }) => {
 
                         <FormInput
                             label={"Date of Birth"}
-                            // value={phoneNumber}
+                            value={utils.convertToDateString(dateOfBirth)}
                             placeholder="DD/MM/YYYY"
                             containerStyle={{ marginTop: 15 }}
                             inputContainerStyle={{
                                 backgroundColor: "white",
+                                alignItems: "center"
                             }}
                             onChange={(value) => {
-                                // setPhoneNumber(value)
+                                console.log("alooo");
                                 utils.validateInput(value, 0, setErrorMsg)
                             }}
                             errorMsg={errorMsg}
+                            editable={false}
+                            appendComponent={
+                                <IconButton
+                                    icon={icons.calendar}
+                                    containerStyle={{
+                                        width: 30, height: 30,
+                                    }}
+                                    onPress={showPicker}
+                                    iconStyle={{ tintColor: COLORS.gray }}
+                                />
+                            }
                         />
+                        {showDatePicker &&
+                            <RNDateTimePicker
+                                value={dateOfBirth}
+                                mode={"date"}
+                                onChange={onPickDate}
+                            />
+                        }
 
                         <FormInput
                             label={"Gender"}
                             // value={gender}
                             placeholder="Select gender"
                             containerStyle={{ marginTop: 15 }}
-                            inputContainerStyle={{
-                                backgroundColor: "white",
-                            }}
-                            onChange={(value) => {
-                                // setPhoneNumber(value)
-                                utils.validateInput(value, 0, setErrorMsg)
-                            }}
+                            inputContainerStyle={{ backgroundColor: COLORS.white }}
+                            inputComponent={
+                                <Picker
+                                    style={{ flex: 1, alignSelf: "center" }}
+                                    selectedValue={gender}
+                                    onValueChange={(value) => setGender(value)}
+                                >
+                                    <Picker.Item label="Male" value="male" />
+                                    <Picker.Item label="Female" value="female" />
+                                    <Picker.Item label="Others" value="others" />
+                                </Picker>
+                            }
                             errorMsg={errorMsg}
                         />
+
+
 
                         <FormInput
                             label={"Email"}

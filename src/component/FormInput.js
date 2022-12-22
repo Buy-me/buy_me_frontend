@@ -1,4 +1,4 @@
-import { Text, TextInput, View } from "react-native";
+import { Keyboard, Text, TextInput, View, TouchableWithoutFeedback } from "react-native";
 import { COLORS, FONTS, SIZES } from "../constants";
 
 const FormInput = ({
@@ -9,6 +9,7 @@ const FormInput = ({
 	inputStyle,
 	value = "",
 	prependComponent,
+	inputComponent,
 	appendComponent,
 	onChange,
 	secureTextEntry,
@@ -17,6 +18,7 @@ const FormInput = ({
 	autoCapitalize = "none",
 	errorMsg = "",
 	maxLength,
+	editable = true,
 }) => {
 	return (
 		<View style={{ ...containerStyle }}>
@@ -39,20 +41,27 @@ const FormInput = ({
 					...inputContainerStyle,
 				}}>
 				{prependComponent}
-				<TextInput
-					style={{ flex: 1, ...inputStyle }}
-					value={value}
-					placeholder={placeholder}
-					secureTextEntry={secureTextEntry}
-					keyboardType={keyboardType}
-					autoComplete={autoCompleteType}
-					autoCapitalize={autoCapitalize}
-					maxLength={maxLength}
-					onChangeText={(text) => onChange(text)}
-				/>
+				{inputComponent !== undefined ?
+					inputComponent
+					:
+					< TouchableWithoutFeedback onPress={editable ? null : Keyboard.dismiss}>
+						<TextInput
+							style={{ flex: 1, ...inputStyle }}
+							value={value}
+							placeholder={placeholder}
+							secureTextEntry={secureTextEntry}
+							keyboardType={keyboardType}
+							autoComplete={autoCompleteType}
+							autoCapitalize={autoCapitalize}
+							maxLength={maxLength}
+							onChangeText={(text) => onChange(text)}
+							editable={editable}
+						/>
+					</TouchableWithoutFeedback>
+				}
 				{appendComponent}
 			</View>
-		</View>
+		</View >
 	);
 };
 
