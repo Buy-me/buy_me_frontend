@@ -49,6 +49,12 @@ const Home = () => {
     handleChangeCategory(selectedCategoryId, selectedMenuType);
   }, []);
 
+  useEffect(async () => {
+    // const { response, err } = await favoriteApi.remove({
+    //   favoriteId: media.id,
+    // });
+  }, []);
+
   const handleChangeCategory = (categoryId, menuTypeId) => {
     //Retrieve the popular
     let selectedPopular = dummyData.menu.find((a) => a.name == "Popular");
