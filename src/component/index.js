@@ -15,6 +15,8 @@ import CardItem from "./CardItem";
 import InfoCard from "./InfoCard";
 import HorizontalFoodCard from "./HorizontalFoodCard";
 import VerticalFoodCard from "./VerticalFoodCard";
+import TwoPointSlider from "./TwoPointSlider";
+import TextButtonTag from "./TextButtonTag";
 
 export {
   Header,
@@ -24,6 +26,7 @@ export {
   LineDivider,
   FormInput,
   FormInputCheck,
+  TwoPointSlider,
   RadioButton,
   CartQuantityButton,
   IconLabel,
@@ -34,4 +37,5 @@ export {
   HorizontalFoodCard,
   VerticalFoodCard,
   InfoCard,
+  TextButtonTag,
 };

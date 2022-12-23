@@ -4,6 +4,7 @@ import { FlatList } from "react-native-gesture-handler";
 import { HorizontalFoodCard, VerticalFoodCard } from "../../component";
 import { COLORS, dummyData, FONTS, icons, SIZES } from "../../constants";
 import Search from "../Search/Search";
+import FilterModal from "./FilterModal";
 
 const Section = ({ title, onPress, children }) => {
   return (
@@ -42,6 +43,8 @@ const Home = () => {
   const [recommends, setRecommends] = useState([]);
   const [popular, setPopular] = useState([]);
 
+  const [showFilterModal, setShowFilterModal] = useState(false);
+
   useEffect(() => {
     handleChangeCategory(selectedCategoryId, selectedMenuType);
   }, []);
@@ -64,6 +67,7 @@ const Home = () => {
       selectedMenu?.list.filter((a) => a.categories.includes(categoryId))
     );
   };
+
   const renderMenuTypes = () => {
     return (
       <FlatList
@@ -138,6 +142,7 @@ const Home = () => {
       </Section>
     );
   };
+
   const renderPopularSection = () => {
     return (
       <Section
@@ -253,7 +258,7 @@ const Home = () => {
           placeholder="search food..."
         />
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => setShowFilterModal(true)}>
           <Image
             source={icons.filter}
             style={{
@@ -304,6 +309,7 @@ const Home = () => {
       </View>
     );
   };
+
   return (
     <View
       style={{
@@ -311,6 +317,14 @@ const Home = () => {
       }}
     >
       {renderSearch()}
+
+      {/* Filter Modal */}
+      {showFilterModal && (
+        <FilterModal
+          isVisible={showFilterModal}
+          onClose={() => setShowFilterModal(false)}
+        />
+      )}
 
       {/* Flat List */}
       <FlatList
