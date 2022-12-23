@@ -1,61 +1,68 @@
-import { Text, TextInput, View } from "react-native";
+import { Keyboard, Text, TextInput, View, TouchableWithoutFeedback } from "react-native";
 import { COLORS, FONTS, SIZES } from "../constants";
 
 const FormInput = ({
-  containerStyle,
-  inputContainerStyle,
-  label,
-  placeholder,
-  inputStyle,
-  value = "",
-  prependComponent,
-  appendComponent,
-  onChange,
-  secureTextEntry,
-  keyboardType = "default",
-  autoCompleteType = "off",
-  autoCapitalize = "none",
-  errorMsg = "",
-  maxLength,
+	containerStyle,
+	inputContainerStyle,
+	label,
+	placeholder,
+	inputStyle,
+	value = "",
+	prependComponent,
+	inputComponent,
+	appendComponent,
+	onChange,
+	secureTextEntry,
+	keyboardType = "default",
+	autoCompleteType = "off",
+	autoCapitalize = "none",
+	errorMsg = "",
+	maxLength,
+	editable = true,
 }) => {
-  return (
-    <View style={{ ...containerStyle }}>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
-        <Text style={{ color: COLORS.gray, ...FONTS.body4 }}>{label}</Text>
-        <Text style={{ color: COLORS.red, ...FONTS.body4 }}>{errorMsg}</Text>
-      </View>
-      <View
-        style={{
-          flexDirection: "row",
-          height: SIZES.height > 800 ? 55 : 45,
-          paddingHorizontal: SIZES.padding,
-          marginTop: SIZES.height > 800 ? SIZES.base : 0,
-          borderRadius: SIZES.radius,
-          backgroundColor: COLORS.lightGray2,
-          ...inputContainerStyle,
-        }}
-      >
-        {prependComponent}
-        <TextInput
-          style={{ flex: 1, ...inputStyle }}
-          value={value}
-          placeholder={placeholder}
-          secureTextEntry={secureTextEntry}
-          keyboardType={keyboardType}
-          autoComplete={autoCompleteType}
-          autoCapitalize={autoCapitalize}
-          maxLength={maxLength}
-          onChangeText={(text) => onChange(text)}
-        />
-        {appendComponent}
-      </View>
-    </View>
-  );
+	return (
+		<View style={{ ...containerStyle }}>
+			<View
+				style={{
+					flexDirection: "row",
+					justifyContent: "space-between",
+				}}>
+				<Text style={{ color: COLORS.gray, ...FONTS.body4 }}>{label}</Text>
+				<Text style={{ color: COLORS.red, ...FONTS.body4 }}>{errorMsg}</Text>
+			</View>
+			<View
+				style={{
+					flexDirection: "row",
+					height: SIZES.height > 800 ? 55 : 45,
+					paddingHorizontal: SIZES.padding,
+					marginTop: SIZES.height > 800 ? SIZES.base : 0,
+					borderRadius: SIZES.radius,
+					backgroundColor: COLORS.lightGray2,
+					...inputContainerStyle,
+				}}>
+				{prependComponent}
+				{inputComponent !== undefined ?
+					inputComponent
+					:
+					< TouchableWithoutFeedback onPress={editable ? null : Keyboard.dismiss}>
+						<TextInput
+							style={{ flex: 1, ...inputStyle }}
+							value={value}
+							placeholder={placeholder}
+							secureTextEntry={secureTextEntry}
+							keyboardType={keyboardType}
+							autoComplete={autoCompleteType}
+							autoCapitalize={autoCapitalize}
+							maxLength={maxLength}
+							onChangeText={(text) => onChange(text)}
+							editable={editable}
+						/>
+					</TouchableWithoutFeedback>
+				}
+				{appendComponent}
+			</View>
+		</View >
+	);
 };
 
 export default FormInput;

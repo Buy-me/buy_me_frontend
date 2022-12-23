@@ -17,25 +17,29 @@ import HorizontalFoodCard from "./HorizontalFoodCard";
 import VerticalFoodCard from "./VerticalFoodCard";
 import TwoPointSlider from "./TwoPointSlider";
 import TextButtonTag from "./TextButtonTag";
+import GrayLayout from "./GrayLayout";
+import InfoRow from "./InfoRow";
 
 export {
-  Header,
-  TextButton,
-  TextIconButton,
-  IconButton,
-  LineDivider,
-  FormInput,
-  FormInputCheck,
+	Header,
+	TextButton,
+	TextIconButton,
+	IconButton,
+	LineDivider,
+	FormInput,
+	FormInputCheck,
   TwoPointSlider,
-  RadioButton,
-  CartQuantityButton,
-  IconLabel,
-  Rating,
-  StepperInput,
-  FooterTotal,
-  CardItem,
+	RadioButton,
+	CartQuantityButton,
+	IconLabel,
+	Rating,
+	StepperInput,
+	FooterTotal,
+	CardItem,
+	InfoCard,
+	GrayLayout,
   HorizontalFoodCard,
   VerticalFoodCard,
-  InfoCard,
+	InfoRow,
   TextButtonTag,
 };
