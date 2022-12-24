@@ -8,12 +8,13 @@ const HorizontalFoodCard = ({ containerStyle, imageStyle, item, onPress }) => {
       style={{
         flexDirection: "row",
         borderRadius: SIZES.radius,
-        backgroundColor: COLORS.lightGray2,
+        backgroundColor: COLORS.white,
+        // paddingTop: 10,
         ...containerStyle,
       }}
     >
       {/* Images */}
-      <Image source={item.image} style={imageStyle} />
+      <Image source={{ uri: item.images.url }} style={imageStyle} />
       {/* Info */}
 
       <View style={{ flex: 1 }}>
@@ -23,6 +24,7 @@ const HorizontalFoodCard = ({ containerStyle, imageStyle, item, onPress }) => {
             ...FONTS.h3,
             fontSize: 17,
           }}
+          numberOfLines={1}
         >
           {item.name}
         </Text>
@@ -56,7 +58,7 @@ const HorizontalFoodCard = ({ containerStyle, imageStyle, item, onPress }) => {
         style={{
           flexDirection: "row",
           position: "absolute",
-          top: 5,
+          bottom: 3,
           right: SIZES.radius,
         }}
       >
@@ -74,7 +76,7 @@ const HorizontalFoodCard = ({ containerStyle, imageStyle, item, onPress }) => {
             ...FONTS.body5,
           }}
         >
-          {item.calories} Calories
+          {item.calories || 100} Calories
         </Text>
       </View>
     </TouchableOpacity>

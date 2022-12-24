@@ -11,7 +11,7 @@ const VerticalFoodCard = ({ containerStyle, item, onPress }) => {
         padding: SIZES.radius,
         alignItems: "center",
         borderRadius: SIZES.radius,
-        backgroundColor: COLORS.lightGray2,
+        backgroundColor: COLORS.white,
         ...containerStyle,
       }}
     >
@@ -41,19 +41,19 @@ const VerticalFoodCard = ({ containerStyle, item, onPress }) => {
               ...FONTS.body5,
             }}
           >
-            {item.calories} Calories
+            {item.calories || 100} Calories
           </Text>
         </View>
 
         {/* Favourite */}
-        <Image
+        {/* <Image
           source={icons.love}
           style={{
             width: 20,
             height: 20,
             tintColor: item.isFavourite ? COLORS.primary : COLORS.gray,
           }}
-        />
+        /> */}
       </View>
 
       {/* Image */}
@@ -66,10 +66,13 @@ const VerticalFoodCard = ({ containerStyle, item, onPress }) => {
         }}
       >
         <Image
-          source={item.image}
+          source={{
+            uri: item.images.url,
+          }}
           style={{
             height: "100%",
             width: "100%",
+            borderRadius: SIZES.radius,
           }}
         />
       </View>
@@ -78,13 +81,14 @@ const VerticalFoodCard = ({ containerStyle, item, onPress }) => {
       <View
         style={{
           alignItems: "center",
-          marginTop: -20,
+          marginTop: 10,
         }}
       >
         <Text
           style={{
             ...FONTS.h3,
           }}
+          numberOfLines={1}
         >
           {item.name}
         </Text>

@@ -1,10 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity, TextInput } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
+import { useDispatch, useSelector } from "react-redux";
+import categoryApi from "../../api/categoryApi";
 import { HorizontalFoodCard, VerticalFoodCard } from "../../component";
 import { COLORS, dummyData, FONTS, icons, SIZES } from "../../constants";
 import Search from "../Search/Search";
 import FilterModal from "./FilterModal";
+import {
+  setSelectedCategory,
+  setCategories,
+  setSelectedMenuType,
+} from "../../features/category/categorySlice";
+import {
+  setFoods,
+  setPopulars,
+  setRecommends,
+} from "../../features/food/foodSlice";
+import foodApi from "../../api/foodApi";
 
 const Section = ({ title, onPress, children }) => {
   return (
@@ -24,6 +37,7 @@ const Section = ({ title, onPress, children }) => {
             style={{
               color: COLORS.primary,
               ...FONTS.body3,
+              textDecorationLine: "underline",
             }}
           >
             Show All
@@ -37,41 +51,47 @@ const Section = ({ title, onPress, children }) => {
 };
 
 const Home = () => {
-  const [selectedCategoryId, setSelectedCategoryId] = useState(1);
-  const [selectedMenuType, setSelectedMenuType] = useState(1);
-  const [menuList, setMenuList] = useState([]);
-  const [recommends, setRecommends] = useState([]);
-  const [popular, setPopular] = useState([]);
-
   const [showFilterModal, setShowFilterModal] = useState(false);
 
+  //Redux Category
+  const dispatch = useDispatch();
+  const { selectedCategory, categories, selectedMenuType } = useSelector(
+    (state) => state.category
+  );
+  // Redux Food
+  const { populars, recommends, selectedFood, foods } = useSelector(
+    (state) => state.food
+  );
+
+  //
   useEffect(() => {
-    handleChangeCategory(selectedCategoryId, selectedMenuType);
+    handleChangeCategory(selectedCategory, selectedMenuType);
   }, []);
 
-  useEffect(async () => {
-    // const { response, err } = await favoriteApi.remove({
-    //   favoriteId: media.id,
-    // });
+  // handle render category first time
+  useEffect(() => {
+    const getCategories = async () => {
+      const { response, err } = await categoryApi.getList();
+      dispatch(setCategories(response.data));
+    };
+    getCategories();
   }, []);
 
-  const handleChangeCategory = (categoryId, menuTypeId) => {
-    //Retrieve the popular
-    let selectedPopular = dummyData.menu.find((a) => a.name == "Popular");
-    //Retrieve the recommend
-    let selectedRecommed = dummyData.menu.find((a) => a.name == "Recommended");
+  const handleChangeCategory = (category, menuType) => {
+    // console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++");
+    // console.log(category, menuType);
+    // console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++");
 
-    let selectedMenu = dummyData.menu.find((a) => a.id == menuTypeId);
-
-    setPopular(
-      selectedPopular?.list.filter((a) => a.categories.includes(categoryId))
-    );
-    setRecommends(
-      selectedRecommed?.list.filter((a) => a.categories.includes(categoryId))
-    );
-    setMenuList(
-      selectedMenu?.list.filter((a) => a.categories.includes(categoryId))
-    );
+    const getFoods = async () => {
+      const { response, err } = await foodApi.getList({
+        sort: menuType.sort,
+        categoryId: category?.id,
+      });
+      dispatch(setFoods(response.data));
+      dispatch(setRecommends(response.data));
+      dispatch(setPopulars(response.data));
+    };
+    getFoods();
   };
 
   const renderMenuTypes = () => {
@@ -94,14 +114,16 @@ const Home = () => {
                   index == dummyData.menu.length - 1 ? SIZES.padding : 0,
               }}
               onPress={() => {
-                setSelectedMenuType(item.id);
-                handleChangeCategory(selectedCategoryId, item.id);
+                dispatch(setSelectedMenuType(item));
+                handleChangeCategory(selectedCategory, item);
               }}
             >
               <Text
                 style={{
                   color:
-                    selectedMenuType == item.id ? COLORS.primary : COLORS.black,
+                    selectedMenuType.id == item.id
+                      ? COLORS.primary
+                      : COLORS.black,
                   ...FONTS.h3,
                 }}
               >
@@ -128,17 +150,23 @@ const Home = () => {
           renderItem={({ item, index }) => (
             <HorizontalFoodCard
               containerStyle={{
-                height: 180,
+                height: 160,
                 width: SIZES.width * 0.85,
+                marginVertical: 10,
                 marginLeft: index == 0 ? SIZES.padding : 18,
                 marginRight: index == recommends.length - 1 ? SIZES.padding : 0,
                 paddingRight: SIZES.radius,
                 alignItems: "center",
+                borderColor: COLORS.lightGray1,
+                borderWidth: 1,
               }}
               imageStyle={{
-                marginTop: 35,
-                height: 150,
-                width: 150,
+                marginLeft: 15,
+                marginRight: 10,
+                borderRadius: SIZES.radius,
+                height: 130,
+                width: 130,
+                alignSelf: "center",
               }}
               item={item}
               onPress={() => console.log("HorizontalFoodCard")}
@@ -156,7 +184,7 @@ const Home = () => {
         onPress={() => console.log("Show all popular items")}
       >
         <FlatList
-          data={popular}
+          data={populars}
           keyExtractor={(item) => `${item.id}`}
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -164,7 +192,9 @@ const Home = () => {
             <VerticalFoodCard
               containerStyle={{
                 marginLeft: index == 0 ? SIZES.padding : 18,
-                marginRight: index == popular.length - 1 ? SIZES.padding : 0,
+                marginRight: index == populars.length - 1 ? SIZES.padding : 0,
+                borderColor: COLORS.lightGray1,
+                borderWidth: 1,
               }}
               item={item}
               onPress={() => console.log("Vertical Food Card")}
@@ -178,37 +208,44 @@ const Home = () => {
   const renderFoodCategories = () => {
     return (
       <FlatList
-        data={dummyData.categories}
+        data={categories}
         keyExtractor={(item) => `${item.id}`}
         horizontal
         showsHorizontalScrollIndicator={false}
         renderItem={({ item, index }) => (
           <TouchableOpacity
             onPress={() => {
-              setSelectedCategoryId(item.id);
-              handleChangeCategory(item.id, selectedMenuType);
+              dispatch(setSelectedCategory(item));
+              handleChangeCategory(
+                { id: item.id, name: item.name },
+                selectedMenuType
+              );
             }}
             style={{
               flexDirection: "row",
               height: 55,
               marginTop: SIZES.padding,
               marginLeft: index == 0 ? SIZES.padding : SIZES.radius,
-              marginRight:
-                index == dummyData.categories.length - 1 ? SIZES.padding : 0,
+              marginRight: index == categories.length - 1 ? SIZES.padding : 0,
               paddingHorizontal: 8,
               borderRadius: SIZES.radius,
               backgroundColor:
-                selectedCategoryId == item.id
+                selectedCategory?.id == item.id
                   ? COLORS.primary
                   : COLORS.lightGray2,
             }}
           >
             <Image
-              source={item.icon}
+              source={{
+                uri: item.icon.url,
+              }}
               style={{
-                marginTop: 5,
-                height: 50,
-                width: 50,
+                // marginTop: 5,
+                alignSelf: "center",
+                marginRight: 5,
+
+                height: 35,
+                width: 35,
               }}
             />
             <Text
@@ -216,7 +253,7 @@ const Home = () => {
                 alignSelf: "center",
                 marginRight: SIZES.base,
                 color:
-                  selectedCategoryId == item.id
+                  selectedCategory?.id == item.id
                     ? COLORS.white
                     : COLORS.darkGray,
                 ...FONTS.h3,
@@ -334,7 +371,7 @@ const Home = () => {
 
       {/* Flat List */}
       <FlatList
-        data={menuList}
+        data={foods}
         keyExtractor={(item) => `${item.id}`}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
@@ -359,11 +396,15 @@ const Home = () => {
                 alignItems: "center",
                 marginHorizontal: SIZES.padding,
                 marginBottom: SIZES.radius,
+                borderColor: COLORS.lightGray1,
+                borderWidth: 1,
               }}
               imageStyle={{
-                marginTop: 20,
+                alignSelf: "center",
                 height: 110,
                 width: 110,
+                marginHorizontal: 10,
+                borderRadius: SIZES.radius,
               }}
               item={item}
               onPress={() => console.log("HorizontalFoodCard")}

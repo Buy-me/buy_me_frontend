@@ -7,9 +7,6 @@ const version = "/v1";
 
 const privateClient = axios.create({
   baseURL: baseURL + version,
-  paramsSerializer: {
-    encode: (params) => queryString.stringify(params),
-  },
 });
 
 privateClient.interceptors.request.use(async (config) => {

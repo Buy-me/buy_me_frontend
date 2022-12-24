@@ -23,8 +23,8 @@ const sizes = [
   {
     id: 3,
     label: `18"`,
-  }
-]
+  },
+];
 
 const categories = [
   {
@@ -69,7 +69,8 @@ const hotTacos = {
 const vegBiryani = {
   id: 3,
   name: "Veg Biryani",
-  description: "Indian Vegetable Biryani Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum",
+  description:
+    "Indian Vegetable Biryani Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum",
   categories: [1, 2, 3],
   price: 10.99,
   calories: 78,
@@ -95,44 +96,38 @@ const myCart = [
   },
   {
     qty: 2,
-    ...vegBiryani
+    ...vegBiryani,
   },
   {
     qty: 3,
-    ...hotTacos
-  }
-]
+    ...hotTacos,
+  },
+];
 
 const menu = [
   {
     id: 1,
-    name: "Featured",
-    list: [hamburger, hotTacos, vegBiryani],
+    name: "Newest",
+    list: [hamburger, hotTacos, wrapSandwich],
+    sort: "id desc",
   },
   {
     id: 2,
-    name: "Nearby you",
-    list: [hamburger, vegBiryani, wrapSandwich],
-  }, 
+    name: "Trending",
+    list: [hamburger, hotTacos, wrapSandwich],
+    sort: "id desc",
+  },
   {
     id: 3,
-    name: "Popular",
-    list: [hamburger, hotTacos, wrapSandwich],
+    name: "Price High to Low",
+    list: [hamburger, vegBiryani, wrapSandwich],
+    sort: "price desc",
   },
   {
     id: 4,
-    name: "Newest",
-    list: [hamburger, hotTacos, vegBiryani],
-  },
-  {
-    id: 5,
-    name: "Trending",
+    name: "Price Low to High",
     list: [hamburger, vegBiryani, wrapSandwich],
-  },
-  {
-    id: 6,
-    name: "Recommended",
-    list: [hamburger, hotTacos, wrapSandwich],
+    sort: "price asc",
   },
 ];
 
@@ -141,15 +136,15 @@ const myCards = [
     id: 0,
     name: "Google Pay",
     icon: icons.google,
-    card_no: "0123456789"
+    card_no: "0123456789",
   },
   {
     id: 1,
     name: "Visa",
     icon: icons.visa,
-    card_no: "0123456789"
-  }
-]
+    card_no: "0123456789",
+  },
+];
 
 export default {
   myProfile,
@@ -158,5 +153,5 @@ export default {
   vegBiryani,
   sizes,
   myCart,
-  myCards
+  myCards,
 };

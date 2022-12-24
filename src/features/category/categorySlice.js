@@ -2,19 +2,32 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   selectedCategory: null,
+  selectedMenuType: {
+    id: 1,
+    name: "Newest",
+    sort: "id desc",
+  },
   categories: [],
 };
 
-export const tabSlice = createSlice({
+export const categorySlice = createSlice({
   name: "category",
   initialState,
   reducers: {
     setSelectedCategory: (state, action) => {
+      console.log(action);
       state.selectedCategory = action.payload;
+    },
+    setCategories: (state, action) => {
+      state.categories = action.payload;
+    },
+    setSelectedMenuType: (state, action) => {
+      state.selectedMenuType = action.payload;
     },
   },
 });
 
-export const { setSelectedCategory } = tabSlice.actions;
+export const { setSelectedCategory, setCategories, setSelectedMenuType } =
+  categorySlice.actions;
 
-export default tabSlice.reducer;
+export default categorySlice.reducer;
