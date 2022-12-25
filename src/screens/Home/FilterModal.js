@@ -9,15 +9,23 @@ import {
   Animated,
   TouchableWithoutFeedback,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import {
   IconButton,
   TextButtonTag,
   TextIconButton,
+  TextButtonFilter,
   TwoPointSlider,
 } from "../../component";
 
 // import Animated from "react-native-reanimated";
 import { COLORS, constants, FONTS, icons, SIZES } from "../../constants";
+import { setSelectedCategory } from "../../features/category/categorySlice";
+import {
+  setIsLoading,
+  setPrices,
+  setRating,
+} from "../../features/food/foodSlice";
 
 const Section = ({ title, children, containerStyle }) => {
   return (
@@ -28,30 +36,38 @@ const Section = ({ title, children, containerStyle }) => {
       }}
     >
       <Text style={{ ...FONTS.h3 }}>{title}</Text>
-
       {children}
     </View>
   );
 };
 
-const FilterModal = ({ isVisible, onClose }) => {
+const FilterModal = ({
+  isVisible,
+  onClose,
+  handleFilter,
+  handleResetFilter,
+}) => {
   const [showFilterModal, setShowFilterModal] = useState(isVisible);
   const modelAnimatedValue = useRef(new Animated.Value(0)).current;
 
-  const [ratings, setRatings] = useState("");
-  const [tags, setTags] = useState("");
+  const dispatch = useDispatch();
+  const { selectedCategory, categories } = useSelector(
+    (state) => state.category
+  );
+
+  const { rating, prices } = useSelector((state) => state.food);
 
   useEffect(() => {
     if (showFilterModal) {
       Animated.timing(modelAnimatedValue, {
         toValue: 1,
-        duration: 500,
+        duration: 300,
         useNativeDriver: false,
       }).start();
     } else {
       Animated.timing(modelAnimatedValue, {
         toValue: 0,
-        duration: 500,
+        duration: 0,
         useNativeDriver: false,
       }).start(() => onClose());
     }
@@ -71,12 +87,12 @@ const FilterModal = ({ isVisible, onClose }) => {
           }}
         >
           <TwoPointSlider
-            values={[3, 10]}
+            values={prices}
             min={1}
             max={20}
             postfix=""
-            onValueChange={() => {
-              (value) => console.log(value);
+            onValueChange={(values) => {
+              dispatch(setPrices(values));
             }}
           />
         </View>
@@ -109,21 +125,21 @@ const FilterModal = ({ isVisible, onClose }) => {
                   alignItems: "center",
                   borderRadius: SIZES.base,
                   backgroundColor:
-                    item.id == ratings ? COLORS.primary : COLORS.lightGray2,
+                    item.id == rating ? COLORS.primary : COLORS.lightGray2,
                 }}
                 label={item.label}
                 labelStyle={{
-                  color: item.id == ratings ? COLORS.white : COLORS.gray,
+                  color: item.id == rating ? COLORS.white : COLORS.gray,
                 }}
                 iconPosition="RIGHT"
                 icon={icons.star}
                 iconStyle={{
                   width: 15,
                   height: 15,
-                  tintColor: item.id == ratings ? COLORS.white : COLORS.gray,
+                  tintColor: item.id == rating ? COLORS.white : COLORS.gray,
                 }}
                 onPress={() => {
-                  setRatings(item.id);
+                  dispatch(setRating(item.id));
                 }}
               />
             );
@@ -135,20 +151,23 @@ const FilterModal = ({ isVisible, onClose }) => {
 
   const renderTags = () => {
     return (
-      <Section title={"Tags"}>
+      <Section title={"Categories"}>
         <View
           style={{
             flexDirection: "row",
             flexWrap: "wrap",
           }}
         >
-          {constants.tags.map((item, index) => {
+          {categories.map((item, index) => {
             return (
               <TextButtonTag
                 key={`Tags-${index}`}
-                label={item.label}
+                label={item.name}
                 labelStyle={{
-                  color: item.id == tags ? COLORS.white : COLORS.gray,
+                  color:
+                    item.id == selectedCategory?.id
+                      ? COLORS.white
+                      : COLORS.gray,
                   ...FONTS.body3,
                 }}
                 buttonContainerStyle={{
@@ -158,9 +177,11 @@ const FilterModal = ({ isVisible, onClose }) => {
                   alignItems: "center",
                   borderRadius: SIZES.base,
                   backgroundColor:
-                    item.id == tags ? COLORS.primary : COLORS.lightGray2,
+                    item.id == selectedCategory?.id
+                      ? COLORS.primary
+                      : COLORS.lightGray2,
                 }}
-                onPress={() => setTags(item.id)}
+                onPress={() => dispatch(setSelectedCategory(item))}
               ></TextButtonTag>
             );
           })}
@@ -259,17 +280,50 @@ const FilterModal = ({ isVisible, onClose }) => {
               backgroundColor: COLORS.white,
             }}
           >
-            <TextButtonTag
-              label={"Apply Filter"}
-              buttonContainerStyle={{
-                height: 50,
-                borderRadius: SIZES.base,
-                backgroundColor: COLORS.primary,
+            <View
+              style={{
+                flexDirection: "row",
+                // alignItems: "center",
+                justifyContent: "space-around",
               }}
-              onPress={() => {
-                console.log("Aplly");
-              }}
-            ></TextButtonTag>
+            >
+              <TextButtonTag
+                label={"Reset"}
+                labelStyle={{
+                  color: COLORS.primary,
+                }}
+                buttonContainerStyle={{
+                  flex: 1,
+                  height: 50,
+                  borderRadius: SIZES.base,
+                  backgroundColor: COLORS.white,
+                  borderColor: COLORS.primary,
+                  borderWidth: 1,
+                }}
+                onPress={() => {
+                  setShowFilterModal(false);
+                  dispatch(setIsLoading(true));
+                  dispatch(setPrices([0, 0]));
+                  dispatch(setRating(0));
+                  handleResetFilter();
+                }}
+              ></TextButtonTag>
+              <TextButtonTag
+                label={"Apply Filter"}
+                buttonContainerStyle={{
+                  flex: 2,
+                  height: 50,
+                  borderRadius: SIZES.base,
+                  backgroundColor: COLORS.primary,
+                  marginLeft: 20,
+                }}
+                onPress={() => {
+                  setShowFilterModal(false);
+                  dispatch(setIsLoading(true));
+                  handleFilter();
+                }}
+              ></TextButtonTag>
+            </View>
           </View>
         </Animated.View>
       </View>

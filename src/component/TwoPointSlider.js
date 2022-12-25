@@ -6,6 +6,7 @@ import { COLORS, FONTS, SIZES } from "../constants";
 const TwoPointSlider = ({ values, min, max, postfix, onValueChange }) => {
   return (
     <MultiSlider
+      onValuesChangeFinish={onValueChange}
       values={values}
       min={min}
       max={max}

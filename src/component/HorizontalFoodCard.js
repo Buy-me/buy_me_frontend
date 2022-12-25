@@ -12,6 +12,7 @@ const HorizontalFoodCard = ({ containerStyle, imageStyle, item, onPress }) => {
         // paddingTop: 10,
         ...containerStyle,
       }}
+      onPress={onPress}
     >
       {/* Images */}
       <Image source={{ uri: item.images.url }} style={imageStyle} />

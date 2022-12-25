@@ -14,10 +14,12 @@ import {
 } from "../../features/category/categorySlice";
 import {
   setFoods,
+  setIsLoading,
   setPopulars,
   setRecommends,
 } from "../../features/food/foodSlice";
 import foodApi from "../../api/foodApi";
+import { useNavigation } from "@react-navigation/native";
 
 const Section = ({ title, onPress, children }) => {
   return (
@@ -51,7 +53,9 @@ const Section = ({ title, onPress, children }) => {
 };
 
 const Home = () => {
+  const navigation = useNavigation();
   const [showFilterModal, setShowFilterModal] = useState(false);
+  const [search, setSearch] = useState("");
 
   //Redux Category
   const dispatch = useDispatch();
@@ -59,9 +63,15 @@ const Home = () => {
     (state) => state.category
   );
   // Redux Food
-  const { populars, recommends, selectedFood, foods } = useSelector(
-    (state) => state.food
-  );
+  const {
+    populars,
+    recommends,
+    selectedFood,
+    foods,
+    rating,
+    prices,
+    isLoading,
+  } = useSelector((state) => state.food);
 
   //
   useEffect(() => {
@@ -86,7 +96,45 @@ const Home = () => {
       const { response, err } = await foodApi.getList({
         sort: menuType.sort,
         categoryId: category?.id,
+        minPrice: prices[0],
+        maxPrice: prices[1],
+        rating: rating,
       });
+      dispatch(setIsLoading(false));
+      dispatch(setFoods(response.data));
+      dispatch(setRecommends(response.data));
+      dispatch(setPopulars(response.data));
+    };
+    getFoods();
+  };
+  const handleResetFilter = () => {
+    const getFoods = async () => {
+      const { response, err } = await foodApi.getList({
+        sort: selectedMenuType.sort,
+        categoryId: selectedCategory?.id,
+      });
+
+      dispatch(setIsLoading(false));
+
+      dispatch(setFoods(response.data));
+      dispatch(setRecommends(response.data));
+      dispatch(setPopulars(response.data));
+    };
+    getFoods();
+  };
+
+  const handleFilter = () => {
+    const getFoods = async () => {
+      const { response, err } = await foodApi.getList({
+        sort: selectedMenuType.sort,
+        categoryId: selectedCategory?.id,
+        minPrice: prices[0],
+        maxPrice: prices[1],
+        rating: rating,
+      });
+
+      dispatch(setIsLoading(false));
+
       dispatch(setFoods(response.data));
       dispatch(setRecommends(response.data));
       dispatch(setPopulars(response.data));
@@ -142,37 +190,50 @@ const Home = () => {
         title="Recommended"
         onPress={() => console.log("Show All Recommended")}
       >
-        <FlatList
-          data={recommends}
-          keyExtractor={(item) => `${item.id}`}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item, index }) => (
-            <HorizontalFoodCard
-              containerStyle={{
-                height: 160,
-                width: SIZES.width * 0.85,
-                marginVertical: 10,
-                marginLeft: index == 0 ? SIZES.padding : 18,
-                marginRight: index == recommends.length - 1 ? SIZES.padding : 0,
-                paddingRight: SIZES.radius,
-                alignItems: "center",
-                borderColor: COLORS.lightGray1,
-                borderWidth: 1,
-              }}
-              imageStyle={{
-                marginLeft: 15,
-                marginRight: 10,
-                borderRadius: SIZES.radius,
-                height: 130,
-                width: 130,
-                alignSelf: "center",
-              }}
-              item={item}
-              onPress={() => console.log("HorizontalFoodCard")}
-            />
-          )}
-        />
+        {recommends.length != 0 ? (
+          <FlatList
+            data={recommends}
+            keyExtractor={(item) => `${item.id}`}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            renderItem={({ item, index }) => (
+              <HorizontalFoodCard
+                containerStyle={{
+                  height: 160,
+                  width: SIZES.width * 0.85,
+                  marginVertical: 10,
+                  marginLeft: index == 0 ? SIZES.padding : 18,
+                  marginRight:
+                    index == recommends.length - 1 ? SIZES.padding : 0,
+                  paddingRight: SIZES.radius,
+                  alignItems: "center",
+                  borderColor: COLORS.lightGray1,
+                  borderWidth: 1,
+                }}
+                imageStyle={{
+                  marginLeft: 15,
+                  marginRight: 10,
+                  borderRadius: SIZES.radius,
+                  height: 130,
+                  width: 130,
+                  alignSelf: "center",
+                }}
+                item={item}
+                onPress={() => console.log("HorizontalFoodCard")}
+              />
+            )}
+          />
+        ) : (
+          <View
+            style={{
+              marginHorizontal: SIZES.padding,
+            }}
+          >
+            <Text style={{ ...FONTS.body4 }}>
+              No items found. Please chose the orther category or try again
+            </Text>
+          </View>
+        )}
       </Section>
     );
   };
@@ -183,24 +244,36 @@ const Home = () => {
         title="Popular"
         onPress={() => console.log("Show all popular items")}
       >
-        <FlatList
-          data={populars}
-          keyExtractor={(item) => `${item.id}`}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item, index }) => (
-            <VerticalFoodCard
-              containerStyle={{
-                marginLeft: index == 0 ? SIZES.padding : 18,
-                marginRight: index == populars.length - 1 ? SIZES.padding : 0,
-                borderColor: COLORS.lightGray1,
-                borderWidth: 1,
-              }}
-              item={item}
-              onPress={() => console.log("Vertical Food Card")}
-            />
-          )}
-        />
+        {populars.length != 0 ? (
+          <FlatList
+            data={populars}
+            keyExtractor={(item) => `${item.id}`}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            renderItem={({ item, index }) => (
+              <VerticalFoodCard
+                containerStyle={{
+                  marginLeft: index == 0 ? SIZES.padding : 18,
+                  marginRight: index == populars.length - 1 ? SIZES.padding : 0,
+                  borderColor: COLORS.lightGray1,
+                  borderWidth: 1,
+                }}
+                item={item}
+                onPress={() => console.log("Vertical Food Card")}
+              />
+            )}
+          />
+        ) : (
+          <View
+            style={{
+              marginHorizontal: SIZES.padding,
+            }}
+          >
+            <Text style={{ ...FONTS.body4 }}>
+              No items found. Please chose the orther category or try again
+            </Text>
+          </View>
+        )}
       </Section>
     );
   };
@@ -299,6 +372,9 @@ const Home = () => {
             ...FONTS.body3,
           }}
           placeholder="search food..."
+          onChangeText={(newText) => {
+            setSearch(newText);
+          }}
         />
 
         <TouchableOpacity onPress={() => setShowFilterModal(true)}>
@@ -366,54 +442,85 @@ const Home = () => {
         <FilterModal
           isVisible={showFilterModal}
           onClose={() => setShowFilterModal(false)}
+          handleFilter={handleFilter}
+          handleResetFilter={handleResetFilter}
         />
       )}
 
       {/* Flat List */}
-      <FlatList
-        data={foods}
-        keyExtractor={(item) => `${item.id}`}
-        showsVerticalScrollIndicator={false}
-        ListHeaderComponent={
-          <View>
-            {/* Delivery Address */}
-            {renderDeliveryTo()}
-            {/* Category */}
-            {renderFoodCategories()}
-            {/*  Popular */}
-            {renderPopularSection()}
-            {/*  Recommended */}
-            {renderRecommendedSection()}
-            {renderMenuTypes()}
-          </View>
-        }
-        // ListFooterComponent={<View style={{ height: 200 }}></View>}
-        renderItem={({ item, index }) => {
-          return (
-            <HorizontalFoodCard
-              containerStyle={{
-                height: 130,
-                alignItems: "center",
-                marginHorizontal: SIZES.padding,
-                marginBottom: SIZES.radius,
-                borderColor: COLORS.lightGray1,
-                borderWidth: 1,
+      {isLoading ? (
+        <View>
+          <Text>Spinner</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={foods}
+          keyExtractor={(item) => `${item.id}`}
+          showsVerticalScrollIndicator={false}
+          ListHeaderComponent={
+            <View>
+              {/* Delivery Address */}
+              {renderDeliveryTo()}
+              {/* Category */}
+              {renderFoodCategories()}
+              {/*  Popular */}
+              {renderPopularSection()}
+              {/*  Recommended */}
+              {renderRecommendedSection()}
+              {renderMenuTypes()}
+            </View>
+          }
+          ListFooterComponent={
+            <View
+              style={{
+                height: 150,
               }}
-              imageStyle={{
-                alignSelf: "center",
-                height: 110,
-                width: 110,
-                marginHorizontal: 10,
-                borderRadius: SIZES.radius,
-              }}
-              item={item}
-              onPress={() => console.log("HorizontalFoodCard")}
             >
-              {item.name}
-            </HorizontalFoodCard>
-          );
-        }}
-      />
+              {foods.length == 0 ? (
+                <View
+                  style={{
+                    marginHorizontal: SIZES.padding,
+                  }}
+                >
+                  <Text style={{ ...FONTS.body4 }}>
+                    No items found. Please chose the orther category or try
+                    again
+                  </Text>
+                </View>
+              ) : (
+                <View></View>
+              )}
+            </View>
+          }
+          renderItem={({ item, index }) => {
+            return (
+              <HorizontalFoodCard
+                containerStyle={{
+                  height: 130,
+                  alignItems: "center",
+                  marginHorizontal: SIZES.padding,
+                  marginBottom: SIZES.radius,
+                  borderColor: COLORS.lightGray1,
+                  borderWidth: 1,
+                }}
+                imageStyle={{
+                  alignSelf: "center",
+                  height: 110,
+                  width: 110,
+                  marginHorizontal: 10,
+                  borderRadius: SIZES.radius,
+                }}
+                item={item}
+                onPress={() => {
+                  navigation.navigate("FoodDetail");
+                }}
+              >
+                {item.name}
+              </HorizontalFoodCard>
+            );
+          }}
+        />
+      )}
     </View>
   );
 };

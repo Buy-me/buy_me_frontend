@@ -1,13 +1,12 @@
-import React from 'react';
-import {
-    View,
-} from 'react-native';
+import React from "react";
+import { Text, View } from "react-native";
 
 const Favourite = () => {
-    return (
-        <View>
-        </View>
-    )
-}
+  return (
+    <View>
+      <Text>Favourite</Text>
+    </View>
+  );
+};
 
-export default Favourite
+export default Favourite;

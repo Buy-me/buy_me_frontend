@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Image,
+  FlatList,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -28,6 +29,11 @@ import {
 import { setSelectedTab } from "../features/tab/tabSlice";
 import FoodDetail from "./Food/FoodDetail";
 import Home from "./Home/Home";
+import { useRef } from "react";
+import Search from "./Search/Search";
+import CartTab from "./Cart/CartTab";
+import Favourite from "./Favourite/Favourite";
+import Notification from "./Notification/Notification";
 
 const TabButton = ({
   label,
@@ -98,6 +104,7 @@ const TabButton = ({
 const MainLayout = ({ navigation }) => {
   const isDrawerOpen = useDrawerStatus() === "open";
   const scaleAnim = useSharedValue(1);
+  const flatListRef = useRef();
   const borderAnim = useSharedValue(1);
   useEffect(() => {
     if (isDrawerOpen) {
@@ -108,6 +115,7 @@ const MainLayout = ({ navigation }) => {
       borderAnim.value = 1;
     }
   }, [isDrawerOpen]);
+
   const style = useAnimatedStyle(() => {
     return {
       borderRadius: borderAnim.value,
@@ -128,6 +136,10 @@ const MainLayout = ({ navigation }) => {
 
   useEffect(() => {
     if (selectedTab == constants.screens.home) {
+      flatListRef?.current?.scrollToIndex({
+        index: 0,
+        animated: false,
+      });
       homeTabFlex.value = withTiming(4, { duration: 500 });
       homeTabColor.value = withTiming(COLORS.primary, { duration: 500 });
     } else {
@@ -136,6 +148,10 @@ const MainLayout = ({ navigation }) => {
     }
 
     if (selectedTab == constants.screens.search) {
+      flatListRef?.current?.scrollToIndex({
+        index: 1,
+        animated: false,
+      });
       searchTabFlex.value = withTiming(4, { duration: 500 });
       searchTabColor.value = withTiming(COLORS.primary, { duration: 500 });
     } else {
@@ -144,6 +160,10 @@ const MainLayout = ({ navigation }) => {
     }
 
     if (selectedTab == constants.screens.cart) {
+      flatListRef?.current?.scrollToIndex({
+        index: 2,
+        animated: false,
+      });
       cartTabFlex.value = withTiming(4, { duration: 500 });
       cartTabColor.value = withTiming(COLORS.primary, { duration: 500 });
     } else {
@@ -152,6 +172,10 @@ const MainLayout = ({ navigation }) => {
     }
 
     if (selectedTab == constants.screens.favourite) {
+      flatListRef?.current?.scrollToIndex({
+        index: 3,
+        animated: false,
+      });
       favouriteTabFlex.value = withTiming(4, { duration: 500 });
       favouriteTabColor.value = withTiming(COLORS.primary, { duration: 500 });
     } else {
@@ -160,6 +184,10 @@ const MainLayout = ({ navigation }) => {
     }
 
     if (selectedTab == constants.screens.notification) {
+      flatListRef?.current?.scrollToIndex({
+        index: 4,
+        animated: false,
+      });
       notificationTabFlex.value = withTiming(4, { duration: 500 });
       notificationTabColor.value = withTiming(COLORS.primary, {
         duration: 500,
@@ -297,7 +325,35 @@ const MainLayout = ({ navigation }) => {
           flex: 1,
         }}
       >
-        <Home />
+        <FlatList
+          ref={flatListRef}
+          horizontal
+          scrollEnabled={false}
+          pagingEnabled
+          snapToAlignment="center"
+          snapToInterval={SIZES.padding}
+          showsHorizontalScrollIndicator={false}
+          data={constants.bottom_tabs}
+          keyExtractor={(item) => `${item.id}`}
+          renderItem={({ item, index }) => {
+            return (
+              <View
+                style={{
+                  height: SIZES.height,
+                  width: SIZES.width,
+                }}
+              >
+                {item.label == constants.screens.home && <Home />}
+                {item.label == constants.screens.search && <Search />}
+                {item.label == constants.screens.cart && <CartTab />}
+                {item.label == constants.screens.favourite && <Favourite />}
+                {item.label == constants.screens.notification && (
+                  <Notification />
+                )}
+              </View>
+            );
+          }}
+        />
       </View>
       {/* Footer */}
       <View
@@ -359,7 +415,7 @@ const MainLayout = ({ navigation }) => {
             innerContainerStyle={cartColorStyle}
             onPress={() => {
               dispatch(setSelectedTab(constants.screens.cart));
-              navigation.navigate("FoodDetail");
+              // navigation.navigate("FoodDetail");
             }}
           />
 

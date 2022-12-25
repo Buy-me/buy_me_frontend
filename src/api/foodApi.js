@@ -12,6 +12,10 @@ const foodApi = {
       const response = await privateClient.get(foodEndpoints.list, {
         params: {
           sort: params.sort,
+          category_id: params.categoryId || 0,
+          min_price: params.minPrice || 0,
+          max_price: params.maxPrice || 0,
+          rating: params.rating || 0,
         },
       });
       return { response };

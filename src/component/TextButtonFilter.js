@@ -2,14 +2,14 @@ import React from "react";
 import { FONTS, COLORS } from "../constants";
 import { Text, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
 
-const TextButtonTag = ({
+const TextButtonFilter = ({
   label,
   labelStyle,
   onPress,
   buttonContainerStyle,
 }) => {
   return (
-    <TouchableOpacity
+    <TouchableWithoutFeedback
       style={{
         alignItems: "center",
         justifyContent: "center",
@@ -27,8 +27,8 @@ const TextButtonTag = ({
       >
         {label}
       </Text>
-    </TouchableOpacity>
+    </TouchableWithoutFeedback>
   );
 };
 
-export default TextButtonTag;
+export default TextButtonFilter;
