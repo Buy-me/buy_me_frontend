@@ -110,7 +110,7 @@ const CustomDrawerContent = ({ navigation, setSelectedTab, selectedTab }) => {
             isFocus={selectedTab === constants.screens.my_wallet}
             onPress={() => {
               setSelectedTab(constants.screens.my_wallet);
-              navigation.navigate("MainLayout");
+              navigation.navigate("MyCart");
             }}
           />
           <CustomDrawerItem

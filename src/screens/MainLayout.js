@@ -31,9 +31,9 @@ import FoodDetail from "./Food/FoodDetail";
 import Home from "./Home/Home";
 import { useRef } from "react";
 import Search from "./Search/Search";
-import CartTab from "./Cart/CartTab";
 import Favourite from "./Favourite/Favourite";
 import Notification from "./Notification/Notification";
+import MyCart from "./Cart/MyCart";
 
 const TabButton = ({
   label,
@@ -345,7 +345,7 @@ const MainLayout = ({ navigation }) => {
               >
                 {item.label == constants.screens.home && <Home />}
                 {item.label == constants.screens.search && <Search />}
-                {item.label == constants.screens.cart && <CartTab />}
+                {item.label == constants.screens.cart && <MyCart />}
                 {item.label == constants.screens.favourite && <Favourite />}
                 {item.label == constants.screens.notification && (
                   <Notification />

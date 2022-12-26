@@ -46,6 +46,8 @@ const ticket = require("../assets/icons/ticket.png");
 const creditCard = require("../assets/icons/credit-card.png");
 const cash = require("../assets/icons/cash.png");
 const calendar = require("../assets/icons/calendar.png")
+const category = require("../assets/icons/category.png")
+const note = require("../assets/icons/note.png")
 
 export default {
 	coupon,
@@ -95,5 +97,7 @@ export default {
 	ticket,
 	creditCard,
 	cash,
-	calendar
+	calendar,
+	category,
+	note
 };

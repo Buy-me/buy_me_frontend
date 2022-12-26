@@ -6,7 +6,7 @@ const TextIconButton = ({
   label,
   labelStyle,
   icon,
-  iconPosition,
+  iconPosition="LEFT",
   iconStyle,
   onPress,
 }) => {

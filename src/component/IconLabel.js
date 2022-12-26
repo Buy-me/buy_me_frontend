@@ -6,7 +6,7 @@ const IconLabel = ({
   containerStyle,
   icon,
   iconStyle,
-  iconPosition,
+  iconPosition="LEFT",
   label,
   labelStyle,
 }) => {

@@ -18,6 +18,7 @@ import {
   Rating,
   StepperInput,
   TextButton,
+  TextIconButton
 } from "../../component";
 import { useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
@@ -92,14 +93,14 @@ const FoodDetail = ({ navigation }) => {
             </View>
 
             {/* favourite */}
-            <Image
+            {/* <Image
               source={icons.love}
               style={{
                 width: 20,
                 height: 20,
                 tintColor: foodItem?.isFavourite ? COLORS.primary : COLORS.gray,
               }}
-            />
+            /> */}
           </View>
 
           <Image
@@ -115,13 +116,37 @@ const FoodDetail = ({ navigation }) => {
         {/* Food Info */}
         <View style={{ marginTop: SIZES.padding }}>
           {/* Name and description */}
-          <Text
-            style={{
-              ...FONTS.h1,
-            }}
-          >
-            {foodItem?.name}
-          </Text>
+          <View style={{
+            flexDirection: "row",
+            alignItems: "center"
+          }}>
+            <Text
+              style={{
+                ...FONTS.h1,
+                marginRight: 20
+              }}
+            >
+              {foodItem?.name}
+            </Text>
+            {/* rating */}
+            <IconLabel
+              containerStyle={{
+                alignItems: "center",
+                paddingVertical: 5
+              }}
+              icon={icons.star}
+              iconPosition="LEFT"
+              iconStyle={{
+                tintColor: "#FDD836",
+                width: 15,
+                height: 15,
+                marginRight: 5
+              }}
+              label="4.5"
+              labelStyle={{ color: COLORS.black }}
+            />
+          </View>
+
           <Text
             style={{
               marginTop: SIZES.base,
@@ -133,49 +158,64 @@ const FoodDetail = ({ navigation }) => {
             {foodItem?.description}
           </Text>
 
-          {/* rating, duration and shipping */}
+          {/* Add note */}
+          <TextIconButton
+            containerStyle={{
+              flex: 1,
+              height: 40,
+            }}
+            icon={icons.note}
+            iconStyle={{ tintColor: COLORS.transparentPrimray }}
+            label="Add note..."
+            labelStyle={{
+              flex: 1,
+              color: COLORS.transparentBlack1,
+              textAlign: "left",
+              marginLeft: 10,
+              ...FONTS.h3,
+            }}
+          />
+
+          {/* Quantity and Favourite */}
           <View
             style={{
               flexDirection: "row",
               marginTop: SIZES.padding,
             }}
           >
-            {/* rating */}
-            <IconLabel
+            <StepperInput
+              value={foodQuantity}
+              onAdd={() => setFoodQuantity(foodQuantity + 1)}
+              onMinus={() =>
+                setFoodQuantity((prev) => {
+                  if (prev > 1) return prev - 1;
+                })
+              }
+            />
+
+            <TextIconButton
               containerStyle={{
+                flex: 1,
+                height: 60,
+                marginLeft: SIZES.radius,
+                paddingHorizontal: SIZES.radius,
+                borderRadius: SIZES.radius,
                 backgroundColor: COLORS.primary,
-                marginRight: SIZES.radius,
               }}
-              icon={icons.star}
-              label="4.5"
-              labelStyle={{ color: COLORS.white }}
-            />
-
-            {/* duration */}
-            <IconLabel
-              containerStyle={{
-                marginHorizontal: SIZES.radius,
-                paddingHorizontal: 0,
+              icon={icons.favourite}
+              iconStyle={{ tintColor: COLORS.white }}
+              label="Add to Favourite"
+              labelStyle={{
+                flex: 1,
+                color: COLORS.white,
+                textAlign: "center",
+                ...FONTS.h3,
               }}
-              icon={icons.clock}
-              iconStyle={{ tintColor: COLORS.black }}
-              label="30 Mins"
-            />
-
-            {/* shipping */}
-            <IconLabel
-              containerStyle={{
-                marginHorizontal: SIZES.radius,
-                paddingHorizontal: 0,
-              }}
-              icon={icons.dollar}
-              iconStyle={{ tintColor: COLORS.black }}
-              label="Free Shipping"
             />
           </View>
 
           {/* sizes */}
-          <View
+          {/* <View
             style={{
               flexDirection: "row",
               marginTop: SIZES.padding,
@@ -215,62 +255,24 @@ const FoodDetail = ({ navigation }) => {
                 />
               ))}
             </View>
-          </View>
+          </View> */}
         </View>
       </View>
     );
   };
 
-  const renderFooter = () => {
-    return (
-      <View
-        style={{
-          flexDirection: "row",
-          height: 100,
-          alignItems: "center",
-          paddingHorizontal: SIZES.padding,
-          paddingBottom: SIZES.radius,
-        }}
-      >
-        <StepperInput
-          value={foodQuantity}
-          onAdd={() => setFoodQuantity(foodQuantity + 1)}
-          onMinus={() =>
-            setFoodQuantity((prev) => {
-              if (prev > 1) return prev - 1;
-            })
-          }
-        />
-
-        <TextButton
-          buttonStyle={{
-            flex: 1,
-            flexDirection: "row",
-            height: 60,
-            marginLeft: SIZES.radius,
-            paddingHorizontal: SIZES.radius,
-            borderRadius: SIZES.radius,
-            backgroundColor: COLORS.primary,
-          }}
-          label={"Buy Now"}
-          label2={"$15.99"}
-          onPress={() => navigation.navigate("MyCart")}
-        />
-      </View>
-    );
-  };
-
-  const renderRestaurant = () => {
+  const renderExtraInfo = () => {
     return (
       <View
         style={{
           flexDirection: "row",
           marginVertical: SIZES.padding,
           paddingHorizontal: SIZES.padding,
+          justifyContent: "space-between",
           alignItems: "center",
         }}
       >
-        <Image
+        {/* <Image
           source={images.profile}
           style={{
             width: 50,
@@ -291,7 +293,59 @@ const FoodDetail = ({ navigation }) => {
             1.2 KM away from you
           </Text>
         </View>
-        <Rating rating={4} iconStyle={{ marginLeft: 3 }} />
+        <Rating rating={4} iconStyle={{ marginLeft: 3 }} /> */}
+        {/* Category */}
+        <IconLabel
+          containerStyle={{
+            marginHorizontal: SIZES.radius,
+            paddingHorizontal: 0,
+          }}
+          iconPosition="LEFT"
+          icon={icons.category}
+          iconStyle={{ tintColor: COLORS.black }}
+          label="Coffee"
+        />
+
+        {/* shipping */}
+        <IconLabel
+          containerStyle={{
+            marginHorizontal: SIZES.radius,
+            paddingHorizontal: 0,
+          }}
+          iconPosition="LEFT"
+          icon={icons.dollar}
+          iconStyle={{ tintColor: COLORS.black }}
+          label="Free Shipping"
+        />
+      </View>
+    );
+  };
+
+  const renderFooter = () => {
+    return (
+      <View
+        style={{
+          flexDirection: "row",
+          height: 100,
+          alignItems: "center",
+          paddingHorizontal: SIZES.padding,
+          paddingBottom: SIZES.radius,
+        }}
+      >
+        <TextButton
+          buttonStyle={{
+            flex: 1,
+            flexDirection: "row",
+            height: 60,
+            // marginLeft: SIZES.radius,
+            paddingHorizontal: SIZES.radius,
+            borderRadius: SIZES.radius,
+            backgroundColor: COLORS.primary,
+          }}
+          label={"Buy Now"}
+          label2={"$15.99"}
+          onPress={() => navigation.navigate("MyCart")}
+        />
       </View>
     );
   };
@@ -308,8 +362,8 @@ const FoodDetail = ({ navigation }) => {
 
         <LineDivider />
 
-        {/* restaurant */}
-        {renderRestaurant()}
+        {/* extra info */}
+        {renderExtraInfo()}
       </ScrollView>
 
       {/* Footer */}
