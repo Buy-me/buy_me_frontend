@@ -16,6 +16,7 @@ const foodApi = {
           min_price: params.minPrice || 0,
           max_price: params.maxPrice || 0,
           rating: params.rating || 0,
+          search: params.search || "",
         },
       });
       return { response };

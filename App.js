@@ -14,7 +14,8 @@ import MyCard from "./src/screens/Card/MyCard";
 import AddCard from "./src/screens/Card/AddCard";
 import Checkout from "./src/screens/Cart/Checkout";
 import MyAccount from "./src/screens/Account/MyAccount";
-import { ChangePassword, EditAccount } from "./src/screens";
+import { Address, ChangePassword, EditAccount } from "./src/screens";
+import AddAddress from "./src/screens/Address/AddAddress";
 
 const Stack = createNativeStackNavigator();
 
@@ -45,9 +46,12 @@ const App = () => {
           <Stack.Screen name="MyCard" component={MyCard} />
           <Stack.Screen name="Add Card" component={AddCard} />
           <Stack.Screen name="Checkout" component={Checkout} />
-					<Stack.Screen name="MyAccount" component={MyAccount} />
-					<Stack.Screen name="EditAccount" component={EditAccount} />
-					<Stack.Screen name="ChangePassword" component={ChangePassword} />
+          <Stack.Screen name="MyAccount" component={MyAccount} />
+          <Stack.Screen name="EditAccount" component={EditAccount} />
+          <Stack.Screen name="Address" component={Address} />
+          <Stack.Screen name="Add Address" component={AddAddress} />
+          <Stack.Screen name="ChangePassword" component={ChangePassword} />
+
           <Stack.Screen
             name="Success"
             component={Success}
