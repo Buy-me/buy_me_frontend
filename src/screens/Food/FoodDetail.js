@@ -22,11 +22,14 @@ import {
 } from "../../component";
 import { useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
+import { useSelector } from "react-redux";
 
 const FoodDetail = ({ navigation }) => {
-  const [foodItem, setFoodItem] = useState(dummyData.vegBiryani);
-  const [selectedSize, setSelectedSize] = useState(0);
   const [foodQuantity, setFoodQuantity] = useState(1);
+  const [isFavourite, setIsFavourite] = useState(false)
+
+  const { selectedFood } = useSelector(state => state.food)
+  // console.log(selectedFood);
 
   const renderHeader = () => {
     return (
@@ -60,7 +63,7 @@ const FoodDetail = ({ navigation }) => {
           style={{
             height: 190,
             borderRadius: 15,
-            backgroundColor: COLORS.lightGray2,
+            backgroundColor: COLORS.white,
           }}
         >
           {/* calories and favourite */}
@@ -73,7 +76,7 @@ const FoodDetail = ({ navigation }) => {
             }}
           >
             {/* calories */}
-            <View style={{ flexDirection: "row" }}>
+            {/* <View style={{ flexDirection: "row" }}>
               <Image
                 source={icons.calories}
                 style={{
@@ -90,7 +93,7 @@ const FoodDetail = ({ navigation }) => {
                 {" "}
                 {foodItem?.calories} calories
               </Text>
-            </View>
+            </View> */}
 
             {/* favourite */}
             {/* <Image
@@ -104,7 +107,7 @@ const FoodDetail = ({ navigation }) => {
           </View>
 
           <Image
-            source={foodItem?.image}
+            source={{ uri: selectedFood?.images.url }}
             resizeMode="contain"
             style={{
               height: 170,
@@ -117,22 +120,23 @@ const FoodDetail = ({ navigation }) => {
         <View style={{ marginTop: SIZES.padding }}>
           {/* Name and description */}
           <View style={{
-            flexDirection: "row",
-            alignItems: "center"
+            flexDirection: "column",
+            // alignItems: "center"
           }}>
             <Text
               style={{
                 ...FONTS.h1,
-                marginRight: 20
+                // marginRight: 20
               }}
             >
-              {foodItem?.name}
+              {selectedFood?.name}
             </Text>
             {/* rating */}
             <IconLabel
               containerStyle={{
                 alignItems: "center",
-                paddingVertical: 5
+                paddingVertical: 5,
+                paddingHorizontal: 0
               }}
               icon={icons.star}
               iconPosition="LEFT"
@@ -140,10 +144,9 @@ const FoodDetail = ({ navigation }) => {
                 tintColor: "#FDD836",
                 width: 15,
                 height: 15,
-                marginRight: 5
               }}
-              label="4.5"
-              labelStyle={{ color: COLORS.black }}
+              label={selectedFood?.rating.toFixed(1)}
+              labelStyle={{ color: COLORS.gray }}
             />
           </View>
 
@@ -155,7 +158,7 @@ const FoodDetail = ({ navigation }) => {
               ...FONTS.body3,
             }}
           >
-            {foodItem?.description}
+            {selectedFood?.description}
           </Text>
 
           {/* Add note */}
@@ -163,6 +166,7 @@ const FoodDetail = ({ navigation }) => {
             containerStyle={{
               flex: 1,
               height: 40,
+              marginTop: 15
             }}
             icon={icons.note}
             iconStyle={{ tintColor: COLORS.transparentPrimray }}
@@ -186,76 +190,32 @@ const FoodDetail = ({ navigation }) => {
             <StepperInput
               value={foodQuantity}
               onAdd={() => setFoodQuantity(foodQuantity + 1)}
-              onMinus={() =>
-                setFoodQuantity((prev) => {
-                  if (prev > 1) return prev - 1;
-                })
-              }
+              onMinus={() => {
+                  if(foodQuantity > 1) setFoodQuantity(foodQuantity - 1)
+              }}
             />
 
             <TextIconButton
               containerStyle={{
                 flex: 1,
-                height: 60,
+                height: 55,
                 marginLeft: SIZES.radius,
                 paddingHorizontal: SIZES.radius,
                 borderRadius: SIZES.radius,
                 backgroundColor: COLORS.primary,
               }}
-              icon={icons.favourite}
+              icon={ isFavourite ? icons.love : icons.favourite}
               iconStyle={{ tintColor: COLORS.white }}
-              label="Add to Favourite"
+              label={ isFavourite ? "Remove Favourite" : "Add to Favourite"}
               labelStyle={{
                 flex: 1,
                 color: COLORS.white,
                 textAlign: "center",
                 ...FONTS.h3,
               }}
+              onPress={() => setIsFavourite(!isFavourite)}
             />
           </View>
-
-          {/* sizes */}
-          {/* <View
-            style={{
-              flexDirection: "row",
-              marginTop: SIZES.padding,
-              alignItems: "center",
-            }}
-          >
-            <Text style={{ ...FONTS.h3 }}>Sizes:</Text>
-
-            <View
-              style={{
-                flexDirection: "row",
-                flexWrap: "wrap",
-                marginLeft: SIZES.padding,
-              }}
-            >
-              {dummyData.sizes.map((item, index) => (
-                <TextButton
-                  key={`size-${index}`}
-                  buttonStyle={{
-                    width: 55,
-                    height: 55,
-                    margin: SIZES.base,
-                    borderWidth: 1,
-                    borderRadius: SIZES.radius,
-                    borderColor:
-                      selectedSize !== item.id ? COLORS.gray2 : COLORS.primary,
-                    backgroundColor:
-                      selectedSize !== item.id ? null : COLORS.primary,
-                  }}
-                  label={item.label}
-                  labelStyle={{
-                    color:
-                      selectedSize !== item.id ? COLORS.gray2 : COLORS.white,
-                    ...FONTS.body2,
-                  }}
-                  onPress={() => setSelectedSize(item.id)}
-                />
-              ))}
-            </View>
-          </View> */}
         </View>
       </View>
     );
@@ -303,7 +263,7 @@ const FoodDetail = ({ navigation }) => {
           iconPosition="LEFT"
           icon={icons.category}
           iconStyle={{ tintColor: COLORS.black }}
-          label="Coffee"
+          label={"Coffee"} //TODO: CHANGE
         />
 
         {/* shipping */}
@@ -332,7 +292,7 @@ const FoodDetail = ({ navigation }) => {
           paddingBottom: SIZES.radius,
         }}
       >
-        <TextButton
+        {/* <TextButton
           buttonStyle={{
             flex: 1,
             flexDirection: "row",
@@ -344,6 +304,33 @@ const FoodDetail = ({ navigation }) => {
           }}
           label={"Buy Now"}
           label2={"$15.99"}
+          onPress={() => navigation.navigate("MyCart")}
+        /> */}
+
+        <TextIconButton
+          containerStyle={{
+            flex: 1,
+            flexDirection: "row",
+            height: 60,
+            paddingHorizontal: SIZES.radius,
+            borderRadius: SIZES.radius,
+            backgroundColor: COLORS.primary,
+            justifyContent: "space-between",
+            alignItems: "center"
+          }}
+          label={"Add to Cart"}
+          labelStyle={{
+            color: COLORS.white,
+            textAlign: "left",
+            ...FONTS.h3,
+          }}
+          label2={`$${(foodQuantity * selectedFood?.price).toFixed(2)}`}
+          label2Style={{
+            color: COLORS.white,
+            ...FONTS.h3,
+          }}
+          icon={icons.cart}
+          iconStyle={{ tintColor: COLORS.white }}
           onPress={() => navigation.navigate("MyCart")}
         />
       </View>

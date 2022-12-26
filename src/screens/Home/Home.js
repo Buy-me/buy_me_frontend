@@ -17,6 +17,7 @@ import {
   setIsLoading,
   setPopulars,
   setRecommends,
+  setSelectedFood,
 } from "../../features/food/foodSlice";
 import foodApi from "../../api/foodApi";
 import { useNavigation } from "@react-navigation/native";
@@ -513,6 +514,7 @@ const Home = () => {
                 item={item}
                 onPress={() => {
                   navigation.navigate("FoodDetail");
+                  dispatch(setSelectedFood(item))
                 }}
               >
                 {item.name}

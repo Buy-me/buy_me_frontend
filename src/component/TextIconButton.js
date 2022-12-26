@@ -1,12 +1,14 @@
-import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { COLORS, FONTS } from "../constants";
 
 const TextIconButton = ({
   containerStyle,
   label,
   labelStyle,
+  label2,
+  label2Style,
   icon,
-  iconPosition="LEFT",
+  iconPosition = "LEFT",
   iconStyle,
   onPress,
 }) => {
@@ -29,14 +31,43 @@ const TextIconButton = ({
           }}
         />
       )}
-      <Text
-        style={{
-          ...FONTS.body3,
-          ...labelStyle,
-        }}
-      >
-        {label}
-      </Text>
+
+      {!label2 ?
+        <Text
+          style={{
+            ...FONTS.body3,
+            ...labelStyle,
+          }}
+        >
+          {label}
+        </Text>
+        :
+        <View style={{
+          flex: 1,
+          flexDirection: "row",
+          justifyContent: "space-between",
+          marginLeft: 10,
+          alignSelf: "center"
+        }}>
+          <Text
+            style={{
+              ...FONTS.body3,
+              ...labelStyle,
+            }}
+          >
+            {label}
+          </Text>
+          <Text
+            style={{
+              ...FONTS.body3,
+              ...label2Style,
+            }}
+          >
+            {label2}
+          </Text>
+        </View>
+      }
+
       {iconPosition == "RIGHT" && (
         <Image
           source={icon}
