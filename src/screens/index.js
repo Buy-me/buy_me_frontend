@@ -1,8 +1,7 @@
 import MainLayout from "./MainLayout"
 
 // SignInSignUp
-import SignIn from "./SignInSignUp/SignIn"
-// import SignUp from "./SignInSignUp/SignUp"
+import AuthLayout from "./SignInSignUp/AuthLayout";
 
 // Home
 import Home from "./Home/Home"
@@ -30,8 +29,7 @@ import ChangePassword from "./Account/ChangePassword";
 
 export {
     MainLayout,
-    SignIn,
-    // SignUp,
+    AuthLayout,
     Home,
     Search,
     CartTab,

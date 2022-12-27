@@ -1,3 +1,5 @@
+const eye = require("../assets/icons/eye.png");
+const eye_closed = require("../assets/icons/eye_closed.png");
 const coupon = require("../assets/icons/coupon.png");
 const cross = require("../assets/icons/cross.png");
 const cart = require("../assets/icons/cart.png");
@@ -48,6 +50,8 @@ const cash = require("../assets/icons/cash.png");
 const calendar = require("../assets/icons/calendar.png")
 
 export default {
+	eye,
+	eye_closed,
 	coupon,
 	cross,
 	cart,

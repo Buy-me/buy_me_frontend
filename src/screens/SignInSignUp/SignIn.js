@@ -1,18 +1,196 @@
 import React from 'react';
 import {
     View,
-    Text
+    Text,
+    Image,
+    TouchableOpacity
 } from 'react-native';
 
-import AuthLayout from "../SignInSignUp/AuthLayout";
+import {
+    images,
+    icons,
+    FONTS,
+    SIZES,
+    COLORS
+} from "../../constants";
 
-const SignIn = () => {
+import {
+    FormInput, 
+    TextButton
+} from "../../component"
+
+import { AuthLayout } from '../';
+import utils from '../../utils';
+
+const SignIn = ({ navigation }) => {
+    const [email, setEmail] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const [emailError, setEmailError] = React.useState("");
+    const [passwordError, setPasswordError] = React.useState("");
+
+    const [showPass, setShowPass] = React.useState(false);
+
+    function isEnabledSignIn() {
+        return email != "" && password != "" && emailError == "";
+    }
+
     return (
         <AuthLayout
+            screenName='signin'
             title="Let's Sign You In"
             subtitle="Welcome back, you've been missed"
-        >
+            chidren={
+                <View
+                    style={{
+                        flex: 1,
+                        marginTop: SIZES.padding* 2
+                    }}
+                >
+                    {/* Form Inputs */}
+                    {/* Email */}
+                    <FormInput
+                        label='Email'
+                        keyboardType='email-address'
+                        autoCompleteType='email'
+                        value={email}
+                        onChange={(value) => {
+                            // Validate email
+                            utils.utils.validateEmail(value, setEmailError);
+                            setEmail(value);
+                        }}
+                        errorMsg={emailError}
+                        appendComponent={
+                            <View
+                                style={{
+                                    justifyContent:'center'
+                                }}
+                            >
+                                <Image
+                                    source={email == "" || (email != "" && emailError == "") ? icons.correct : icons.cancel}
+                                    style={{
+                                        height: 20,
+                                        width: 20,
+                                        tintColor: email == "" ? COLORS.gray : (email != "" && emailError == "") ? COLORS.green : COLORS.red
+                                    }}
+                                >
 
+                                </Image>
+                            </View>
+                        }
+                    />
+                    <View
+                        style={{
+                            height: 20
+                        }}
+                    >
+                    </View>                    
+                    {/* Password */}
+                    <FormInput
+                        label='Password'
+                        secureTextEntry={!showPass}
+                        autoCompleteType='password'
+                        containerStyle={{
+                            marginTop: SIZES.radius
+                        }}
+                        value={password}
+                        onChange={(value) => {
+                            // Validate email
+                            utils.utils.validatePassword(value, setPasswordError);
+                            setPassword(value);
+                        }}
+                        errorMsg={passwordError}
+                        appendComponent={
+                            <TouchableOpacity
+                                style={{
+                                    width: 40,
+                                    alignItems: 'flex-end',
+                                    justifyContent: 'center'
+                                }}
+                                onPress={() => setShowPass(!showPass)}
+                            >
+                                <Image
+                                    source={showPass ? icons.eye : icons.eye_closed}
+                                    style={{
+                                        height: 20,
+                                        width: 20,
+                                        tintColor: COLORS.gray
+                                    }}
+                                >
+                                </Image>
+                            </TouchableOpacity>
+                        }
+                    />
+                    <View
+                        style={{
+                            height: 15
+                        }}
+                    >
+                    </View>                      
+                    {/* Forgot Password */}
+                    <TextButton
+                        label='Forgot Password?'
+                        buttonStyle={{
+                            backgroundColor: null,
+                            alignItems: 'flex-end'
+                        }}
+                        labelStyle={{
+                            color: COLORS.gray,
+                            ...FONTS.body5
+                        }}
+                        // onPress={() => ""} // To Forgot Password
+                    >
+                    </TextButton>
+                    <View
+                        style={{
+                            height: 40
+                        }}
+                    >
+                    </View>                    
+                    {/* Sign In Button */}
+                    <TextButton
+                        label='Sign In'
+                        disabled={isEnabledSignIn() ? false : true}
+                        buttonStyle={{
+                            height: 60,
+                            borderRadius: 10,
+                            backgroundColor: isEnabledSignIn() ? COLORS.primary : COLORS.transparentPrimary
+                        }}
+                    >
+                    </TextButton>
+                    {/* To Sign Up */}
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            marginTop: SIZES.radius,
+                            justifyContent: 'center'
+                        }}
+                    >
+                        <Text
+                            style={{
+                                color: COLORS.darkGray,
+                                ...FONTS.body4
+                            }}
+                        >
+                            Don't have an account?
+                        </Text>
+
+                        <TextButton
+                            label="Sign Up"
+                            buttonStyle={{
+                                marginLeft: 3,
+                                backgroundColor: null
+                            }}
+                            labelStyle={{
+                                color: COLORS.primary,
+                                ...FONTS.h4
+                            }}
+                            onPress={() => navigation.navigate("SignUp")}
+                        >
+                        </TextButton>
+                    </View>
+                </View>
+            }
+        >
         </AuthLayout>
     );
 }
