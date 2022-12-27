@@ -172,6 +172,7 @@ const SignUp = ({ navigation }) => {
                           borderRadius: 10,
                           backgroundColor: isEnabledSignUp() ? COLORS.primary : COLORS.transparentPrimary
                       }}
+                      onPress={() => navigation.navigate("SignIn")}
                   >
                   </TextButton>
                   {/* To Sign In */}
