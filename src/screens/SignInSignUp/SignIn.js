@@ -31,14 +31,14 @@ const SignIn = ({ navigation }) => {
     const [showPass, setShowPass] = React.useState(false);
 
     function isEnabledSignIn() {
-        return email != "" && password != "" && emailError == "";
+        return email != "" && password != "" && emailError == "" && passwordError == "";
     }
 
     return (
         <AuthLayout
             screenName='signin'
             title="Let's Sign You In"
-            subtitle="Welcome back, you've been missed"
+            subtitle="Welcome back, you've been missed."
             chidren={
                 <View
                     style={{
@@ -73,7 +73,6 @@ const SignIn = ({ navigation }) => {
                                         tintColor: email == "" ? COLORS.gray : (email != "" && emailError == "") ? COLORS.green : COLORS.red
                                     }}
                                 >
-
                                 </Image>
                             </View>
                         }

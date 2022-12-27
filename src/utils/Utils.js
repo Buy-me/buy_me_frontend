@@ -50,11 +50,22 @@ function validatePassword(value, setPasswordError) {
     }
 }
 
+function validateUsername(value, setUsernameError) {
+    if (value == "") {
+        setUsernameError("")
+    }
+    else if (value.length < 5) {
+        setUsernameError("Username must be 5 characters")
+    } else {
+        setUsernameError("")
+    }
+}
 
 const utils = {
 	validateInput,
     isValidEmail,
     validateEmail,
+    validateUsername,
     validatePassword,
 	convertToDateString
 };

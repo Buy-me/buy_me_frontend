@@ -43,6 +43,7 @@ const AuthLayout = ({ title, subtitle, screenName, titleContainerStyle, chidren 
                         source={images.logo}
                         resizeMode="contain"
                         style={{
+                            marginTop: SIZES.padding - 40,
                             height: 200,
                             width: 200
                         }}
@@ -55,7 +56,7 @@ const AuthLayout = ({ title, subtitle, screenName, titleContainerStyle, chidren 
                 {/* Title & Subtitle */}
                 <View
                     style={{
-                        marginTop: SIZES.padding,
+                        marginTop: SIZES.padding - 30,
                         ...titleContainerStyle
                     }}
                 >
