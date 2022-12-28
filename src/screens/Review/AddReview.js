@@ -1,54 +1,60 @@
 import { useEffect, useState } from "react";
 import { Image, ImageBackground, Text, ToastAndroid, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Rating } from "react-native-ratings";
 import { useDispatch, useSelector } from "react-redux";
 import addressApi from "../../api/addressApi";
+import foodApi from "../../api/foodApi";
 import {
   FormInput,
   FormInputCheck,
   Header,
   IconButton,
-  RadioButton,
   TextButton,
 } from "../../component";
-import { COLORS, FONTS, icons, images, SIZES } from "../../constants";
 import {
-  addAddress,
-  setAddressList,
-} from "../../features/address/addressSlice";
+  COLORS,
+  dummyData,
+  FONTS,
+  icons,
+  images,
+  SIZES,
+} from "../../constants";
+import { addAddress } from "../../features/address/addressSlice";
 import Utils from "../../utils";
 import utils from "../../utils/Utils";
 
-const AddAddress = ({ navigation, route }) => {
-  const [title, setTitle] = useState("");
-  const [titleError, setTitleError] = useState("");
-  const [address, setAddress] = useState("");
-  const [addressError, setAddressError] = useState("");
+const AddReview = ({ navigation, route }) => {
+  const [foodItem, setFoodItem] = useState(dummyData.vegBiryani);
+
+  const [comment, setComent] = useState("");
+  const [rating, setRating] = useState(5);
+  const [commentErr, setCommentErr] = useState("");
 
   //Redux
   const dispatch = useDispatch();
 
-  function isEnableAddAddress() {
-    return address != "" && title != "";
+  function isEnableRating() {
+    return comment != "";
   }
 
-  const handleAdd = async () => {
-    const { response, err } = await addressApi.addAddress({
-      title,
-      address,
+  const handleRating = async () => {
+    const { response, err } = await foodApi.rating(1, {
+      rating,
+      comment,
     });
     if (err) {
       alert(utils.utils.capitalizeFirstLetter(err.message));
       return;
     }
     dispatch(addAddress(response.data));
-    ToastAndroid.show("Address has been added!", ToastAndroid.SHORT);
+    ToastAndroid.show("Rating succcessfully!", ToastAndroid.SHORT);
   };
 
   const renderHeader = () => {
     return (
       <Header
-        title="ADD NEW ADDRESS"
+        title="REVIEW ITEM"
         containerStyle={{
           height: 50,
           marginHorizontal: SIZES.padding,
@@ -85,37 +91,76 @@ const AddAddress = ({ navigation, route }) => {
     );
   };
 
+  const renderItem = () => {
+    return (
+      <View
+        style={{
+          height: 160,
+          borderRadius: 15,
+          marginTop: 20,
+          backgroundColor: COLORS.white,
+          // backgroundColor: COLORS.red,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Image
+          source={foodItem?.image}
+          resizeMode="contain"
+          style={{ width: "50%", alignSelf: "center" }}
+        />
+      </View>
+    );
+  };
   const renderForm = () => {
     const { utils } = Utils;
     return (
-      <View style={{ marginTop: SIZES.padding * 2 }}>
-        <FormInput
-          label="Title Address"
-          keyboardType="default"
-          containerStyle={{}}
-          maxLength={100}
-          value={title}
-          onChange={(value) => {
-            utils.validateInput(value, 1, setTitleError);
-            setTitle(value);
+      <View style={{ flexDirection: "column", marginTop: SIZES.padding * 2 }}>
+        <Rating
+          type="custom"
+          showRating={false}
+          onFinishRating={(raing) => {
+            setRating(raing);
           }}
-          errorMsg={titleError}
-          appendComponent={<FormInputCheck value={title} error={titleError} />}
+          startingValue={rating}
+          jumpValue={0.5}
+          imageSize={40}
+          fractions={1}
+          style={{
+            flex: 1,
+            height: 10,
+            marginBottom: 40,
+          }}
         />
 
         <FormInput
-          label="Address"
-          value={address}
+          label="Comment"
+          value={comment}
           containerStyle={{
             marginTop: SIZES.radius,
           }}
-          onChange={(value) => {
-            utils.validateInput(value, 1, setAddressError);
-            setAddress(value);
+          inputContainerStyle={{
+            height: 300,
+            padding: SIZES.padding,
+            alignItems: "flex-start",
           }}
-          errorMsg={addressError}
+          inputStyle={{
+            textAlignVertical: "top",
+          }}
+          onChange={(value) => {
+            utils.validateInput(value, 1, setCommentErr);
+            setComent(value);
+          }}
+          errorMsg={commentErr}
           appendComponent={
-            <FormInputCheck value={address} error={addressError} />
+            <FormInputCheck
+              value={comment}
+              error={commentErr}
+              style={{
+                height: "100%",
+                justifyContent: "flex-end",
+              }}
+            />
           }
         />
       </View>
@@ -131,17 +176,17 @@ const AddAddress = ({ navigation, route }) => {
         }}
       >
         <TextButton
-          label="Add Address"
-          disabled={!isEnableAddAddress()}
+          label="Submit Rating"
+          disabled={!isEnableRating()}
           buttonStyle={{
             height: 60,
             borderRadius: SIZES.radius,
-            backgroundColor: isEnableAddAddress()
+            backgroundColor: isEnableRating()
               ? COLORS.primary
               : COLORS.transparentPrimray,
           }}
           onPress={() => {
-            handleAdd();
+            handleRating();
             navigation.goBack();
           }}
         />
@@ -163,6 +208,7 @@ const AddAddress = ({ navigation, route }) => {
           paddingHorizontal: SIZES.padding,
         }}
       >
+        {renderItem()}
         {renderForm()}
       </KeyboardAwareScrollView>
       {renderFooter()}
@@ -170,4 +216,4 @@ const AddAddress = ({ navigation, route }) => {
   );
 };
 
-export default AddAddress;
+export default AddReview;

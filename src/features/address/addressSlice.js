@@ -1,33 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  addressList: [
-    {
-      id: 0,
-      title: "Le Quy Don Highschool",
-      address: "123 Tran Hung Dao Street, Ward 2, District 1",
-    },
-    {
-      id: 1,
-      title: "Le Quy Don Highschool",
-      address: "123 Tran Hung Dao Street, Ward 2, District 1",
-    },
-    {
-      id: 2,
-      title: "University of Informaton Technology",
-      address: "123 Tran Hung Dao Street, Ward 2, District 1",
-    },
-    {
-      id: 3,
-      title: "Ben Thanh Market",
-      address: "123 Tran Hung Dao Street, Ward 2, District 1",
-    },
-  ],
-  selectedAddress: {
-    id: 2,
-    title: "University of Informaton Technology",
-    address: "123 Tran Hung Dao Street, Ward 2, District 1",
-  },
+  addressList: [],
+  selectedAddress: null,
 };
 
 export const addressSlice = createSlice({
@@ -38,13 +13,19 @@ export const addressSlice = createSlice({
       state.addressList = action.payload;
     },
     addAddress: (state, action) => {
-      console.log("Come here add ");
-      state.addressList = [
-        { id: action.payload.title, ...action.payload },
-        ...state.addressList,
-      ];
+      state.addressList = [{ ...action.payload }, ...state.addressList];
 
       console.log(state.addressList);
+    },
+    deleteAddress: (state, action) => {
+      // newAddr = state.addressList.filter((item) => item.id !== action.payload);
+      state.addressList = state.addressList.filter(
+        (item) => item.id !== action.payload
+      );
+
+      if (state.addressList.length == 0) {
+        state.selectedAddress = null;
+      }
     },
     setSelectedAddress: (state, action) => {
       state.selectedAddress = action.payload;
@@ -52,7 +33,7 @@ export const addressSlice = createSlice({
   },
 });
 
-export const { setAddressList, setSelectedAddress, addAddress } =
+export const { setAddressList, setSelectedAddress, addAddress, deleteAddress } =
   addressSlice.actions;
 
 export default addressSlice.reducer;

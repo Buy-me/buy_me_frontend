@@ -320,7 +320,7 @@ const MainLayout = ({ navigation }) => {
               justifyContent: "center",
               borderRadius: SIZES.radius,
             }}
-            onPress={() => navigation.openDrawer()}
+            onPress={() => navigation.navigate("Review")}
           >
             <Image
               source={dummyData.myProfile?.profile_image}

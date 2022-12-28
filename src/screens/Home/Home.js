@@ -447,7 +447,11 @@ const Home = ({ type }) => {
           }}
           onPress={() => navigation.navigate("Address")}
         >
-          <Text style={{ ...FONTS.h3 }}>{selectedAddress.title}</Text>
+          <Text style={{ ...FONTS.h3 }}>
+            {selectedAddress
+              ? selectedAddress.title
+              : "Choose the delivery addresses"}
+          </Text>
           <Image
             source={icons.down_arrow}
             style={{

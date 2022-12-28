@@ -66,6 +66,8 @@ const FormInput = ({
               maxLength={maxLength}
               onChangeText={(text) => onChange(text)}
               editable={editable}
+              multiline
+              numberOfLines={5}
             />
           </TouchableWithoutFeedback>
         )}

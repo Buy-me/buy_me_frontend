@@ -1,4 +1,11 @@
-import { Image, StyleSheet, Text, ToastAndroid, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS, dummyData, FONTS, icons, SIZES } from "../../constants";
 import {
@@ -18,30 +25,36 @@ import {
 } from "../../features/address/addressSlice";
 import addressApi from "../../api/addressApi";
 import utils from "../../utils";
+import { AirbnbRating, Rating } from "react-native-ratings";
 
-const address = [
+const ratings = [
   {
     id: 0,
-    title: "Le Quy Don Highschool",
-    address: "123 Tran Hung Dao Street, Ward 2, District 1",
+    address: "Nice is delicioussssss",
+    rating: 4.5,
   },
   {
     id: 1,
-    title: "Le Quy Don Highschool",
-    address: "123 Tran Hung Dao Street, Ward 2, District 1",
+    address: "Nice is delicioussssss",
+    rating: 5,
   },
   {
     id: 2,
     title: "University of Informaton Technology",
-    address: "123 Tran Hung Dao Street, Ward 2, District 1",
+    rating: 4,
   },
   {
     id: 3,
-    title: "Ben Thanh Market",
-    address: "123 Tran Hung Dao Street, Ward 2, District 1",
+    address: "Nice is delicioussssss",
+    rating: 1,
+  },
+  {
+    id: 4,
+    address: "Nice is delicioussssss",
+    rating: 2,
   },
 ];
-const Address = ({ navigation }) => {
+const Review = ({ navigation }) => {
   const dispatch = useDispatch();
   const { addressList } = useSelector((state) => state.address);
 
@@ -60,6 +73,10 @@ const Address = ({ navigation }) => {
     getAddresses();
   }, []);
 
+  function ratingCompleted(rating) {
+    // console.log("Rating is: " + rating);
+  }
+
   //handle delete address
 
   const handleDelete = async (item) => {
@@ -76,7 +93,7 @@ const Address = ({ navigation }) => {
   const renderHeader = () => {
     return (
       <Header
-        title={"ADDRESS LIST"}
+        title={"REVIEW LIST"}
         containerStyle={headerStyles.container}
         leftComponent={
           <IconButton
@@ -91,21 +108,25 @@ const Address = ({ navigation }) => {
             icon={icons.address}
             containerStyle={headerStyles.rightContainer}
             iconStyle={headerStyles.rightIcon}
-            onPress={() => navigation.navigate("Add Address")}
+            onPress={() =>
+              navigation.navigate("Add Review", {
+                foodId: 1,
+              })
+            }
           />
         }
       />
     );
   };
 
-  const renderAddressList = () => {
+  const renderReviewList = () => {
     return (
-      <SwipeListView
-        data={addressList}
-        keyExtractor={(item) => `Address_${item.id}`}
+      <FlatList
+        keyExtractor={(item) => `${item.id}`}
+        data={ratings}
+        showsHorizontalScrollIndicator={false}
         contentContainerStyle={{
           marginTop: SIZES.radius,
-          // marginBottom: SIZES.radius,
           paddingHorizontal: SIZES.padding,
           borderTopColor: COLORS.lightGray1,
           borderTopWidth: 1,
@@ -123,64 +144,70 @@ const Address = ({ navigation }) => {
                 color: COLORS.darkGray,
               }}
             >
-              You still don't have a shipping address
+              This product has no reviews yet
             </Text>
           </View>
         }
-        disableRightSwipe
-        rightOpenValue={-75}
-        renderItem={(data, rowMap) => (
+        renderItem={(item, index) => (
           <View
             style={{
-              height: 100,
               backgroundColor: COLORS.lightGray2,
-              ...cartItemStyles.container,
+              ...reviewItemStyles.container,
             }}
           >
-            {/* <View style={cartItemStyles.imageView}>
-              <Image
-                source={icons.recent}
-                resizeMode="contain"
-                style={cartItemStyles.image}
-              /> */}
-
-            <IconButton
-              icon={icons.recent}
-              containerStyle={cartItemStyles.imageView}
-              iconStyle={cartItemStyles.image}
-              onPress={() => {
-                dispatch(setSelectedAddress(data.item));
-                navigation.goBack();
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
               }}
-            />
-            {/* </View> */}
-            <View style={{ flex: 1 }}>
-              <Text
-                style={{ ...FONTS.h3, color: COLORS.darkGray }}
-                numberOfLines={2}
+            >
+              <IconButton
+                icon={icons.apple}
+                containerStyle={reviewItemStyles.imageView}
+                iconStyle={reviewItemStyles.image}
+                onPress={() => {
+                  // dispatch(setSelectedAddress(data.item));
+                  navigation.goBack();
+                }}
+              />
+              <View
+                style={{ alignItems: "flex-start", justifyContent: "center" }}
               >
-                {data.item.title}
-              </Text>
-              <Text
-                style={{ ...FONTS.body4, color: COLORS.darkGray2 }}
-                numberOfLines={3}
-              >
-                {data.item.address}
+                <Text
+                  style={{ ...FONTS.h3, color: COLORS.darkGray }}
+                  numberOfLines={2}
+                >
+                  {item?.user?.name || "Ro di"}
+                </Text>
+                <Rating
+                  type="custom"
+                  showRating={false}
+                  onFinishRating={ratingCompleted}
+                  imageSize={20}
+                  tintColor={COLORS.lightGray2}
+                  style={{
+                    flex: 1,
+                    height: 10,
+                  }}
+                />
+              </View>
+            </View>
+            <View
+              style={{
+                paddingVertical: SIZES.radius,
+              }}
+            >
+              <Text>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Voluptatibus magni saepe blanditiis eum dolorem officia velit
+                quod, libero consectetur aliquid officiis amet reprehenderit
+                sapiente nostrum quae nobis dolore ratione odio.
               </Text>
             </View>
           </View>
         )}
-        renderHiddenItem={(data, rowMap) => (
-          <IconButton
-            containerStyle={{
-              ...cartItemStyles.container,
-              ...cartItemStyles.hiddenItem,
-            }}
-            icon={icons.delete_icon}
-            iconStyle={{ marginRight: 10 }}
-            onPress={() => handleDelete(data.item)}
-          />
-        )}
+        ListFooterComponent={<View style={{ height: 30 }}></View>}
       />
     );
   };
@@ -191,45 +218,30 @@ const Address = ({ navigation }) => {
       {renderHeader()}
 
       {/* Cart list */}
-      {renderAddressList()}
+      {renderReviewList()}
     </View>
   );
 };
 
-export default Address;
+export default Review;
 
-const cartItemStyles = StyleSheet.create({
+const reviewItemStyles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: "column",
+    alignItems: "flex-start",
     marginTop: SIZES.radius,
     paddingHorizontal: SIZES.radius,
     paddingVertical: SIZES.radius,
     borderRadius: SIZES.radius,
   },
   imageView: {
-    width: 80,
-    height: 80,
-    marginLeft: -10,
+    paddingTop: 3,
+    marginRight: 8,
     justifyContent: "center",
     alignItems: "center",
   },
   image: {
-    width: "70%",
-    height: "70%",
-    position: "absolute",
     tintColor: COLORS.darkGray,
-  },
-  stepperInput: {
-    height: 50,
-    width: 125,
-    backgroundColor: COLORS.white,
-  },
-
-  hiddenItem: {
-    flex: 1,
-    justifyContent: "flex-end",
-    backgroundColor: COLORS.primary,
   },
 });
 
