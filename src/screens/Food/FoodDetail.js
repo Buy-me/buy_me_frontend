@@ -1,9 +1,8 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, ToastAndroid, View } from "react-native";
 import React, { useEffect } from "react";
 import {
   COLORS,
   constants,
-  dummyData,
   FONTS,
   icons,
   images,
@@ -18,7 +17,7 @@ import {
   Rating,
   StepperInput,
   TextButton,
-  TextIconButton
+  TextIconButton,
 } from "../../component";
 import { useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
@@ -40,8 +39,7 @@ const FoodDetail = ({ navigation }) => {
     })
 
     if (err) {
-      //TODO: ADD A TOAST TO NOTIFY USER ABOUT THIS
-      console.log(err);
+      ToastAndroid.show("This product is already added in the cart!", ToastAndroid.SHORT)
     }
     else
       console.log("response", response);
