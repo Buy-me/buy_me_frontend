@@ -1,18 +1,39 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
-import { COLORS, dummyData, FONTS, icons, SIZES } from '../../constants'
+import { COLORS, FONTS, icons, SIZES } from '../../constants'
 import { CartQuantityButton, FooterTotal, Header, IconButton, StepperInput } from '../../component'
 import { SwipeListView } from 'react-native-swipe-list-view'
+import { useEffect } from 'react'
+import cartApi from '../../api/cartApi'
+import { useDispatch, useSelector } from 'react-redux'
+import { setProductQuantity, setProductsCart, setSubTotal } from '../../features/cart/cartSlice'
 
 const MyCart = ({ navigation }) => {
-    const [myCartList, setMyCartList] = useState(dummyData.myCart)
+    const dispatch = useDispatch()
+    const { products, subTotal } = useSelector(state => state.cart)
+    
+    useEffect(() => {
+        (async () => {
+            //to get data from the backend
+            const { response } = await cartApi.getMyCart()
+            const data = response.data
+            //set data for redux store
+            dispatch(setProductsCart(data))
+        })()
+    }, [])
+
+    useEffect(() => {
+        let result = 0;
+        for (let item of products) {
+            result += item.food_data.price * item.quantity
+        }
+
+        dispatch(setSubTotal(result))
+    }, [products])
 
     // Handler
     const updateQuantityHandler = (newQty, id) => {
-        const newCartList = myCartList.map(item =>
-            item.id === id ? { ...item, qty: newQty } : item)
-
-        setMyCartList(newCartList)
+        dispatch(setProductQuantity({ newQty, id }))
     }
 
     const removeCartItemGHandler = (id) => {
@@ -48,8 +69,8 @@ const MyCart = ({ navigation }) => {
     const renderCartList = () => {
         return (
             <SwipeListView
-                data={myCartList}
-                keyExtractor={item => `${item.id}`}
+                data={products}
+                keyExtractor={item => `${item.food_id}`}
                 contentContainerStyle={{
                     marginTop: SIZES.radius,
                     paddingHorizontal: SIZES.padding,
@@ -60,28 +81,28 @@ const MyCart = ({ navigation }) => {
                 renderItem={(data, rowMap) => (
                     <View style={{
                         height: 100,
-                        backgroundColor: COLORS.lightGray2,
+                        backgroundColor: COLORS.white,
                         ...cartItemStyles.container
                     }}>
                         <View style={cartItemStyles.imageView}>
                             <Image
-                                source={data.item.image}
+                                source={{ uri: data.item.food_data.images.url }}
                                 resizeMode="contain"
                                 style={cartItemStyles.image}
                             />
                         </View>
                         <View style={{ flex: 1 }}>
-                            <Text style={{ ...FONTS.body3 }}>{data.item.name}</Text>
-                            <Text style={{ color: COLORS.primary, ...FONTS.h3 }}>{data.item.price}</Text>
+                            <Text style={{ ...FONTS.body3 }}>{data.item.food_data.name}</Text>
+                            <Text style={{ color: COLORS.primary, ...FONTS.h3 }}>${(data.item.food_data.price.toFixed(2))}</Text>
                         </View>
 
                         <StepperInput
                             containerStyle={cartItemStyles.stepperInput}
-                            value={data.item.qty}
-                            onAdd={() => updateQuantityHandler(data.item.qty + 1, data.item.id)}
+                            value={data.item.quantity}
+                            onAdd={() => updateQuantityHandler(data.item.quantity + 1, data.item.food_id)}
                             onMinus={() => {
-                                if (data.item.qty > 1) {
-                                    updateQuantityHandler(data.item.qty - 1, data.item.id)
+                                if (data.item.quantity > 1) {
+                                    updateQuantityHandler(data.item.quantity - 1, data.item.food_id)
                                 }
                             }}
                         />
@@ -95,7 +116,7 @@ const MyCart = ({ navigation }) => {
                         }}
                         icon={icons.delete_icon}
                         iconStyle={{ marginRight: 10 }}
-                        onPress={() => removeCartItemGHandler(data.item.id)}
+                        onPress={() => removeCartItemGHandler(data.item.food_id)}
                     />
                 )}
             />
@@ -112,9 +133,9 @@ const MyCart = ({ navigation }) => {
 
             {/* Footer */}
             <FooterTotal
-                subTotal={40.03}
+                subTotal={subTotal}
                 shippingFee={0.00}
-                total={40.03}
+                total={subTotal}
                 onPress={() => navigation.navigate("MyCard")}
             />
         </View>
@@ -145,7 +166,7 @@ const cartItemStyles = StyleSheet.create({
     stepperInput: {
         height: 50,
         width: 125,
-        backgroundColor: COLORS.white
+        backgroundColor: COLORS.lightGray2
     },
 
     hiddenItem: {

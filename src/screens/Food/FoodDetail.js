@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   COLORS,
   constants,
@@ -23,6 +23,7 @@ import {
 import { useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
+import cartApi from "../../api/cartApi";
 
 const FoodDetail = ({ navigation }) => {
   const [foodQuantity, setFoodQuantity] = useState(1);
@@ -30,6 +31,8 @@ const FoodDetail = ({ navigation }) => {
 
   const { selectedFood } = useSelector(state => state.food)
   // console.log(selectedFood);
+
+  
 
   const renderHeader = () => {
     return (
@@ -44,7 +47,12 @@ const FoodDetail = ({ navigation }) => {
             onPress={() => navigation.goBack()}
           />
         }
-        rightComponent={<CartQuantityButton quantity={5} />}
+        rightComponent={
+          <CartQuantityButton
+            quantity={5}
+            onPress={() => navigation.navigate("MyCart")}
+          />
+        }
       />
     );
   };
@@ -76,7 +84,7 @@ const FoodDetail = ({ navigation }) => {
             }}
           >
             {/* calories */}
-            {/* <View style={{ flexDirection: "row" }}>
+            <View style={{ flexDirection: "row" }}>
               <Image
                 source={icons.calories}
                 style={{
@@ -91,9 +99,9 @@ const FoodDetail = ({ navigation }) => {
                 }}
               >
                 {" "}
-                {foodItem?.calories} calories
+                70 calories
               </Text>
-            </View> */}
+            </View>
 
             {/* favourite */}
             {/* <Image
