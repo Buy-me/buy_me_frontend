@@ -32,7 +32,6 @@ import FoodDetail from "./Food/FoodDetail";
 import Home from "./Home/Home";
 import { useRef } from "react";
 import Search from "./Search/Search";
-import CartTab from "./Cart/CartTab";
 import Favourite from "./Favourite/Favourite";
 import Notification from "./Notification/Notification";
 import { useState } from "react";

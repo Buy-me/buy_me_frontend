@@ -1,27 +1,78 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
-import { COLORS, dummyData, FONTS, icons, SIZES } from '../../constants'
+import { COLORS, FONTS, icons, SIZES } from '../../constants'
 import { CartQuantityButton, FooterTotal, Header, IconButton, StepperInput } from '../../component'
 import { SwipeListView } from 'react-native-swipe-list-view'
+import { useEffect } from 'react'
+import cartApi from '../../api/cartApi'
+import { useDispatch, useSelector } from 'react-redux'
+import { setProductQuantity, setProductsCart, setSubTotal } from '../../features/cart/cartSlice'
 
 const MyCart = ({ navigation }) => {
-    const [myCartList, setMyCartList] = useState(dummyData.myCart)
+    const dispatch = useDispatch()
+    const { products, subTotal } = useSelector(state => state.cart)
+
+    useEffect(() => {
+        (async () => {
+            //to get data from the backend
+            const { response, err } = await cartApi.getMyCart()
+
+            // if (err) {
+            //     console.log(err);
+            // }
+            // else {
+            //     console.log(response);
+            // }
+
+            if (response?.data) {
+                const data = response.data
+                // console.log("THIS IS CART", data);
+                //set data for redux store
+                dispatch(setProductsCart(data))
+            }
+        })()
+    }, [])
+
+    useEffect(() => {
+        let result = 0;
+        for (let item of products) {
+            result += item.food_data.price * item.quantity
+        }
+
+        dispatch(setSubTotal(result))
+    }, [products])
 
     // Handler
-    const updateQuantityHandler = (newQty, id) => {
-        const newCartList = myCartList.map(item =>
-            item.id === id ? { ...item, qty: newQty } : item)
+    const updateQuantityHandler = async (newQty, id) => {
+        dispatch(setProductQuantity({ newQty, id }))
+        const { response, err } = await cartApi.updateFromCart({
+            food_id: id,
+            quantity: newQty
+        })
 
-        setMyCartList(newCartList)
+        // if (err) {
+        //     console.log(err);
+        // }
+        // else {
+        //     console.log(response);
+        // }
     }
 
-    const removeCartItemGHandler = (id) => {
-        let newCartList = [...myCartList]
+    const removeCartItemGHandler = async (id) => {
+        // let newCartList = [...products]
 
-        const index = newCartList.findIndex(item => item.id === id)
-        newCartList.splice(index, 1)
+        // const index = newCartList.findIndex(item => item.food_id === id)
+        // newCartList.splice(index, 1)
 
-        setMyCartList(newCartList)
+        // dispatch(setProductsCart(newCartList))
+        const { response, err } = await cartApi.deleteFromCart(id)
+
+        if (err) {
+            console.log(err);
+        }
+        else {
+            console.log(response);
+        }
     }
 
     //Renderer
@@ -47,58 +98,69 @@ const MyCart = ({ navigation }) => {
 
     const renderCartList = () => {
         return (
-            <SwipeListView
-                data={myCartList}
-                keyExtractor={item => `${item.id}`}
-                contentContainerStyle={{
-                    marginTop: SIZES.radius,
-                    paddingHorizontal: SIZES.padding,
-                    paddingBottom: SIZES.padding * 2,
-                }}
-                disableRightSwipe
-                rightOpenValue={-75}
-                renderItem={(data, rowMap) => (
-                    <View style={{
-                        height: 100,
-                        backgroundColor: COLORS.lightGray2,
-                        ...cartItemStyles.container
-                    }}>
-                        <View style={cartItemStyles.imageView}>
-                            <Image
-                                source={data.item.image}
-                                resizeMode="contain"
-                                style={cartItemStyles.image}
+            products.length > 0 ?
+                <SwipeListView
+                    data={products}
+                    keyExtractor={item => `${item.food_id}`}
+                    contentContainerStyle={{
+                        marginTop: SIZES.radius,
+                        paddingHorizontal: SIZES.padding,
+                        paddingBottom: SIZES.padding * 2,
+                    }}
+                    disableRightSwipe
+                    rightOpenValue={-75}
+                    renderItem={(data, rowMap) => (
+                        <View style={{
+                            height: 100,
+                            backgroundColor: COLORS.white,
+                            ...cartItemStyles.container
+                        }}>
+                            <View style={cartItemStyles.imageView}>
+                                <Image
+                                    source={{ uri: data.item.food_data.images.url }}
+                                    resizeMode="contain"
+                                    style={cartItemStyles.image}
+                                />
+                            </View>
+                            <View style={{ flex: 1 }}>
+                                <Text style={{ ...FONTS.body3 }}>{data.item.food_data.name}</Text>
+                                <Text style={{ color: COLORS.primary, ...FONTS.h3 }}>${(data.item.food_data.price.toFixed(2))}</Text>
+                            </View>
+
+                            <StepperInput
+                                containerStyle={cartItemStyles.stepperInput}
+                                value={data.item.quantity}
+                                onAdd={() => updateQuantityHandler(data.item.quantity + 1, data.item.food_id)}
+                                onMinus={() => {
+                                    if (data.item.quantity > 1) {
+                                        updateQuantityHandler(data.item.quantity - 1, data.item.food_id)
+                                    }
+                                }}
                             />
                         </View>
-                        <View style={{ flex: 1 }}>
-                            <Text style={{ ...FONTS.body3 }}>{data.item.name}</Text>
-                            <Text style={{ color: COLORS.primary, ...FONTS.h3 }}>{data.item.price}</Text>
-                        </View>
-
-                        <StepperInput
-                            containerStyle={cartItemStyles.stepperInput}
-                            value={data.item.qty}
-                            onAdd={() => updateQuantityHandler(data.item.qty + 1, data.item.id)}
-                            onMinus={() => {
-                                if (data.item.qty > 1) {
-                                    updateQuantityHandler(data.item.qty - 1, data.item.id)
-                                }
+                    )}
+                    renderHiddenItem={(data, rowMap) => (
+                        <IconButton
+                            containerStyle={{
+                                ...cartItemStyles.hiddenItem,
+                                ...cartItemStyles.container
                             }}
+                            icon={icons.delete_icon}
+                            iconStyle={{ marginRight: 10 }}
+                            onPress={() => removeCartItemGHandler(data.item.food_id)}
                         />
-                    </View>
-                )}
-                renderHiddenItem={(data, rowMap) => (
-                    <IconButton
-                        containerStyle={{
-                            ...cartItemStyles.hiddenItem,
-                            ...cartItemStyles.container
-                        }}
-                        icon={icons.delete_icon}
-                        iconStyle={{ marginRight: 10 }}
-                        onPress={() => removeCartItemGHandler(data.item.id)}
-                    />
-                )}
-            />
+                    )}
+                />
+                :
+                <View style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center"
+                }}>
+                    <Text style={{
+                        ...FONTS.h2
+                    }}>Your cart is empty</Text>
+                </View>
         )
     }
 
@@ -112,9 +174,10 @@ const MyCart = ({ navigation }) => {
 
             {/* Footer */}
             <FooterTotal
-                subTotal={40.03}
+                disabled={products.length > 0 ? false : true}
+                subTotal={subTotal}
                 shippingFee={0.00}
-                total={40.03}
+                total={subTotal}
                 onPress={() => navigation.navigate("MyCard")}
             />
         </View>
@@ -145,7 +208,7 @@ const cartItemStyles = StyleSheet.create({
     stepperInput: {
         height: 50,
         width: 125,
-        backgroundColor: COLORS.white
+        backgroundColor: COLORS.lightGray2
     },
 
     hiddenItem: {
