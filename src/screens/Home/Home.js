@@ -1,10 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, TouchableOpacity, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  TextInput,
+  Keyboard,
+} from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
 import categoryApi from "../../api/categoryApi";
 import { HorizontalFoodCard, VerticalFoodCard } from "../../component";
-import { COLORS, dummyData, FONTS, icons, SIZES } from "../../constants";
+import {
+  COLORS,
+  constants,
+  dummyData,
+  FONTS,
+  icons,
+  SIZES,
+} from "../../constants";
 import Search from "../Search/Search";
 import FilterModal from "./FilterModal";
 import {
@@ -21,6 +35,7 @@ import {
 } from "../../features/food/foodSlice";
 import foodApi from "../../api/foodApi";
 import { useNavigation } from "@react-navigation/native";
+import { useRef } from "react";
 
 const Section = ({ title, onPress, children }) => {
   return (
@@ -53,10 +68,11 @@ const Section = ({ title, onPress, children }) => {
   );
 };
 
-const Home = () => {
+const Home = ({ type }) => {
   const navigation = useNavigation();
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [search, setSearch] = useState("");
+  let content;
 
   //Redux Category
   const dispatch = useDispatch();
@@ -73,6 +89,8 @@ const Home = () => {
     prices,
     isLoading,
   } = useSelector((state) => state.food);
+
+  const { selectedAddress } = useSelector((state) => state.address);
 
   //
   useEffect(() => {
@@ -100,23 +118,10 @@ const Home = () => {
         minPrice: prices[0],
         maxPrice: prices[1],
         rating: rating,
+        search: search,
       });
+      console.log(response.data.length);
       dispatch(setIsLoading(false));
-      dispatch(setFoods(response.data));
-      dispatch(setRecommends(response.data));
-      dispatch(setPopulars(response.data));
-    };
-    getFoods();
-  };
-  const handleResetFilter = () => {
-    const getFoods = async () => {
-      const { response, err } = await foodApi.getList({
-        sort: selectedMenuType.sort,
-        categoryId: selectedCategory?.id,
-      });
-
-      dispatch(setIsLoading(false));
-
       dispatch(setFoods(response.data));
       dispatch(setRecommends(response.data));
       dispatch(setPopulars(response.data));
@@ -132,6 +137,7 @@ const Home = () => {
         minPrice: prices[0],
         maxPrice: prices[1],
         rating: rating,
+        search: search,
       });
 
       dispatch(setIsLoading(false));
@@ -141,6 +147,26 @@ const Home = () => {
       dispatch(setPopulars(response.data));
     };
     getFoods();
+  };
+
+  const handleResetFilter = () => {
+    const getFoods = async () => {
+      const { response, err } = await foodApi.getList({
+        sort: selectedMenuType.sort,
+        categoryId: selectedCategory?.id,
+        search: search,
+      });
+
+      dispatch(setIsLoading(false));
+
+      dispatch(setFoods(response.data));
+      dispatch(setRecommends(response.data));
+      dispatch(setPopulars(response.data));
+    };
+    getFoods();
+  };
+  const handeClickItem = (item) => {
+    dispatch(setSelectedFood(item));
   };
 
   const renderMenuTypes = () => {
@@ -220,7 +246,7 @@ const Home = () => {
                   alignSelf: "center",
                 }}
                 item={item}
-                onPress={() => console.log("HorizontalFoodCard")}
+                onPress={() => handeClickItem(item)}
               />
             )}
           />
@@ -260,7 +286,7 @@ const Home = () => {
                   borderWidth: 1,
                 }}
                 item={item}
-                onPress={() => console.log("Vertical Food Card")}
+                onPress={() => handeClickItem(item)}
               />
             )}
           />
@@ -372,9 +398,13 @@ const Home = () => {
             marginLeft: SIZES.radius,
             ...FONTS.body3,
           }}
+          value={search}
           placeholder="search food..."
           onChangeText={(newText) => {
             setSearch(newText);
+          }}
+          onSubmitEditing={() => {
+            handleFilter();
           }}
         />
 
@@ -415,8 +445,13 @@ const Home = () => {
             marginTop: SIZES.base,
             alignItems: "center",
           }}
+          onPress={() => navigation.navigate("Address")}
         >
-          <Text style={{ ...FONTS.h3 }}>{dummyData.myProfile.address}</Text>
+          <Text style={{ ...FONTS.h3 }}>
+            {selectedAddress
+              ? selectedAddress.title
+              : "Choose the delivery addresses"}
+          </Text>
           <Image
             source={icons.down_arrow}
             style={{
@@ -429,6 +464,25 @@ const Home = () => {
       </View>
     );
   };
+
+  if (type == constants.screens.home) {
+    content = (
+      <View>
+        {/* Delivery Address */}
+        {renderDeliveryTo()}
+        {/* Category */}
+        {renderFoodCategories()}
+        {/*  Popular */}
+        {renderPopularSection()}
+        {/*  Recommended */}
+        {renderRecommendedSection()}
+
+        {renderMenuTypes()}
+      </View>
+    );
+  } else {
+    content = null;
+  }
 
   return (
     <View
@@ -458,19 +512,7 @@ const Home = () => {
           data={foods}
           keyExtractor={(item) => `${item.id}`}
           showsVerticalScrollIndicator={false}
-          ListHeaderComponent={
-            <View>
-              {/* Delivery Address */}
-              {renderDeliveryTo()}
-              {/* Category */}
-              {renderFoodCategories()}
-              {/*  Popular */}
-              {renderPopularSection()}
-              {/*  Recommended */}
-              {renderRecommendedSection()}
-              {renderMenuTypes()}
-            </View>
-          }
+          ListHeaderComponent={content}
           ListFooterComponent={
             <View
               style={{
@@ -513,6 +555,7 @@ const Home = () => {
                 }}
                 item={item}
                 onPress={() => {
+                  handeClickItem(item);
                   navigation.navigate("FoodDetail");
                   dispatch(setSelectedFood(item))
                 }}

@@ -48,6 +48,7 @@ const cash = require("../assets/icons/cash.png");
 const calendar = require("../assets/icons/calendar.png")
 const category = require("../assets/icons/category.png")
 const note = require("../assets/icons/note.png")
+const recent = require("../assets/icons/recent.png");
 
 export default {
 	coupon,
@@ -99,5 +100,6 @@ export default {
 	cash,
 	calendar,
 	category,
-	note
+	note,
+	recent
 };
