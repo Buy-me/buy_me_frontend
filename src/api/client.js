@@ -14,7 +14,7 @@ privateClient.interceptors.request.use(async (config) => {
     ...config,
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7InVzZXJfaWQiOjEsInJvbGUiOiJ1c2VyIn0sImV4cCI6MTY3MjM5MzUwNSwiaWF0IjoxNjcxNzg4NzA1fQ.QDJaxyz3Iob5pYl4iSjd2OvJuNPJz25yDYxtIardpCc`,
+      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7InVzZXJfaWQiOjIsInJvbGUiOiJ1c2VyIn0sImV4cCI6MTY3MjkzMTEzNywiaWF0IjoxNjcyMzI2MzM3fQ.-zj0CEEJXLSY40OMOGEwJAYv2yRbg25nba285hlpKvU`,
     },
   };
 });

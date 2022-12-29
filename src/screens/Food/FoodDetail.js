@@ -32,8 +32,22 @@ const FoodDetail = ({ navigation }) => {
   const { selectedFood } = useSelector(state => state.food)
   // console.log(selectedFood);
 
-  
+  //Handler
+  const handleAddToCart = async () => {
+    const { response, err } = await cartApi.addToCart({
+      food_id: selectedFood.id,
+      quantity: foodQuantity
+    })
 
+    if (err) {
+      //TODO: ADD A TOAST TO NOTIFY USER ABOUT THIS
+      console.log(err);
+    }
+    else
+      console.log("response", response);
+  }
+
+  //Renderer
   const renderHeader = () => {
     return (
       <Header
@@ -199,7 +213,7 @@ const FoodDetail = ({ navigation }) => {
               value={foodQuantity}
               onAdd={() => setFoodQuantity(foodQuantity + 1)}
               onMinus={() => {
-                  if(foodQuantity > 1) setFoodQuantity(foodQuantity - 1)
+                if (foodQuantity > 1) setFoodQuantity(foodQuantity - 1)
               }}
             />
 
@@ -212,9 +226,9 @@ const FoodDetail = ({ navigation }) => {
                 borderRadius: SIZES.radius,
                 backgroundColor: COLORS.primary,
               }}
-              icon={ isFavourite ? icons.love : icons.favourite}
+              icon={isFavourite ? icons.love : icons.favourite}
               iconStyle={{ tintColor: COLORS.white }}
-              label={ isFavourite ? "Remove Favourite" : "Add to Favourite"}
+              label={isFavourite ? "Remove Favourite" : "Add to Favourite"}
               labelStyle={{
                 flex: 1,
                 color: COLORS.white,
@@ -339,7 +353,7 @@ const FoodDetail = ({ navigation }) => {
           }}
           icon={icons.cart}
           iconStyle={{ tintColor: COLORS.white }}
-          onPress={() => navigation.navigate("MyCart")}
+          onPress={handleAddToCart}
         />
       </View>
     );

@@ -11,14 +11,25 @@ import { setProductQuantity, setProductsCart, setSubTotal } from '../../features
 const MyCart = ({ navigation }) => {
     const dispatch = useDispatch()
     const { products, subTotal } = useSelector(state => state.cart)
-    
+
     useEffect(() => {
         (async () => {
             //to get data from the backend
-            const { response } = await cartApi.getMyCart()
-            const data = response.data
-            //set data for redux store
-            dispatch(setProductsCart(data))
+            const { response, err } = await cartApi.getMyCart()
+
+            // if (err) {
+            //     console.log(err);
+            // }
+            // else {
+            //     console.log(response);
+            // }
+
+            if (response?.data) {
+                const data = response.data
+                // console.log("THIS IS CART", data);
+                //set data for redux store
+                dispatch(setProductsCart(data))
+            }
         })()
     }, [])
 
@@ -32,17 +43,36 @@ const MyCart = ({ navigation }) => {
     }, [products])
 
     // Handler
-    const updateQuantityHandler = (newQty, id) => {
+    const updateQuantityHandler = async (newQty, id) => {
         dispatch(setProductQuantity({ newQty, id }))
+        const { response, err } = await cartApi.updateFromCart({
+            food_id: id,
+            quantity: newQty
+        })
+
+        // if (err) {
+        //     console.log(err);
+        // }
+        // else {
+        //     console.log(response);
+        // }
     }
 
-    const removeCartItemGHandler = (id) => {
-        let newCartList = [...myCartList]
+    const removeCartItemGHandler = async (id) => {
+        // let newCartList = [...products]
 
-        const index = newCartList.findIndex(item => item.id === id)
-        newCartList.splice(index, 1)
+        // const index = newCartList.findIndex(item => item.food_id === id)
+        // newCartList.splice(index, 1)
 
-        setMyCartList(newCartList)
+        // dispatch(setProductsCart(newCartList))
+        const { response, err } = await cartApi.deleteFromCart(id)
+
+        if (err) {
+            console.log(err);
+        }
+        else {
+            console.log(response);
+        }
     }
 
     //Renderer
@@ -68,58 +98,69 @@ const MyCart = ({ navigation }) => {
 
     const renderCartList = () => {
         return (
-            <SwipeListView
-                data={products}
-                keyExtractor={item => `${item.food_id}`}
-                contentContainerStyle={{
-                    marginTop: SIZES.radius,
-                    paddingHorizontal: SIZES.padding,
-                    paddingBottom: SIZES.padding * 2,
-                }}
-                disableRightSwipe
-                rightOpenValue={-75}
-                renderItem={(data, rowMap) => (
-                    <View style={{
-                        height: 100,
-                        backgroundColor: COLORS.white,
-                        ...cartItemStyles.container
-                    }}>
-                        <View style={cartItemStyles.imageView}>
-                            <Image
-                                source={{ uri: data.item.food_data.images.url }}
-                                resizeMode="contain"
-                                style={cartItemStyles.image}
+            products.length > 0 ?
+                <SwipeListView
+                    data={products}
+                    keyExtractor={item => `${item.food_id}`}
+                    contentContainerStyle={{
+                        marginTop: SIZES.radius,
+                        paddingHorizontal: SIZES.padding,
+                        paddingBottom: SIZES.padding * 2,
+                    }}
+                    disableRightSwipe
+                    rightOpenValue={-75}
+                    renderItem={(data, rowMap) => (
+                        <View style={{
+                            height: 100,
+                            backgroundColor: COLORS.white,
+                            ...cartItemStyles.container
+                        }}>
+                            <View style={cartItemStyles.imageView}>
+                                <Image
+                                    source={{ uri: data.item.food_data.images.url }}
+                                    resizeMode="contain"
+                                    style={cartItemStyles.image}
+                                />
+                            </View>
+                            <View style={{ flex: 1 }}>
+                                <Text style={{ ...FONTS.body3 }}>{data.item.food_data.name}</Text>
+                                <Text style={{ color: COLORS.primary, ...FONTS.h3 }}>${(data.item.food_data.price.toFixed(2))}</Text>
+                            </View>
+
+                            <StepperInput
+                                containerStyle={cartItemStyles.stepperInput}
+                                value={data.item.quantity}
+                                onAdd={() => updateQuantityHandler(data.item.quantity + 1, data.item.food_id)}
+                                onMinus={() => {
+                                    if (data.item.quantity > 1) {
+                                        updateQuantityHandler(data.item.quantity - 1, data.item.food_id)
+                                    }
+                                }}
                             />
                         </View>
-                        <View style={{ flex: 1 }}>
-                            <Text style={{ ...FONTS.body3 }}>{data.item.food_data.name}</Text>
-                            <Text style={{ color: COLORS.primary, ...FONTS.h3 }}>${(data.item.food_data.price.toFixed(2))}</Text>
-                        </View>
-
-                        <StepperInput
-                            containerStyle={cartItemStyles.stepperInput}
-                            value={data.item.quantity}
-                            onAdd={() => updateQuantityHandler(data.item.quantity + 1, data.item.food_id)}
-                            onMinus={() => {
-                                if (data.item.quantity > 1) {
-                                    updateQuantityHandler(data.item.quantity - 1, data.item.food_id)
-                                }
+                    )}
+                    renderHiddenItem={(data, rowMap) => (
+                        <IconButton
+                            containerStyle={{
+                                ...cartItemStyles.hiddenItem,
+                                ...cartItemStyles.container
                             }}
+                            icon={icons.delete_icon}
+                            iconStyle={{ marginRight: 10 }}
+                            onPress={() => removeCartItemGHandler(data.item.food_id)}
                         />
-                    </View>
-                )}
-                renderHiddenItem={(data, rowMap) => (
-                    <IconButton
-                        containerStyle={{
-                            ...cartItemStyles.hiddenItem,
-                            ...cartItemStyles.container
-                        }}
-                        icon={icons.delete_icon}
-                        iconStyle={{ marginRight: 10 }}
-                        onPress={() => removeCartItemGHandler(data.item.food_id)}
-                    />
-                )}
-            />
+                    )}
+                />
+                :
+                <View style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center"
+                }}>
+                    <Text style={{
+                        ...FONTS.h2
+                    }}>Your cart is empty</Text>
+                </View>
         )
     }
 
@@ -133,6 +174,7 @@ const MyCart = ({ navigation }) => {
 
             {/* Footer */}
             <FooterTotal
+                disabled={products.length > 0 ? false : true}
                 subTotal={subTotal}
                 shippingFee={0.00}
                 total={subTotal}
