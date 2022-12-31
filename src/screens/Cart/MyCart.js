@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, ToastAndroid, View } from 'react-native'
 import React, { useState } from 'react'
 import { COLORS, FONTS, icons, SIZES } from '../../constants'
 import { CartQuantityButton, FooterTotal, Header, IconButton, StepperInput } from '../../component'
@@ -12,25 +12,23 @@ const MyCart = ({ navigation }) => {
     const dispatch = useDispatch()
     const { products, subTotal } = useSelector(state => state.cart)
 
+    const updateMyCart = async () => {
+        //to get data from the backend
+        const { response, err } = await cartApi.getMyCart()
+
+        if (err) {
+            console.log(err);
+        }
+        else {
+            const data = response.data
+            // console.log("THIS IS CART", data);
+            //set data for redux store
+            dispatch(setProductsCart(data))
+        }
+    }
+
     useEffect(() => {
-        (async () => {
-            //to get data from the backend
-            const { response, err } = await cartApi.getMyCart()
-
-            // if (err) {
-            //     console.log(err);
-            // }
-            // else {
-            //     console.log(response);
-            // }
-
-            if (response?.data) {
-                const data = response.data
-                // console.log("THIS IS CART", data);
-                //set data for redux store
-                dispatch(setProductsCart(data))
-            }
-        })()
+        updateMyCart()
     }, [])
 
     useEffect(() => {
@@ -59,19 +57,14 @@ const MyCart = ({ navigation }) => {
     }
 
     const removeCartItemGHandler = async (id) => {
-        // let newCartList = [...products]
-
-        // const index = newCartList.findIndex(item => item.food_id === id)
-        // newCartList.splice(index, 1)
-
-        // dispatch(setProductsCart(newCartList))
-        const { response, err } = await cartApi.deleteFromCart(id)
+        const { response, err } = await cartApi.deleteFromCart({ food_id: id })
 
         if (err) {
-            console.log(err);
+            ToastAndroid.show("Cannot do this now!", ToastAndroid.SHORT)
         }
         else {
-            console.log(response);
+            updateMyCart()
+            ToastAndroid.show("Product has been removed from cart!", ToastAndroid.SHORT)
         }
     }
 

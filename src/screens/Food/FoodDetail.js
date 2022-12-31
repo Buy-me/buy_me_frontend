@@ -42,7 +42,7 @@ const FoodDetail = ({ navigation }) => {
       ToastAndroid.show("This product is already added in the cart!", ToastAndroid.SHORT)
     }
     else
-      console.log("response", response);
+      ToastAndroid.show("Product has been added!", ToastAndroid.SHORT)
   }
 
   //Renderer
