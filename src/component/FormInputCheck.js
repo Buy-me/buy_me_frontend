@@ -1,9 +1,9 @@
 import { Image, View } from "react-native";
 import { COLORS, icons } from "../constants";
 
-const FormInputCheck = ({ value, error }) => {
+const FormInputCheck = ({ value, error, style }) => {
   return (
-    <View style={{ justifyContent: "center" }}>
+    <View style={{ justifyContent: "center", ...style }}>
       <Image
         source={
           value == "" || (value != "" && error == "")

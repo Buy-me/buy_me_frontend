@@ -17,16 +17,16 @@ const bottom_tabs = [
     id: 1,
     label: screens.search,
   },
+  // {
+  //   id: 2,
+  //   label: screens.cart,
+  // },
   {
     id: 2,
-    label: screens.cart,
-  },
-  {
-    id: 3,
     label: screens.favourite,
   },
   {
-    id: 4,
+    id: 3,
     label: screens.notification,
   },
 ];

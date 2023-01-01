@@ -5,7 +5,7 @@ import { COLORS, FONTS, SIZES } from "../constants";
 import LineDivider from "./LineDivider";
 import TextButton from "./TextButton";
 
-const FooterTotal = ({ subTotal, shippingFee, total, onPress }) => {
+const FooterTotal = ({ subTotal, shippingFee, total, onPress, disabled=false }) => {
   return (
     <View>
       <LinearGradient
@@ -40,8 +40,9 @@ const FooterTotal = ({ subTotal, shippingFee, total, onPress }) => {
             height: 60,
             marginTop: SIZES.padding,
             borderRadius: SIZES.radius,
-            backgroundColor: COLORS.primary,
+            backgroundColor: !disabled ? COLORS.primary : COLORS.lightGray1,
           }}
+          disabled={disabled}
           label="Place your Order"
           onPress={onPress}
         />

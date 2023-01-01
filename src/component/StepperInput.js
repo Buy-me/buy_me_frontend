@@ -9,7 +9,7 @@ const StepperInput = ({ containerStyle, value = 1, onAdd, onMinus }) => {
       style={{
         flexDirection: "row",
         width: 130,
-        height: 60,
+        height: 55,
         backgroundColor: COLORS.lightGray2,
         borderRadius: SIZES.radius,
         ...containerStyle,
@@ -49,8 +49,8 @@ const StepperInput = ({ containerStyle, value = 1, onAdd, onMinus }) => {
 
 const styles = StyleSheet.create({
   defaultIcon: {
-    width: 25,
-    height: 25,
+    width: 20,
+    height: 20,
     tintColor: COLORS.primary,
   },
   textView: {

@@ -1,9 +1,8 @@
-import { Image, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { Image, StyleSheet, Text, ToastAndroid, View } from "react-native";
+import React, { useEffect } from "react";
 import {
   COLORS,
   constants,
-  dummyData,
   FONTS,
   icons,
   images,
@@ -18,15 +17,40 @@ import {
   Rating,
   StepperInput,
   TextButton,
+  TextIconButton,
 } from "../../component";
 import { useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
+import { useSelector } from "react-redux";
+import cartApi from "../../api/cartApi";
 
 const FoodDetail = ({ navigation }) => {
-  const [foodItem, setFoodItem] = useState(dummyData.vegBiryani);
-  const [selectedSize, setSelectedSize] = useState(0);
   const [foodQuantity, setFoodQuantity] = useState(1);
+  const [isFavourite, setIsFavourite] = useState(false);
 
+  const { selectedFood } = useSelector((state) => state.food);
+  // console.log(selectedFood);
+
+  //Handler
+  const handleAddToCart = async () => {
+    const { response, err } = await cartApi.addToCart({
+      food_id: selectedFood.id,
+      quantity: foodQuantity,
+    });
+
+    if (err) {
+      navigation.navigate("MyCart");
+      ToastAndroid.show(
+        "This product is already added in the cart!",
+        ToastAndroid.SHORT
+      );
+    } else {
+      navigation.navigate("MyCart");
+      console.log("response", response);
+    }
+  };
+
+  //Renderer
   const renderHeader = () => {
     return (
       <Header
@@ -40,7 +64,12 @@ const FoodDetail = ({ navigation }) => {
             onPress={() => navigation.goBack()}
           />
         }
-        rightComponent={<CartQuantityButton quantity={5} />}
+        rightComponent={
+          <CartQuantityButton
+            quantity={5}
+            onPress={() => navigation.navigate("MyCart")}
+          />
+        }
       />
     );
   };
@@ -59,7 +88,7 @@ const FoodDetail = ({ navigation }) => {
           style={{
             height: 190,
             borderRadius: 15,
-            backgroundColor: COLORS.lightGray2,
+            backgroundColor: COLORS.white,
           }}
         >
           {/* calories and favourite */}
@@ -87,23 +116,23 @@ const FoodDetail = ({ navigation }) => {
                 }}
               >
                 {" "}
-                {foodItem?.calories} calories
+                70 calories
               </Text>
             </View>
 
             {/* favourite */}
-            <Image
+            {/* <Image
               source={icons.love}
               style={{
                 width: 20,
                 height: 20,
                 tintColor: foodItem?.isFavourite ? COLORS.primary : COLORS.gray,
               }}
-            />
+            /> */}
           </View>
 
           <Image
-            source={foodItem?.image}
+            source={{ uri: selectedFood?.images.url }}
             resizeMode="contain"
             style={{
               height: 170,
@@ -115,13 +144,39 @@ const FoodDetail = ({ navigation }) => {
         {/* Food Info */}
         <View style={{ marginTop: SIZES.padding }}>
           {/* Name and description */}
-          <Text
+          <View
             style={{
-              ...FONTS.h1,
+              flexDirection: "column",
+              // alignItems: "center"
             }}
           >
-            {foodItem?.name}
-          </Text>
+            <Text
+              style={{
+                ...FONTS.h1,
+                // marginRight: 20
+              }}
+            >
+              {selectedFood?.name}
+            </Text>
+            {/* rating */}
+            <IconLabel
+              containerStyle={{
+                alignItems: "center",
+                paddingVertical: 5,
+                paddingHorizontal: 0,
+              }}
+              icon={icons.star}
+              iconPosition="LEFT"
+              iconStyle={{
+                tintColor: "#FDD836",
+                width: 15,
+                height: 15,
+              }}
+              label={selectedFood?.rating.toFixed(1)}
+              labelStyle={{ color: COLORS.gray }}
+            />
+          </View>
+
           <Text
             style={{
               marginTop: SIZES.base,
@@ -130,149 +185,101 @@ const FoodDetail = ({ navigation }) => {
               ...FONTS.body3,
             }}
           >
-            {foodItem?.description}
+            {selectedFood?.description}
           </Text>
 
-          {/* rating, duration and shipping */}
+          {/* Add note */}
+          <TextIconButton
+            containerStyle={{
+              flex: 1,
+              height: 40,
+              marginTop: 15,
+            }}
+            icon={icons.note}
+            iconStyle={{ tintColor: COLORS.transparentPrimray }}
+            label="Write Review"
+            labelStyle={{
+              flex: 1,
+              color: COLORS.darkGray2,
+              textAlign: "left",
+              marginLeft: 10,
+              ...FONTS.h3,
+            }}
+            onPress={() => {
+              /* 1. Navigate to the Details route with params */
+              navigation.navigate("Review", {
+                foodId: selectedFood.id,
+                // otherParam: "anything you want here",
+              });
+            }}
+          />
+
+          {/* Quantity and Favourite */}
           <View
             style={{
               flexDirection: "row",
               marginTop: SIZES.padding,
             }}
           >
-            {/* rating */}
-            <IconLabel
-              containerStyle={{
-                backgroundColor: COLORS.primary,
-                marginRight: SIZES.radius,
+            <StepperInput
+              containerStyle={
+                {
+                  // borderColor: COLORS.primary,
+                  // borderWidth: 1,
+                }
+              }
+              value={foodQuantity}
+              onAdd={() => setFoodQuantity(foodQuantity + 1)}
+              onMinus={() => {
+                if (foodQuantity > 1) setFoodQuantity(foodQuantity - 1);
               }}
-              icon={icons.star}
-              label="4.5"
-              labelStyle={{ color: COLORS.white }}
             />
 
-            {/* duration */}
-            <IconLabel
+            <TextIconButton
               containerStyle={{
-                marginHorizontal: SIZES.radius,
-                paddingHorizontal: 0,
+                flex: 1,
+                height: 55,
+                marginLeft: SIZES.radius,
+                paddingHorizontal: SIZES.radius,
+                borderRadius: SIZES.radius,
+                // backgroundColor: COLORS.primary,
+                borderColor: COLORS.primary,
+                borderWidth: 1,
               }}
-              icon={icons.clock}
-              iconStyle={{ tintColor: COLORS.black }}
-              label="30 Mins"
+              icon={isFavourite ? icons.love : icons.favourite}
+              iconStyle={{
+                tintColor: COLORS.primary,
+                color: COLORS.primary,
+              }}
+              label={isFavourite ? "Remove Favourite" : "Add to Favourite"}
+              labelStyle={{
+                flex: 1,
+                color: COLORS.primary,
+                textAlign: "center",
+                ...FONTS.h3,
+              }}
+              onPress={() => setIsFavourite(!isFavourite)}
             />
-
-            {/* shipping */}
-            <IconLabel
-              containerStyle={{
-                marginHorizontal: SIZES.radius,
-                paddingHorizontal: 0,
-              }}
-              icon={icons.dollar}
-              iconStyle={{ tintColor: COLORS.black }}
-              label="Free Shipping"
-            />
-          </View>
-
-          {/* sizes */}
-          <View
-            style={{
-              flexDirection: "row",
-              marginTop: SIZES.padding,
-              alignItems: "center",
-            }}
-          >
-            <Text style={{ ...FONTS.h3 }}>Sizes:</Text>
-
-            <View
-              style={{
-                flexDirection: "row",
-                flexWrap: "wrap",
-                marginLeft: SIZES.padding,
-              }}
-            >
-              {dummyData.sizes.map((item, index) => (
-                <TextButton
-                  key={`size-${index}`}
-                  buttonStyle={{
-                    width: 55,
-                    height: 55,
-                    margin: SIZES.base,
-                    borderWidth: 1,
-                    borderRadius: SIZES.radius,
-                    borderColor:
-                      selectedSize !== item.id ? COLORS.gray2 : COLORS.primary,
-                    backgroundColor:
-                      selectedSize !== item.id ? null : COLORS.primary,
-                  }}
-                  label={item.label}
-                  labelStyle={{
-                    color:
-                      selectedSize !== item.id ? COLORS.gray2 : COLORS.white,
-                    ...FONTS.body2,
-                  }}
-                  onPress={() => setSelectedSize(item.id)}
-                />
-              ))}
-            </View>
           </View>
         </View>
       </View>
     );
   };
 
-  const renderFooter = () => {
+  const renderExtraInfo = () => {
     return (
       <View
         style={{
           flexDirection: "row",
-          height: 100,
-          alignItems: "center",
+          marginVertical: SIZES.radius,
           paddingHorizontal: SIZES.padding,
-          paddingBottom: SIZES.radius,
-        }}
-      >
-        <StepperInput
-          value={foodQuantity}
-          onAdd={() => setFoodQuantity(foodQuantity + 1)}
-          onMinus={() =>
-            setFoodQuantity((prev) => {
-              if (prev > 1) return prev - 1;
-            })
-          }
-        />
-
-        <TextButton
-          buttonStyle={{
-            flex: 1,
-            flexDirection: "row",
-            height: 60,
-            marginLeft: SIZES.radius,
-            paddingHorizontal: SIZES.radius,
-            borderRadius: SIZES.radius,
-            backgroundColor: COLORS.primary,
-          }}
-          label={"Buy Now"}
-          label2={"$15.99"}
-          onPress={() => navigation.navigate("MyCart")}
-        />
-      </View>
-    );
-  };
-
-  const renderRestaurant = () => {
-    return (
-      <View
-        style={{
-          flexDirection: "row",
-          marginVertical: SIZES.padding,
-          paddingHorizontal: SIZES.padding,
+          justifyContent: "space-between",
           alignItems: "center",
         }}
       >
-        <Image
+        {/* <Image
           source={images.profile}
-          style={{
+          style={
             width: 50,
             height: 50,
             borderRadius: SIZES.radius,
@@ -291,7 +298,87 @@ const FoodDetail = ({ navigation }) => {
             1.2 KM away from you
           </Text>
         </View>
-        <Rating rating={4} iconStyle={{ marginLeft: 3 }} />
+        <Rating rating={4} iconStyle={{ marginLeft: 3 }} /> */}
+        {/* Category */}
+        <IconLabel
+          containerStyle={{
+            marginHorizontal: SIZES.radius,
+            paddingHorizontal: 0,
+          }}
+          iconPosition="LEFT"
+          icon={icons.category}
+          iconStyle={{ tintColor: COLORS.black }}
+          label={"Coffee"} //TODO: CHANGE
+        />
+
+        {/* shipping */}
+        <IconLabel
+          containerStyle={{
+            marginHorizontal: SIZES.radius,
+            paddingHorizontal: 0,
+          }}
+          iconPosition="LEFT"
+          icon={icons.dollar}
+          iconStyle={{ tintColor: COLORS.black }}
+          label="Free Shipping"
+        />
+      </View>
+    );
+  };
+
+  const renderFooter = () => {
+    return (
+      <View
+        style={{
+          flexDirection: "row",
+          height: 100,
+          alignItems: "center",
+          paddingHorizontal: SIZES.padding,
+          paddingBottom: SIZES.radius,
+          marginTop: 10,
+        }}
+      >
+        {/* <TextButton
+          buttonStyle={{
+            flex: 1,
+            flexDirection: "row",
+            height: 60,
+            // marginLeft: SIZES.radius,
+            paddingHorizontal: SIZES.radius,
+            borderRadius: SIZES.radius,
+            backgroundColor: COLORS.primary,
+          }}
+          label={"Buy Now"}
+          label2={"$15.99"}
+          onPress={() => navigation.navigate("MyCart")}
+        /> */}
+
+        <TextIconButton
+          containerStyle={{
+            flex: 1,
+            flexDirection: "row",
+            height: 60,
+            paddingHorizontal: SIZES.radius,
+            borderRadius: SIZES.radius,
+            backgroundColor: COLORS.primary,
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+          label={"Add to Cart"}
+          labelStyle={{
+            color: COLORS.white,
+            textAlign: "left",
+            ...FONTS.h3,
+          }}
+          label2={`$${(foodQuantity * selectedFood?.price).toFixed(2)}`}
+          label2Style={{
+            color: COLORS.white,
+            ...FONTS.h3,
+          }}
+          icon={icons.cart}
+          iconStyle={{ tintColor: COLORS.white }}
+          onPress={handleAddToCart}
+        />
       </View>
     );
   };
@@ -306,15 +393,13 @@ const FoodDetail = ({ navigation }) => {
         {/* detail */}
         {renderDetails()}
 
-        <LineDivider />
-
-        {/* restaurant */}
-        {renderRestaurant()}
+        {/* <LineDivider /> */}
       </ScrollView>
-
       {/* Footer */}
+      {/* extra info */}
       <LineDivider />
-
+      {renderExtraInfo()}
+      <LineDivider />
       {renderFooter()}
     </View>
   );

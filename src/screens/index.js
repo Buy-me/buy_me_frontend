@@ -1,22 +1,22 @@
-import MainLayout from "./MainLayout"
+import MainLayout from "./MainLayout";
 
 // SignInSignUp
 import AuthLayout from "./SignInSignUp/AuthLayout";
 
 // Home
-import Home from "./Home/Home"
+import Home from "./Home/Home";
 
 // Search
 import Search from "./Search/Search";
 
 // Cart
-import CartTab from "./Cart/CartTab"
+import MyCart from "./Cart/MyCart"
 
 // Favourite
 import Favourite from "./Favourite/Favourite";
 
 // Notification
-import Notification from "./Notification/Notification"
+import Notification from "./Notification/Notification";
 
 //MyCard
 import MyCard from "./Card/MyCard";
@@ -27,7 +27,10 @@ import EditAccount from "./Account/EditAccount";
 
 import ChangePassword from "./Account/ChangePassword";
 
+import Address from "./Address/Address";
+
 export {
+
     MainLayout,
     AuthLayout,
     Home,
@@ -38,5 +41,7 @@ export {
     MyCard,
     MyAccount,
     EditAccount,
-    ChangePassword
+    ChangePassword,
+      Address,
 }
+
