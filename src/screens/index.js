@@ -1,5 +1,8 @@
 import MainLayout from "./MainLayout";
 
+// SignInSignUp
+import AuthLayout from "./SignInSignUp/AuthLayout";
+
 // Home
 import Home from "./Home/Home";
 
@@ -27,15 +30,18 @@ import ChangePassword from "./Account/ChangePassword";
 import Address from "./Address/Address";
 
 export {
-  MainLayout,
-  Home,
-  Search,
-  MyCart,
-  Favourite,
-  Notification,
-  MyCard,
-  MyAccount,
-  EditAccount,
-  Address,
-  ChangePassword,
-};
+
+    MainLayout,
+    AuthLayout,
+    Home,
+    Search,
+    CartTab,
+    Favourite,
+    Notification,
+    MyCard,
+    MyAccount,
+    EditAccount,
+    ChangePassword,
+      Address,
+}
+

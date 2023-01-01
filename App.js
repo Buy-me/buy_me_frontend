@@ -5,6 +5,8 @@ import { useFonts } from "expo-font";
 
 import { Provider } from "react-redux";
 import { store } from "./src/app/store";
+import SignIn from "./src/screens/SignInSignUp/SignIn";
+import SignUp from "./src/screens/SignInSignUp/SignUp";
 import CustomDrawer from "./src/navigation/drawer/CustomDrawer";
 import Success from "./src/screens/Cart/Success";
 import DeliveryStatus from "./src/screens/Delivery/DeliveryStatus";
@@ -40,8 +42,10 @@ const App = () => {
           screenOptions={{
             headerShown: false,
           }}
-          initialRouteName={"Home"}
+          initialRouteName={"SignIn"}
         >
+          <Stack.Screen name="SignIn" component={SignIn} />
+          <Stack.Screen name="SignUp" component={SignUp} />
           <Stack.Screen name="Home" component={CustomDrawer} />
           <Stack.Screen name="FoodDetail" component={FoodDetail} />
           <Stack.Screen name="MyCart" component={MyCart} />

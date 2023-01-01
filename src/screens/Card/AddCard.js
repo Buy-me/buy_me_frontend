@@ -237,7 +237,7 @@ const AddCard = ({ navigation, route }) => {
 						borderRadius: SIZES.radius,
 						backgroundColor: isEnableAddCard()
 							? COLORS.primary
-							: COLORS.transparentPrimray,
+							: COLORS.transparentPrimary,
 					}}
 					onPress={() => navigation.goBack()}
 				/>
