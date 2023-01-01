@@ -10,7 +10,7 @@ import Home from "./Home/Home";
 import Search from "./Search/Search";
 
 // Cart
-import MyCart from "./Cart/MyCart"
+import MyCart from "./Cart/MyCart";
 
 // Favourite
 import Favourite from "./Favourite/Favourite";
@@ -30,18 +30,16 @@ import ChangePassword from "./Account/ChangePassword";
 import Address from "./Address/Address";
 
 export {
-
-    MainLayout,
-    AuthLayout,
-    Home,
-    Search,
-    CartTab,
-    Favourite,
-    Notification,
-    MyCard,
-    MyAccount,
-    EditAccount,
-    ChangePassword,
-      Address,
-}
-
+  MainLayout,
+  AuthLayout,
+  Home,
+  Search,
+  MyCart,
+  Favourite,
+  Notification,
+  MyCard,
+  MyAccount,
+  EditAccount,
+  ChangePassword,
+  Address,
+};
