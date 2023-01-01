@@ -37,10 +37,11 @@ const SignIn = ({ navigation }) => {
 
     if (err) {
       console.log(err);
-      //   alert(utils.utils.capitalizeFirstLetter(err.message));
+      alert(utils.utils.capitalizeFirstLetter(err.message));
       return;
     }
-    console.log(response.data);
+
+    utils.utils.storeData("token", { token: response.data.token });
     ToastAndroid.show("Login successfully!", ToastAndroid.SHORT);
     navigation.navigate("Home");
   };

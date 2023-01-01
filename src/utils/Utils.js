@@ -1,3 +1,26 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const storeData = async (key, value) => {
+  // console.log(value);
+  try {
+    const jsonValue = JSON.stringify(value);
+    // console.log("jsonValue", jsonValue);
+    await AsyncStorage.setItem(key, jsonValue);
+  } catch (e) {
+    // saving error
+  }
+};
+
+const getData = async (key) => {
+  try {
+    const jsonValue = await AsyncStorage.getItem(key);
+    console.log("jsonValue", jsonValue);
+    return jsonValue;
+  } catch (e) {
+    // read error
+  }
+};
+
 function validateInput(value, minLength, setError) {
   if (value.length < minLength) {
     setError("Invalid Input");
@@ -69,6 +92,8 @@ const utils = {
   validatePassword,
   convertToDateString,
   capitalizeFirstLetter,
+  storeData,
+  getData,
 };
 
 export default utils;
