@@ -197,13 +197,20 @@ const FoodDetail = ({ navigation }) => {
             }}
             icon={icons.note}
             iconStyle={{ tintColor: COLORS.transparentPrimray }}
-            label="Add note..."
+            label="Write Review"
             labelStyle={{
               flex: 1,
-              color: COLORS.transparentBlack1,
+              color: COLORS.darkGray2,
               textAlign: "left",
               marginLeft: 10,
               ...FONTS.h3,
+            }}
+            onPress={() => {
+              /* 1. Navigate to the Details route with params */
+              navigation.navigate("Review", {
+                foodId: selectedFood.id,
+                // otherParam: "anything you want here",
+              });
             }}
           />
 

@@ -7,25 +7,13 @@ import {
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { COLORS, dummyData, FONTS, icons, SIZES } from "../../constants";
-import {
-  CartQuantityButton,
-  FooterTotal,
-  Header,
-  IconButton,
-  StepperInput,
-} from "../../component";
-import { SwipeListView } from "react-native-swipe-list-view";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  deleteAddress,
-  setAddressList,
-  setSelectedAddress,
-} from "../../features/address/addressSlice";
-import addressApi from "../../api/addressApi";
+import { COLORS, FONTS, icons, SIZES } from "../../constants";
+import { Header, IconButton } from "../../component";
+
 import utils from "../../utils";
-import { AirbnbRating, Rating } from "react-native-ratings";
+import { Rating } from "react-native-ratings";
+import foodApi from "../../api/foodApi";
+import { useIsFocused } from "@react-navigation/native";
 
 const ratings = [
   {
@@ -54,41 +42,37 @@ const ratings = [
     rating: 2,
   },
 ];
-const Review = ({ navigation }) => {
-  const dispatch = useDispatch();
-  const { addressList } = useSelector((state) => state.address);
+const Review = ({ route, navigation }) => {
+  if (!route.params) {
+    navigation.navigate("Home");
+    return;
+  }
+  const [reviewList, setReviewList] = useState([]);
+  const isFocused = useIsFocused();
+
+  const { foodId } = route.params;
 
   // handle render address first time
   useEffect(() => {
-    const getAddresses = async () => {
-      const { response, err } = await addressApi.getList();
+    const getReviews = async () => {
+      const { response, err } = await foodApi.getRatingList(foodId);
 
       if (err) {
         // console.log(err);
         alert(utils.utils.capitalizeFirstLetter(err.message));
         return;
       }
-      dispatch(setAddressList(response.data));
-    };
-    getAddresses();
-  }, []);
 
-  function ratingCompleted(rating) {
-    // console.log("Rating is: " + rating);
-  }
+      setReviewList(response.data);
+    };
+
+    if (isFocused) {
+      console.log("reload");
+      getReviews();
+    }
+  }, [isFocused]);
 
   //handle delete address
-
-  const handleDelete = async (item) => {
-    const { err } = await addressApi.deleteAddress(item.id);
-    if (err) {
-      alert(utils.utils.capitalizeFirstLetter(err.message));
-      return;
-    }
-    dispatch(deleteAddress(item.id));
-    ToastAndroid.show("Delete successfully!", ToastAndroid.SHORT);
-  };
-
   //Renderer
   const renderHeader = () => {
     return (
@@ -105,12 +89,12 @@ const Review = ({ navigation }) => {
         }
         rightComponent={
           <IconButton
-            icon={icons.address}
+            icon={icons.review}
             containerStyle={headerStyles.rightContainer}
             iconStyle={headerStyles.rightIcon}
             onPress={() =>
               navigation.navigate("Add Review", {
-                foodId: 1,
+                foodId: foodId,
               })
             }
           />
@@ -122,8 +106,8 @@ const Review = ({ navigation }) => {
   const renderReviewList = () => {
     return (
       <FlatList
-        keyExtractor={(item) => `${item.id}`}
-        data={ratings}
+        keyExtractor={(item) => `review_${item.id}`}
+        data={reviewList}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{
           marginTop: SIZES.radius,
@@ -148,7 +132,7 @@ const Review = ({ navigation }) => {
             </Text>
           </View>
         }
-        renderItem={(item, index) => (
+        renderItem={({ item, index }) => (
           <View
             style={{
               backgroundColor: COLORS.lightGray2,
@@ -163,13 +147,9 @@ const Review = ({ navigation }) => {
               }}
             >
               <IconButton
-                icon={icons.apple}
+                icon={icons.user}
                 containerStyle={reviewItemStyles.imageView}
                 iconStyle={reviewItemStyles.image}
-                onPress={() => {
-                  // dispatch(setSelectedAddress(data.item));
-                  navigation.goBack();
-                }}
               />
               <View
                 style={{ alignItems: "flex-start", justifyContent: "center" }}
@@ -178,12 +158,15 @@ const Review = ({ navigation }) => {
                   style={{ ...FONTS.h3, color: COLORS.darkGray }}
                   numberOfLines={2}
                 >
-                  {item?.user?.name || "Ro di"}
+                  {item.user.first_name + " " + item.user.last_name || "N/A"}
                 </Text>
                 <Rating
                   type="custom"
                   showRating={false}
-                  onFinishRating={ratingCompleted}
+                  onFinishRating={() => {}}
+                  startingValue={item.rating}
+                  jumpValue={0.5}
+                  fractions={1}
                   imageSize={20}
                   tintColor={COLORS.lightGray2}
                   style={{
@@ -198,12 +181,7 @@ const Review = ({ navigation }) => {
                 paddingVertical: SIZES.radius,
               }}
             >
-              <Text>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Voluptatibus magni saepe blanditiis eum dolorem officia velit
-                quod, libero consectetur aliquid officiis amet reprehenderit
-                sapiente nostrum quae nobis dolore ratione odio.
-              </Text>
+              <Text>{item?.comment}</Text>
             </View>
           </View>
         )}
@@ -285,6 +263,6 @@ const headerStyles = StyleSheet.create({
     width: 25,
     height: 25,
     tintColor: COLORS.primary,
-    marginTop: -5,
+    // marginTop: -5,
   },
 });
