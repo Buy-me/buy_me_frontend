@@ -20,6 +20,7 @@ import TextButtonTag from "./TextButtonTag";
 import TextButtonFilter from "./TextButtonFilter";
 import GrayLayout from "./GrayLayout";
 import InfoRow from "./InfoRow";
+import OrderCard from "./OrderCard";
 
 export {
   Header,
@@ -44,4 +45,5 @@ export {
   VerticalFoodCard,
   InfoRow,
   TextButtonTag,
+  OrderCard,
 };
