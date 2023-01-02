@@ -14,12 +14,15 @@ import { FormInput, TextButton } from "../../component";
 import { AuthLayout } from "../";
 import utils from "../../utils";
 import userApi from "../../api/userApi";
+import { useDispatch } from "react-redux";
+import { setProfile } from "../../features/user/userSlice";
 
 const SignIn = ({ navigation }) => {
   const [email, setEmail] = React.useState("binhdinhreact@gmail.com");
   const [password, setPassword] = React.useState("123456");
   const [emailError, setEmailError] = React.useState("");
   const [passwordError, setPasswordError] = React.useState("");
+  const dispatch = useDispatch();
 
   const [showPass, setShowPass] = React.useState(false);
 
@@ -29,17 +32,29 @@ const SignIn = ({ navigation }) => {
     );
   }
 
+  const getProfile = async () => {
+    const { response, err } = await userApi.profile();
+    if (err) {
+      console.log(err);
+      alert(utils.utils.capitalizeFirstLetter(err.message) || "Try later");
+      return;
+    }
+    console.log("profile", response.data);
+    dispatch(setProfile(response.data));
+    ToastAndroid.show("Login successfully!", ToastAndroid.SHORT);
+  };
+
   const handleLogin = async () => {
     const { response, err } = await userApi.login({
       email: email,
       password: password,
     });
-
     if (err) {
       console.log(err);
       alert(utils.utils.capitalizeFirstLetter(err.message));
       return;
     }
+    getProfile();
 
     utils.utils.storeData("token", { token: response.data.token });
     ToastAndroid.show("Login successfully!", ToastAndroid.SHORT);
@@ -154,7 +169,9 @@ const SignIn = ({ navigation }) => {
               color: COLORS.gray,
               ...FONTS.body5,
             }}
-            // onPress={() => ""} // To Forgot Password
+            onPress={() => {
+              navigation.navigate("ForgotPassword");
+            }} // To Forgot Password
           ></TextButton>
           <View
             style={{
