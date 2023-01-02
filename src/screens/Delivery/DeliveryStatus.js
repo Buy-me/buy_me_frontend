@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Image, ScrollView, Text, View } from "react-native";
 import {
-	Header,
-	LineDivider,
-	TextButton,
-	TextIconButton,
+  Header,
+  LineDivider,
+  TextButton,
+  TextIconButton,
 } from "../../component";
 import { COLORS, constants, FONTS, icons, SIZES } from "../../constants";
 
@@ -152,15 +152,16 @@ const DeliveryStatus = ({ navigation }) => {
 		);
 	};
 
-	return (
-		<View
-			style={{
-				flex: 1,
-				paddingHorizontal: SIZES.padding,
-				backgroundColor: COLORS.white,
-			}}>
-			{/* Header */}
-			{renderHeader()}
+  return (
+    <View
+      style={{
+        flex: 1,
+        paddingHorizontal: SIZES.padding,
+        backgroundColor: COLORS.white,
+      }}
+    >
+      {/* Header */}
+      {renderHeader()}
 
 			{/* Track Order */}
 			<ScrollView showsVerticalScrollIndicator={false}>

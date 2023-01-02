@@ -26,24 +26,29 @@ import cartApi from "../../api/cartApi";
 
 const FoodDetail = ({ navigation }) => {
   const [foodQuantity, setFoodQuantity] = useState(1);
-  const [isFavourite, setIsFavourite] = useState(false)
+  const [isFavourite, setIsFavourite] = useState(false);
 
-  const { selectedFood } = useSelector(state => state.food)
+  const { selectedFood } = useSelector((state) => state.food);
   // console.log(selectedFood);
 
   //Handler
   const handleAddToCart = async () => {
     const { response, err } = await cartApi.addToCart({
       food_id: selectedFood.id,
-      quantity: foodQuantity
-    })
+      quantity: foodQuantity,
+    });
 
     if (err) {
-      ToastAndroid.show("This product is already added in the cart!", ToastAndroid.SHORT)
-    }
-    else
+      navigation.navigate("MyCart");
+      ToastAndroid.show(
+        "This product is already added in the cart!",
+        ToastAndroid.SHORT
+      );
+    } else {
+      navigation.navigate("MyCart");
       console.log("response", response);
-  }
+    }
+  };
 
   //Renderer
   const renderHeader = () => {
@@ -139,10 +144,12 @@ const FoodDetail = ({ navigation }) => {
         {/* Food Info */}
         <View style={{ marginTop: SIZES.padding }}>
           {/* Name and description */}
-          <View style={{
-            flexDirection: "column",
-            // alignItems: "center"
-          }}>
+          <View
+            style={{
+              flexDirection: "column",
+              // alignItems: "center"
+            }}
+          >
             <Text
               style={{
                 ...FONTS.h1,
@@ -156,7 +163,7 @@ const FoodDetail = ({ navigation }) => {
               containerStyle={{
                 alignItems: "center",
                 paddingVertical: 5,
-                paddingHorizontal: 0
+                paddingHorizontal: 0,
               }}
               icon={icons.star}
               iconPosition="LEFT"
@@ -186,17 +193,24 @@ const FoodDetail = ({ navigation }) => {
             containerStyle={{
               flex: 1,
               height: 40,
-              marginTop: 15
+              marginTop: 15,
             }}
             icon={icons.note}
             iconStyle={{ tintColor: COLORS.transparentPrimray }}
-            label="Add note..."
+            label="Write Review"
             labelStyle={{
               flex: 1,
-              color: COLORS.transparentBlack1,
+              color: COLORS.darkGray2,
               textAlign: "left",
               marginLeft: 10,
               ...FONTS.h3,
+            }}
+            onPress={() => {
+              /* 1. Navigate to the Details route with params */
+              navigation.navigate("Review", {
+                foodId: selectedFood.id,
+                // otherParam: "anything you want here",
+              });
             }}
           />
 
@@ -208,10 +222,16 @@ const FoodDetail = ({ navigation }) => {
             }}
           >
             <StepperInput
+              containerStyle={
+                {
+                  // borderColor: COLORS.primary,
+                  // borderWidth: 1,
+                }
+              }
               value={foodQuantity}
               onAdd={() => setFoodQuantity(foodQuantity + 1)}
               onMinus={() => {
-                if (foodQuantity > 1) setFoodQuantity(foodQuantity - 1)
+                if (foodQuantity > 1) setFoodQuantity(foodQuantity - 1);
               }}
             />
 
@@ -222,14 +242,19 @@ const FoodDetail = ({ navigation }) => {
                 marginLeft: SIZES.radius,
                 paddingHorizontal: SIZES.radius,
                 borderRadius: SIZES.radius,
-                backgroundColor: COLORS.primary,
+                // backgroundColor: COLORS.primary,
+                borderColor: COLORS.primary,
+                borderWidth: 1,
               }}
               icon={isFavourite ? icons.love : icons.favourite}
-              iconStyle={{ tintColor: COLORS.white }}
+              iconStyle={{
+                tintColor: COLORS.primary,
+                color: COLORS.primary,
+              }}
               label={isFavourite ? "Remove Favourite" : "Add to Favourite"}
               labelStyle={{
                 flex: 1,
-                color: COLORS.white,
+                color: COLORS.primary,
                 textAlign: "center",
                 ...FONTS.h3,
               }}
@@ -246,7 +271,7 @@ const FoodDetail = ({ navigation }) => {
       <View
         style={{
           flexDirection: "row",
-          marginVertical: SIZES.padding,
+          marginVertical: SIZES.radius,
           paddingHorizontal: SIZES.padding,
           justifyContent: "space-between",
           alignItems: "center",
@@ -254,7 +279,7 @@ const FoodDetail = ({ navigation }) => {
       >
         {/* <Image
           source={images.profile}
-          style={{
+          style={
             width: 50,
             height: 50,
             borderRadius: SIZES.radius,
@@ -310,6 +335,7 @@ const FoodDetail = ({ navigation }) => {
           alignItems: "center",
           paddingHorizontal: SIZES.padding,
           paddingBottom: SIZES.radius,
+          marginTop: 10,
         }}
       >
         {/* <TextButton
@@ -336,7 +362,7 @@ const FoodDetail = ({ navigation }) => {
             borderRadius: SIZES.radius,
             backgroundColor: COLORS.primary,
             justifyContent: "space-between",
-            alignItems: "center"
+            alignItems: "center",
           }}
           label={"Add to Cart"}
           labelStyle={{
@@ -367,15 +393,13 @@ const FoodDetail = ({ navigation }) => {
         {/* detail */}
         {renderDetails()}
 
-        <LineDivider />
-
-        {/* extra info */}
-        {renderExtraInfo()}
+        {/* <LineDivider /> */}
       </ScrollView>
-
       {/* Footer */}
+      {/* extra info */}
       <LineDivider />
-
+      {renderExtraInfo()}
+      <LineDivider />
       {renderFooter()}
     </View>
   );

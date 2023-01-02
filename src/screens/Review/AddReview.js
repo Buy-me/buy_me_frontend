@@ -25,21 +25,37 @@ import Utils from "../../utils";
 import utils from "../../utils/Utils";
 
 const AddReview = ({ navigation, route }) => {
-  const [foodItem, setFoodItem] = useState(dummyData.vegBiryani);
+  const [foodItem, setFoodItem] = useState(null);
 
   const [comment, setComent] = useState("");
   const [rating, setRating] = useState(5);
   const [commentErr, setCommentErr] = useState("");
 
+  const { foodId } = route.params;
+
   //Redux
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const getFood = async () => {
+      const { response, err } = await foodApi.get(foodId);
+
+      if (err) {
+        // console.log(err);
+        alert(utils.utils.capitalizeFirstLetter(err.message));
+        return;
+      }
+      setFoodItem(response.data);
+    };
+    getFood();
+  }, [foodId]);
 
   function isEnableRating() {
     return comment != "";
   }
 
   const handleRating = async () => {
-    const { response, err } = await foodApi.rating(1, {
+    const { response, err } = await foodApi.rating(foodId, {
       rating,
       comment,
     });
@@ -47,7 +63,6 @@ const AddReview = ({ navigation, route }) => {
       alert(utils.utils.capitalizeFirstLetter(err.message));
       return;
     }
-    dispatch(addAddress(response.data));
     ToastAndroid.show("Rating succcessfully!", ToastAndroid.SHORT);
   };
 
@@ -90,6 +105,9 @@ const AddReview = ({ navigation, route }) => {
       />
     );
   };
+  const back = () => {
+    navigation.goBack();
+  };
 
   const renderItem = () => {
     return (
@@ -105,9 +123,12 @@ const AddReview = ({ navigation, route }) => {
         }}
       >
         <Image
-          source={foodItem?.image}
+          source={{ uri: foodItem?.images.url }}
           resizeMode="contain"
-          style={{ width: "50%", alignSelf: "center" }}
+          style={{
+            height: 170,
+            width: "100%",
+          }}
         />
       </View>
     );
@@ -123,8 +144,8 @@ const AddReview = ({ navigation, route }) => {
             setRating(raing);
           }}
           startingValue={rating}
-          jumpValue={0.5}
           imageSize={40}
+          jumpValue={0.5}
           fractions={1}
           style={{
             flex: 1,
@@ -187,7 +208,9 @@ const AddReview = ({ navigation, route }) => {
           }}
           onPress={() => {
             handleRating();
-            navigation.goBack();
+            setTimeout(function () {
+              back();
+            }, 500);
           }}
         />
       </View>

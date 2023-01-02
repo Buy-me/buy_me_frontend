@@ -1,5 +1,8 @@
 import MainLayout from "./MainLayout";
 
+// SignInSignUp
+import AuthLayout from "./SignInSignUp/AuthLayout";
+
 // Home
 import Home from "./Home/Home";
 
@@ -7,7 +10,7 @@ import Home from "./Home/Home";
 import Search from "./Search/Search";
 
 // Cart
-import MyCart from "./Cart/MyCart"
+import MyCart from "./Cart/MyCart";
 
 // Favourite
 import Favourite from "./Favourite/Favourite";
@@ -28,6 +31,7 @@ import Address from "./Address/Address";
 
 export {
   MainLayout,
+  AuthLayout,
   Home,
   Search,
   MyCart,
@@ -36,6 +40,6 @@ export {
   MyCard,
   MyAccount,
   EditAccount,
-  Address,
   ChangePassword,
+  Address,
 };

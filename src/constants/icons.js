@@ -1,3 +1,5 @@
+const eye = require("../assets/icons/eye.png");
+const eye_closed = require("../assets/icons/eye_closed.png");
 const coupon = require("../assets/icons/coupon.png");
 const cross = require("../assets/icons/cross.png");
 const cart = require("../assets/icons/cart.png");
@@ -45,12 +47,17 @@ const chevronUp = require("../assets/icons/chevron-up.png");
 const ticket = require("../assets/icons/ticket.png");
 const creditCard = require("../assets/icons/credit-card.png");
 const cash = require("../assets/icons/cash.png");
-const calendar = require("../assets/icons/calendar.png")
-const category = require("../assets/icons/category.png")
-const note = require("../assets/icons/note.png")
+const calendar = require("../assets/icons/calendar.png");
+const category = require("../assets/icons/category.png");
+const note = require("../assets/icons/note.png");
 const recent = require("../assets/icons/recent.png");
+const review = require("../assets/icons/review.png");
+const user = require("../assets/icons/user.png");
 
 export default {
+
+	eye,
+	eye_closed,
 	coupon,
 	cross,
 	cart,
@@ -99,7 +106,57 @@ export default {
 	creditCard,
 	cash,
 	calendar,
-	category,
-	note,
-	recent
+  user,
+  review,
+  coupon,
+  cross,
+  cart,
+  menu,
+  search,
+  filter,
+  down_arrow,
+  favourite,
+  burger,
+  cherry,
+  rice,
+  love,
+  calories,
+  home,
+  location,
+  logout,
+  notification,
+  profile,
+  setting,
+  star,
+  wallet,
+  help,
+  check_circle_active,
+  check_circle_inactive,
+  map,
+  back,
+  correct,
+  cancel,
+  check_on,
+  check_off,
+  clock,
+  dollar,
+  minus,
+  plus,
+  delete_icon,
+  google,
+  visa,
+  apple,
+  paypal,
+  right,
+  address,
+  alarm,
+  chevronDown,
+  chevronUp,
+  ticket,
+  creditCard,
+  cash,
+  calendar,
+  category,
+  note,
+  recent,
 };

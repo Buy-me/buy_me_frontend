@@ -5,6 +5,8 @@ import { useFonts } from "expo-font";
 
 import { Provider } from "react-redux";
 import { store } from "./src/app/store";
+import SignIn from "./src/screens/SignInSignUp/SignIn";
+import SignUp from "./src/screens/SignInSignUp/SignUp";
 import CustomDrawer from "./src/navigation/drawer/CustomDrawer";
 import Success from "./src/screens/Cart/Success";
 import DeliveryStatus from "./src/screens/Delivery/DeliveryStatus";
@@ -36,44 +38,48 @@ const App = () => {
   }
 
   return (
-		<Provider store={store}>
-			<NavigationContainer>
-				<Stack.Navigator
-					screenOptions={{
-						headerShown: false,
-					}}
-					initialRouteName={"Home"}>
-					<Stack.Screen name='Home' component={CustomDrawer} />
-					<Stack.Screen name='FoodDetail' component={FoodDetail} />
-					<Stack.Screen name='MyCart' component={MyCart} />
-					<Stack.Screen name='MyCard' component={MyCard} />
-					<Stack.Screen name='Add Card' component={AddCard} />
-					<Stack.Screen name='Checkout' component={Checkout} />
-					<Stack.Screen name='MyAccount' component={MyAccount} />
-					<Stack.Screen name='EditAccount' component={EditAccount} />
-					<Stack.Screen name='Address' component={Address} />
-					<Stack.Screen name='Add Address' component={AddAddress} />
-					<Stack.Screen name='Review' component={Review} />
-					<Stack.Screen name='Add Review' component={AddReview} />
-					<Stack.Screen name='ChangePassword' component={ChangePassword} />
-					<Stack.Screen
-						name='Success'
-						component={Success}
-						options={{ gestureEnabled: false }}
-					/>
-					<Stack.Screen
-						name='Delivery Status'
-						component={DeliveryStatus}
-						options={{ gestureEnabled: false }}
-					/>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}
+          initialRouteName={"SignIn"}
+        >
+          <Stack.Screen name="SignIn" component={SignIn} />
+          <Stack.Screen name="SignUp" component={SignUp} />
+          <Stack.Screen name="Home" component={CustomDrawer} />
+          <Stack.Screen name="FoodDetail" component={FoodDetail} />
+          <Stack.Screen name="MyCart" component={MyCart} />
+          <Stack.Screen name="MyCard" component={MyCard} />
+          <Stack.Screen name="Add Card" component={AddCard} />
+          <Stack.Screen name="Checkout" component={Checkout} />
+          <Stack.Screen name="MyAccount" component={MyAccount} />
+          <Stack.Screen name="EditAccount" component={EditAccount} />
+          <Stack.Screen name="Address" component={Address} />
+          <Stack.Screen name="Add Address" component={AddAddress} />
+          <Stack.Screen name="Review" component={Review} />
+          <Stack.Screen name="Add Review" component={AddReview} />
+          <Stack.Screen name="ChangePassword" component={ChangePassword} />
+
+          <Stack.Screen
+            name="Success"
+            component={Success}
+            options={{ gestureEnabled: false }}
+          />
+          <Stack.Screen
+            name="Delivery Status"
+            component={DeliveryStatus}
+            options={{ gestureEnabled: false }}
+          />
 					<Stack.Screen
 						name="Order Detail"
 						component={OrderDetail}
 					/>
-				</Stack.Navigator>
-			</NavigationContainer>
-		</Provider>
-	);
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
+  );
 };
 
 export default App;
