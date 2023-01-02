@@ -25,7 +25,7 @@ const FormInput = ({
   errorMsg = "",
   maxLength,
   editable = true,
-  multiline
+  multiline,
 }) => {
   return (
     <View style={{ ...containerStyle }}>

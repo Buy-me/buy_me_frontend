@@ -5,6 +5,8 @@ import { useFonts } from "expo-font";
 
 import { Provider } from "react-redux";
 import { store } from "./src/app/store";
+import SignIn from "./src/screens/SignInSignUp/SignIn";
+import SignUp from "./src/screens/SignInSignUp/SignUp";
 import CustomDrawer from "./src/navigation/drawer/CustomDrawer";
 import Success from "./src/screens/Cart/Success";
 import DeliveryStatus from "./src/screens/Delivery/DeliveryStatus";
@@ -18,6 +20,8 @@ import { Address, ChangePassword, EditAccount } from "./src/screens";
 import AddAddress from "./src/screens/Address/AddAddress";
 import Review from "./src/screens/Review/Review";
 import AddReview from "./src/screens/Review/AddReview";
+import OrderHistory from "./src/screens/Order/OrderHistory";
+import OrderDetail from "./src/screens/Order/OrderDetail";
 
 const Stack = createNativeStackNavigator();
 
@@ -40,8 +44,10 @@ const App = () => {
           screenOptions={{
             headerShown: false,
           }}
-          initialRouteName={"Home"}
+          initialRouteName={"SignIn"}
         >
+          <Stack.Screen name="SignIn" component={SignIn} />
+          <Stack.Screen name="SignUp" component={SignUp} />
           <Stack.Screen name="Home" component={CustomDrawer} />
           <Stack.Screen name="FoodDetail" component={FoodDetail} />
           <Stack.Screen name="MyCart" component={MyCart} />
@@ -66,6 +72,10 @@ const App = () => {
             component={DeliveryStatus}
             options={{ gestureEnabled: false }}
           />
+					<Stack.Screen
+						name="Order Detail"
+						component={OrderDetail}
+					/>
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

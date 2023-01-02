@@ -140,7 +140,7 @@ const CustomDrawerContent = ({ navigation, setSelectedTab, selectedTab }) => {
               backgroundColor: COLORS.lightGray1,
             }}
           ></View>
-          <CustomDrawerItem label={"Track Your Order"} icon={icons.location} />
+          <CustomDrawerItem label={"Track Your Order"} icon={icons.location} onPress={() => navigation.navigate("Order History")} />
           <CustomDrawerItem label={"Coupons"} icon={icons.coupon} />
           <CustomDrawerItem
             label={"Settings"}
@@ -161,7 +161,13 @@ const CustomDrawerContent = ({ navigation, setSelectedTab, selectedTab }) => {
             marginBottom: SIZES.padding,
           }}
         >
-          <CustomDrawerItem label={"Logout"} icon={icons.logout} />
+          <CustomDrawerItem
+            label={"Logout"}
+            icon={icons.logout}
+            onPress={() => {
+              navigation.navigate("SignIn");
+            }}
+          />
         </View>
       </View>
     </DrawerContentScrollView>

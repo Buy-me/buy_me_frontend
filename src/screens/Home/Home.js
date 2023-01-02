@@ -120,7 +120,7 @@ const Home = ({ type }) => {
         rating: rating,
         search: search,
       });
-      console.log(response.data.length);
+      // console.log(response.data.length);
       dispatch(setIsLoading(false));
       dispatch(setFoods(response.data));
       dispatch(setRecommends(response.data));
