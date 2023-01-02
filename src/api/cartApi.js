@@ -39,10 +39,10 @@ const cartApi = {
             return { err }
         }
     },
-    deleteFromCart: async (id) => {
+    deleteFromCart: async (data) => {
         try {
             const response = await privateClient.delete(foodEndpoints.delete, {
-                food_id: id
+                data
             })
             return { response }
         }

@@ -1,24 +1,31 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { COLORS, icons, SIZES } from '../../constants'
+import { COLORS, icons, images, SIZES } from '../../constants'
 import { FormInput, GrayLayout, Header, IconButton, TextButton } from '../../component'
 import { useState } from 'react'
 import Utils from "../../utils";
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker'
+import { useEffect } from 'react'
 
 const EditAccount = ({ navigation }) => {
     const { utils } = Utils
 
-    const [fullName, setFullName] = useState("")
+    // const [fullName, setFullName] = useState("")
+    const [firstName, setFirstName] = useState("")
+    const [lastName, setLastName] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
-    const [idCard, setIdCard] = useState("")
+    // const [idCard, setIdCard] = useState("")
     const [dateOfBirth, setDateOfBirth] = useState(new Date())
     const [gender, setGender] = useState("male")
-    const [email, setEmail] = useState("")
-    const [address, setAddress] = useState("")
+    // const [email, setEmail] = useState("")
+    // const [address, setAddress] = useState("")
 
     const [errorMsg, setErrorMsg] = useState("")
+
+    useEffect(() => {
+
+    }, [])
 
     const [showDatePicker, setShowDatePicker] = useState(false)
     const showPicker = () => {
@@ -83,14 +90,40 @@ const EditAccount = ({ navigation }) => {
 
             <ScrollView>
                 <View style={styles.contentContainer}>
-                    <GrayLayout>
+                    <View style={{
+                        alignSelf: "center",
+                    }}>
+                        <Image
+                            source={images.profile}
+                            style={{
+                                width: 120,
+                                height: 120,
+                                borderRadius: 10
+                            }}
+                        />
+                    </View>
+
+                    <GrayLayout style={{ marginTop: 25 }}>
                         <FormInput
-                            label={"Full Name"}
+                            label={"First Name"}
                             maxLength={50}
-                            value={fullName}
+                            value={firstName}
                             inputContainerStyle={{ backgroundColor: "white" }}
                             onChange={(value) => {
-                                setFullName(value)
+                                setFirstName(value)
+                                utils.validateInput(value, 0, setErrorMsg)
+                            }}
+                            errorMsg={errorMsg}
+                        />
+
+                        <FormInput
+                            label={"Last Name"}
+                            maxLength={50}
+                            value={lastName}
+                            containerStyle={{ marginTop: 15 }}
+                            inputContainerStyle={{ backgroundColor: "white" }}
+                            onChange={(value) => {
+                                setLastName(value)
                                 utils.validateInput(value, 0, setErrorMsg)
                             }}
                             errorMsg={errorMsg}
@@ -112,7 +145,7 @@ const EditAccount = ({ navigation }) => {
                             errorMsg={errorMsg}
                         />
 
-                        <FormInput
+                        {/* <FormInput
                             label={"ID Card"}
                             maxLength={10} //????
                             keyboardType="numeric"
@@ -126,7 +159,7 @@ const EditAccount = ({ navigation }) => {
                                 utils.validateInput(value, 0, setErrorMsg)
                             }}
                             errorMsg={errorMsg}
-                        />
+                        /> */}
 
                         <FormInput
                             label={"Date of Birth"}
@@ -184,7 +217,7 @@ const EditAccount = ({ navigation }) => {
 
 
 
-                        <FormInput
+                        {/* <FormInput
                             label={"Email"}
                             value={email}
                             keyboardType={"email-address"}
@@ -211,7 +244,7 @@ const EditAccount = ({ navigation }) => {
                                 utils.validateInput(value, 0, setErrorMsg)
                             }}
                             errorMsg={errorMsg}
-                        />
+                        /> */}
                     </GrayLayout>
                 </View>
             </ScrollView>
