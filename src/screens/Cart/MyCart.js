@@ -21,7 +21,6 @@ const MyCart = ({ navigation }) => {
         }
         else {
             const data = response.data
-            // console.log("THIS IS CART", data);
             //set data for redux store
             dispatch(setProductsCart(data))
         }
@@ -83,7 +82,7 @@ const MyCart = ({ navigation }) => {
                     />
                 }
                 rightComponent={
-                    <CartQuantityButton quantity={5} />
+                    <CartQuantityButton />
                 }
             />
         )

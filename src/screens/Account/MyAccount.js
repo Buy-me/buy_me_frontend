@@ -1,11 +1,29 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { COLORS, icons, SIZES } from '../../constants'
+import { COLORS, icons, SIZES, constants, images } from '../../constants'
 import { Header, IconButton, InfoRow, LineDivider } from '../../component'
 import GrayLayout from '../../component/GrayLayout'
-import { color } from 'react-native-reanimated'
+import { useEffect } from 'react'
+import profileApi from '../../api/profileApi'
+import { useState } from 'react'
 
 const MyAccount = ({ navigation }) => {
+    const [profile, setProfile] = useState(null)
+
+    useEffect(() => {
+        (async () => {
+            const { response, err } = await profileApi.getProfile()
+
+            if (err) {
+                console.log(err);
+            }
+            else {
+                const data = response.data
+                console.log(data);
+                setProfile(data)
+            }
+        })()
+    }, [])
 
     const renderHeader = () => {
         return (
@@ -38,92 +56,111 @@ const MyAccount = ({ navigation }) => {
             {renderHeader()}
 
             {/* Content */}
-            <View style={styles.contentContainer}>
-                <GrayLayout>
-                    <InfoRow
-                        title={"Full Name"}
-                        value={"Dinh Huynh Thai Binh"}
-                    />
+            <ScrollView>
 
-                    <LineDivider lineStyle={{
-                        backgroundColor: COLORS.gray2,
-                        marginVertical: 20
-                    }} />
+                <View style={styles.contentContainer}>
+                    <View style={{
+                        alignSelf: "center",
+                        borderColor: COLORS.lightOrange3,
+                        borderRadius: 90,
+                        borderWidth: 2,
+                        padding: 3
+                    }}>
+                        <Image
+                            source={images.profile}
+                            style={{
+                                width: 100,
+                                height: 100,
+                                borderRadius: 90
+                            }}
+                        />
+                    </View>
 
-                    <InfoRow
-                        title={"Phone Number"}
-                        value={"0988877766"}
-                    />
+                    <GrayLayout style={{ marginTop: 15 }}>
+                        <InfoRow
+                            title={"Full Name"}
+                            value={profile?.first_name ? `${profile.first_name} ${profile.last_name}` : constants.placeHolderInputs.string}
+                        />
 
-                    <LineDivider lineStyle={{
-                        backgroundColor: COLORS.gray2,
-                        marginVertical: 20
-                    }} />
+                        <LineDivider lineStyle={{
+                            backgroundColor: COLORS.gray2,
+                            marginVertical: 20
+                        }} />
 
-                    <InfoRow
-                        title={"User ID"}
-                        value={"312321220"}
-                    />
-                </GrayLayout>
+                        <InfoRow
+                            title={"Phone Number"}
+                            value={profile?.phone ? profile.phone : constants.placeHolderInputs.string}
+                        />
 
-                <GrayLayout style={{ marginTop: 15 }}>
-                    <InfoRow
-                        title={"ID Card"}
-                        value={"Not updated"}
-                    />
+                        <LineDivider lineStyle={{
+                            backgroundColor: COLORS.gray2,
+                            marginVertical: 20
+                        }} />
 
-                    <LineDivider lineStyle={{
-                        backgroundColor: COLORS.gray2,
-                        marginVertical: 20
-                    }} />
+                        <InfoRow
+                            title={"User ID"}
+                            value={profile?.id}
+                        />
+                    </GrayLayout>
 
-                    <InfoRow
-                        title={"Date of Birth"}
-                        value={"03/03/2001"}
-                    />
+                    <GrayLayout style={{ marginTop: 15 }}>
+                        <InfoRow
+                            title={"ID Card"}
+                            value={"Not updated"}
+                        />
 
-                    <LineDivider lineStyle={{
-                        backgroundColor: COLORS.gray2,
-                        marginVertical: 20
-                    }} />
+                        <LineDivider lineStyle={{
+                            backgroundColor: COLORS.gray2,
+                            marginVertical: 20
+                        }} />
 
-                    <InfoRow
-                        title={"Gender"}
-                        value={"Male"}
-                    />
+                        <InfoRow
+                            title={"Date of Birth"}
+                            value={"03/03/2001"}
+                        />
 
-                    <LineDivider lineStyle={{
-                        backgroundColor: COLORS.gray2,
-                        marginVertical: 20
-                    }} />
+                        <LineDivider lineStyle={{
+                            backgroundColor: COLORS.gray2,
+                            marginVertical: 20
+                        }} />
 
-                    <InfoRow
-                        title={"Joined"}
-                        value={"03/04/2023"}
-                    />
+                        <InfoRow
+                            title={"Gender"}
+                            value={"Male"}
+                        />
 
-                    <LineDivider lineStyle={{
-                        backgroundColor: COLORS.gray2,
-                        marginVertical: 20
-                    }} />
+                        <LineDivider lineStyle={{
+                            backgroundColor: COLORS.gray2,
+                            marginVertical: 20
+                        }} />
 
-                    <InfoRow
-                        title={"Email"}
-                        value={"tbinh@gmail.com"}
-                    />
+                        <InfoRow
+                            title={"Joined"}
+                            value={"03/04/2023"}
+                        />
 
-                    <LineDivider lineStyle={{
-                        backgroundColor: COLORS.gray2,
-                        marginVertical: 20
-                    }} />
+                        <LineDivider lineStyle={{
+                            backgroundColor: COLORS.gray2,
+                            marginVertical: 20
+                        }} />
 
-                    <InfoRow
-                        title={"Address"}
-                        value={"jsajdpasdkajdlksjdlasj dsadsalkdj"}
-                    />
-                </GrayLayout>
-            </View>
+                        <InfoRow
+                            title={"Email"}
+                            value={profile?.email}
+                        />
 
+                        <LineDivider lineStyle={{
+                            backgroundColor: COLORS.gray2,
+                            marginVertical: 20
+                        }} />
+
+                        <InfoRow
+                            title={"Address"}
+                            value={profile?.addresses ? profile.addresses : constants.placeHolderInputs.string}
+                        />
+                    </GrayLayout>
+                </View>
+            </ScrollView>
         </View>
     )
 }

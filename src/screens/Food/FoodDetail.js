@@ -2,10 +2,8 @@ import { Image, StyleSheet, Text, ToastAndroid, View } from "react-native";
 import React, { useEffect } from "react";
 import {
   COLORS,
-  constants,
   FONTS,
   icons,
-  images,
   SIZES,
 } from "../../constants";
 import {
@@ -14,22 +12,21 @@ import {
   IconButton,
   IconLabel,
   LineDivider,
-  Rating,
   StepperInput,
-  TextButton,
   TextIconButton,
 } from "../../component";
 import { useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import cartApi from "../../api/cartApi";
+import { setProductsCart } from "../../features/cart/cartSlice";
 
 const FoodDetail = ({ navigation }) => {
+  const dispatch = useDispatch()
   const [foodQuantity, setFoodQuantity] = useState(1);
   const [isFavourite, setIsFavourite] = useState(false)
 
   const { selectedFood } = useSelector(state => state.food)
-  // console.log(selectedFood);
 
   //Handler
   const handleAddToCart = async () => {
@@ -41,8 +38,19 @@ const FoodDetail = ({ navigation }) => {
     if (err) {
       ToastAndroid.show("This product is already added in the cart!", ToastAndroid.SHORT)
     }
-    else
+    else {
       ToastAndroid.show("Product has been added!", ToastAndroid.SHORT)
+      //update my cart
+      const { response, err } = await cartApi.getMyCart()
+      if (err) {
+        console.log(err);
+      }
+      else {
+        const data = response.data
+        //update for redux store
+        dispatch(setProductsCart(data))
+      }
+    }
   }
 
   //Renderer
@@ -61,7 +69,6 @@ const FoodDetail = ({ navigation }) => {
         }
         rightComponent={
           <CartQuantityButton
-            quantity={5}
             onPress={() => navigation.navigate("MyCart")}
           />
         }

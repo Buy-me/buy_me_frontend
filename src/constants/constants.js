@@ -8,6 +8,11 @@ const screens = {
   my_wallet: "My Wallet",
 };
 
+const placeHolderInputs = {
+  string: "Not updated",
+  number: 0
+}
+
 const bottom_tabs = [
   {
     id: 0,
@@ -134,4 +139,5 @@ export default {
   ratings,
   tags,
   track_order_status,
+  placeHolderInputs
 };
