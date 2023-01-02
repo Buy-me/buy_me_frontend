@@ -22,23 +22,6 @@ const DeliveryStatus = ({ navigation }) => {
 			/>
 		);
 	};
-	const renderInfo = () => {
-		return (
-			<View
-				style={{
-					marginTop: SIZES.radius,
-					paddingHorizontal: SIZES.padding,
-				}}>
-				<Text
-					style={{ textAlign: "center", color: COLORS.gray, ...FONTS.body4 }}>
-					Estimated Delivery
-				</Text>
-				<Text style={{ textAlign: "center", ...FONTS.h2 }}>
-					21 Sept 2021/12:30PM
-				</Text>
-			</View>
-		);
-	};
 	const renderTrackOrder = () => {
 		return (
 			<View
@@ -141,46 +124,18 @@ const DeliveryStatus = ({ navigation }) => {
 					marginBottom: SIZES.padding,
 				}}>
 				{currentStep < constants.track_order_status.length - 1 && (
-					<View
-						style={{
-							flexDirection: "row",
-							height: 55,
-						}}>
 						<TextButton
-							buttonStyle={{
-								width: "40%",
-								borderRadius: SIZES.base,
-								backgroundColor: COLORS.lightGray2,
-							}}
-							label='Cancel'
-							labelStyle={{
-								color: COLORS.primary,
-							}}
-							onPress={() => navigation.navigate("FoodDetail")}
-						/>
-						<TextIconButton
-							containerStyle={{
-								flex: 1,
-								marginLeft: SIZES.radius,
-								borderRadius: SIZES.base,
-								backgroundColor: COLORS.primary,
-							}}
-							label='Map View'
-							labelStyle={{
-								color: COLORS.white,
-								...FONTS.h3,
-							}}
-							icon={icons.map}
-							iconPosition='LEFT'
-							iconStyle={{
-								width: 25,
-								height: 25,
-								marginRight: SIZES.base,
-								tintColor: COLORS.white,
-							}}
-							onPress={() => navigation.navigate("Map")}
-						/>
-					</View>
+						buttonStyle={{
+							borderRadius: SIZES.base,
+							backgroundColor: COLORS.lightGray2,
+							height: 55
+						}}
+						label='Cancel'
+						labelStyle={{
+							color: COLORS.primary,
+						}}
+						onPress={() => navigation.navigate("Home")}
+					/>
 				)}
 
 				{currentStep == constants.track_order_status.length - 1 && (
@@ -190,7 +145,7 @@ const DeliveryStatus = ({ navigation }) => {
 							borderRadius: SIZES.base,
 						}}
 						label='DONE'
-						onPress={() => navigation.navigate("FoodDetail")}
+						onPress={() => navigation.navigate("Home")}
 					/>
 				)}
 			</View>
@@ -206,9 +161,6 @@ const DeliveryStatus = ({ navigation }) => {
 			}}>
 			{/* Header */}
 			{renderHeader()}
-
-			{/* Info */}
-			{renderInfo()}
 
 			{/* Track Order */}
 			<ScrollView showsVerticalScrollIndicator={false}>
