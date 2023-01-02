@@ -13,6 +13,7 @@ import {
 } from "../../component";
 import { COLORS, dummyData, FONTS, icons, SIZES } from "../../constants";
 import orderApi from "../../api/orderApi";
+import moment from "moment";
 
 const OrderHistory = ({ navigation, route }) => {
 	const isDrawerOpen = useDrawerStatus() === "open";
@@ -67,7 +68,7 @@ const OrderHistory = ({ navigation, route }) => {
 	const filterData = (data) => {
 		const dataFiltered = {};
 		for (const item of data) {
-			const createDate = item.created_at.substring(0, 10);
+			const createDate = moment(item.created_at).format('DD-MM-YYYY');
 			if (dataFiltered[`${createDate}`] == null) {
 				dataFiltered[`${createDate}`] = [item];
 			} else dataFiltered[`${createDate}`].push(item);

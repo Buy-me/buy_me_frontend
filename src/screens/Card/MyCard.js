@@ -15,7 +15,7 @@ const MyCard = ({ navigation }) => {
     const renderHeader = () => {
         return (
             <Header
-                title={"MY CART"}
+                title={"MY CARD"}
                 containerStyle={headerStyles.container}
                 leftComponent={
                     <IconButton

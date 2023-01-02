@@ -11,7 +11,7 @@ const IconButton = ({ containerStyle, icon, iconStyle, onPress }) => {
           width: 30,
           height: 30,
           tintColor: COLORS.white,
-          ...iconStyle,
+          ...iconStyle
         }}
       />
     </TouchableOpacity>
