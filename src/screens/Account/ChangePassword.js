@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TextInput, ToastAndroid, View } from 'react-native'
 import React from 'react'
 import { FormInput, FormInputCheck, GrayLayout, Header, IconButton, TextButton } from '../../component'
 import { COLORS, icons, SIZES } from '../../constants'
 import { useState } from 'react'
 import utils from '../../utils/Utils'
+import changePasswordApi from '../../api/changePasswordApi'
 
 const ChangePassword = ({ navigation }) => {
 
@@ -11,7 +12,37 @@ const ChangePassword = ({ navigation }) => {
     const [newPwd, setNewPwd] = useState("")
     const [retypeNewPwd, setRetypeNewPwd] = useState("")
 
-    const [errorMsg, setErrorMsg] = useState("")
+    const [errorCurrentPwdMsg, setErrorCurrentPwdMsg] = useState("")
+    const [errorNewPwdMsg, setErrorNewPwdMsg] = useState("")
+    const [errorRetypeMsg, setErrorRetypeMsg] = useState("")
+
+    const handleChange = async () => {
+        if (errorCurrentPwdMsg !== "" || errorNewPwdMsg !== "" || errorRetypeMsg !== "") {
+            ToastAndroid.show("Please fill in correctly all the required fields!", ToastAndroid.SHORT)
+        }
+        else if (currentPwd === newPwd) {
+            ToastAndroid.show("New password and Old password must not be the same!", ToastAndroid.SHORT)
+        }
+        else if (newPwd !== retypeNewPwd) {
+            ToastAndroid.show("Retype password must be the same as New password!", ToastAndroid.SHORT)
+        }
+        else {
+            const { response, err } = await changePasswordApi.changePassword({
+                old_password: currentPwd,
+                new_password: newPwd
+            })
+        
+            if (err) {
+                ToastAndroid.show("Cannot change password!", ToastAndroid.SHORT)
+                console.log(err);
+            }
+            else {
+                ToastAndroid.show("Password changed!", ToastAndroid.SHORT)
+                console.log(response);
+                navigation.goBack()
+            }
+        }
+    }
 
     const renderHeader = () => {
         return (
@@ -50,9 +81,7 @@ const ChangePassword = ({ navigation }) => {
                         backgroundColor: COLORS.primary
                     }}
                     label={"Change Password"}
-                    onPress={() => {
-                        navigation.goBack()
-                    }}
+                    onPress={handleChange}
                 />
             </View>
         )
@@ -72,13 +101,13 @@ const ChangePassword = ({ navigation }) => {
                         inputContainerStyle={{ backgroundColor: "white" }}
                         onChange={(value) => {
                             setCurrentPwd(value)
-                            utils.validateInput(value, 6, setErrorMsg)
+                            utils.validateInput(value, 6, setErrorCurrentPwdMsg)
                         }}
                         appendComponent={
-                            <FormInputCheck error={errorMsg} value={currentPwd} />
+                            <FormInputCheck error={errorCurrentPwdMsg} value={currentPwd} />
                         }
                         secureTextEntry={true}
-                        errorMsg={errorMsg}
+                        errorMsg={errorCurrentPwdMsg}
                     />
 
                     <FormInput
@@ -89,30 +118,30 @@ const ChangePassword = ({ navigation }) => {
                         inputContainerStyle={{ backgroundColor: "white" }}
                         onChange={(value) => {
                             setNewPwd(value)
-                            utils.validateInput(value, 6, setErrorMsg)
+                            utils.validateInput(value, 6, setErrorNewPwdMsg)
                         }}
                         appendComponent={
-                            <FormInputCheck error={errorMsg} value={newPwd} />
+                            <FormInputCheck error={errorNewPwdMsg} value={newPwd} />
                         }
                         secureTextEntry={true}
-                        errorMsg={errorMsg}
+                        errorMsg={errorNewPwdMsg}
                     />
 
                     <FormInput
-                        label={"Retype New Password"}
+                        label={"Retype Password"}
                         maxLength={20}
                         value={retypeNewPwd}
                         containerStyle={{ marginTop: 15 }}
                         inputContainerStyle={{ backgroundColor: "white" }}
                         onChange={(value) => {
                             setRetypeNewPwd(value)
-                            utils.validateInput(value, 6, setErrorMsg)
+                            utils.validateInput(value, 6, setErrorRetypeMsg)
                         }}
                         appendComponent={
-                            <FormInputCheck error={errorMsg} value={retypeNewPwd} />
+                            <FormInputCheck error={errorRetypeMsg} value={retypeNewPwd} />
                         }
                         secureTextEntry={true}
-                        errorMsg={errorMsg}
+                        errorMsg={errorRetypeMsg}
                     />
                 </GrayLayout>
             </View>

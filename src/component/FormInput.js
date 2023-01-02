@@ -25,6 +25,7 @@ const FormInput = ({
   errorMsg = "",
   maxLength,
   editable = true,
+  multiline
 }) => {
   return (
     <View style={{ ...containerStyle }}>
@@ -66,7 +67,7 @@ const FormInput = ({
               maxLength={maxLength}
               onChangeText={(text) => onChange(text)}
               editable={editable}
-              multiline
+              multiline={multiline}
               numberOfLines={5}
             />
           </TouchableWithoutFeedback>

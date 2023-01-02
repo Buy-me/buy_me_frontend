@@ -103,7 +103,7 @@ const FoodDetail = ({ navigation }) => {
             }}
           >
             {/* calories */}
-            <View style={{ flexDirection: "row" }}>
+            {/* <View style={{ flexDirection: "row" }}>
               <Image
                 source={icons.calories}
                 style={{
@@ -120,7 +120,7 @@ const FoodDetail = ({ navigation }) => {
                 {" "}
                 70 calories
               </Text>
-            </View>
+            </View> */}
 
             {/* favourite */}
             {/* <Image

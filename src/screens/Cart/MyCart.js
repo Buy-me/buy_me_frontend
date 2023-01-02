@@ -81,9 +81,9 @@ const MyCart = ({ navigation }) => {
                         onPress={() => navigation.goBack()}
                     />
                 }
-                rightComponent={
-                    <CartQuantityButton />
-                }
+                // rightComponent={
+                //     <CartQuantityButton />
+                // }
             />
         )
     }

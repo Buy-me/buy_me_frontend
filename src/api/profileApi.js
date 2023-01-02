@@ -1,7 +1,7 @@
 import privateClient from "./client";
 
 const profileEndpoints = {
-    get: "/profile"
+    get: "/profile",
 };
 
 const profileApi = {

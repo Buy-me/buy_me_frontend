@@ -58,20 +58,18 @@ const MyAccount = ({ navigation }) => {
             {/* Content */}
             <ScrollView>
 
+                <Text onPress={() => navigation.navigate("ChangePassword")}>Change password</Text>
+
                 <View style={styles.contentContainer}>
                     <View style={{
                         alignSelf: "center",
-                        borderColor: COLORS.lightOrange3,
-                        borderRadius: 90,
-                        borderWidth: 2,
-                        padding: 3
                     }}>
                         <Image
                             source={images.profile}
                             style={{
-                                width: 100,
-                                height: 100,
-                                borderRadius: 90
+                                width: 120,
+                                height: 120,
+                                borderRadius: 10
                             }}
                         />
                     </View>
@@ -116,7 +114,7 @@ const MyAccount = ({ navigation }) => {
 
                         <InfoRow
                             title={"Date of Birth"}
-                            value={"03/03/2001"}
+                            value={"Not updated"}
                         />
 
                         <LineDivider lineStyle={{
@@ -136,7 +134,7 @@ const MyAccount = ({ navigation }) => {
 
                         <InfoRow
                             title={"Joined"}
-                            value={"03/04/2023"}
+                            value={"Not updated"}
                         />
 
                         <LineDivider lineStyle={{
