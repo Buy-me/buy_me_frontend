@@ -1,13 +1,7 @@
 import { Image, StyleSheet, Text, ToastAndroid, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS, dummyData, FONTS, icons, SIZES } from "../../constants";
-import {
-  CartQuantityButton,
-  FooterTotal,
-  Header,
-  IconButton,
-  StepperInput,
-} from "../../component";
+import { Header, IconButton } from "../../component";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
@@ -159,7 +153,7 @@ const Address = ({ navigation }) => {
                 style={{ ...FONTS.h3, color: COLORS.darkGray }}
                 numberOfLines={2}
               >
-                {data.item.title}
+                {data.item.title + " | " + data.item.phone}
               </Text>
               <Text
                 style={{ ...FONTS.body4, color: COLORS.darkGray2 }}

@@ -13,14 +13,19 @@ const privateClient = axios.create({
 
 privateClient.interceptors.request.use(async (config) => {
   const jsonValue = await AsyncStorage.getItem("token");
-  // const { token } = JSON.parse(jsonValue);
+  let aToken = " ";
+
+  if (jsonValue) {
+    const { token } = JSON.parse(jsonValue);
+    aToken = token;
+  }
 
   return {
     ...config,
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7InVzZXJfaWQiOjEsInJvbGUiOiJ1c2VyIn0sImV4cCI6MTY3MzI2MTE5MCwiaWF0IjoxNjcyNjU2MzkwfQ.aAcI8uuOMbqkSlj2Kvm2dZMKljs3HXnXzTREhnmVaTM`,
-      // Authorization: `Bearer ${token}`,
+      // Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7InVzZXJfaWQiOjcsInJvbGUiOiJ1c2VyIn0sImV4cCI6MTY3MzMzODE2MywiaWF0IjoxNjcyNzMzMzYzfQ.MGYDVfshLABZcGXVeybIunwJbdPqICQMt0B4Qm7uUqI`,
+      Authorization: `Bearer ${aToken}`,
     },
   };
 });

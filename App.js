@@ -20,6 +20,9 @@ import { Address, ChangePassword, EditAccount } from "./src/screens";
 import AddAddress from "./src/screens/Address/AddAddress";
 import Review from "./src/screens/Review/Review";
 import AddReview from "./src/screens/Review/AddReview";
+
+import ForgotPassword from "./src/screens/SignInSignUp/ForgotPassword";
+
 import OrderHistory from "./src/screens/Order/OrderHistory";
 import OrderDetail from "./src/screens/Order/OrderDetail";
 
@@ -61,6 +64,7 @@ const App = () => {
           <Stack.Screen name="Review" component={Review} />
           <Stack.Screen name="Add Review" component={AddReview} />
           <Stack.Screen name="ChangePassword" component={ChangePassword} />
+          <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
 
           <Stack.Screen
             name="Success"
@@ -72,10 +76,7 @@ const App = () => {
             component={DeliveryStatus}
             options={{ gestureEnabled: false }}
           />
-					<Stack.Screen
-						name="Order Detail"
-						component={OrderDetail}
-					/>
+          <Stack.Screen name="Order Detail" component={OrderDetail} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

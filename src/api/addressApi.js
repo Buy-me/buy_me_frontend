@@ -14,7 +14,7 @@ const addressApi = {
     } catch (err) {
       return { err };
     }
-  },
+},
 
   addAddress: async (data) => {
     try {
