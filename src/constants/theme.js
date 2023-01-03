@@ -8,6 +8,7 @@ export const COLORS = {
   lightOrange: "#FFA133",
   lightOrange2: "#FDDED4",
   lightOrange3: "#FFD9AD",
+  lightOrange4: "#FFF6E5",
   green: "#27AE60",
   red: "#FF1717",
   blue: "#0064C0",
@@ -24,6 +25,7 @@ export const COLORS = {
   white: "#FFFFFF",
   black: "#000000",
   orange: "#F49619",
+  yellow: "#FED049",
 
   transparent: "transparent",
   transparentBlack1: "rgba(0, 0, 0, 0.1)",
@@ -88,6 +90,24 @@ export const FONTS = {
   },
 };
 
-const appTheme = { COLORS, SIZES, FONTS };
+export const COLORS_STATUS = {
+  pending: {
+    color: COLORS.yellow,
+  },
+  preparing: {
+    color: COLORS.yellow,
+  },
+  ["on_the_way"]: {
+    color: COLORS.yellow,
+  },
+  delivered: {
+    color: COLORS.green,
+  },
+  cancel: {
+    color: COLORS.red,
+  }
+}
+
+const appTheme = { COLORS, SIZES, FONTS, COLORS_STATUS };
 
 export default appTheme;
