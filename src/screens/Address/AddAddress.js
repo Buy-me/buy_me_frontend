@@ -22,6 +22,8 @@ import utils from "../../utils/Utils";
 const AddAddress = ({ navigation, route }) => {
   const [title, setTitle] = useState("");
   const [titleError, setTitleError] = useState("");
+  const [phone, setPhone] = useState("");
+  const [phoneError, setPhoneError] = useState("");
   const [address, setAddress] = useState("");
   const [addressError, setAddressError] = useState("");
 
@@ -29,13 +31,14 @@ const AddAddress = ({ navigation, route }) => {
   const dispatch = useDispatch();
 
   function isEnableAddAddress() {
-    return address != "" && title != "";
+    return address != "" && title != "" && phone != "";
   }
 
   const handleAdd = async () => {
     const { response, err } = await addressApi.addAddress({
       title,
       address,
+      phone,
     });
     if (err) {
       alert(utils.utils.capitalizeFirstLetter(err.message));
@@ -89,6 +92,19 @@ const AddAddress = ({ navigation, route }) => {
     const { utils } = Utils;
     return (
       <View style={{ marginTop: SIZES.padding * 2 }}>
+        <FormInput
+          label="Phone"
+          keyboardType="default"
+          containerStyle={{}}
+          maxLength={100}
+          value={phone}
+          onChange={(value) => {
+            utils.validateInput(value, 1, setPhoneError);
+            setPhone(value);
+          }}
+          errorMsg={phoneError}
+          appendComponent={<FormInputCheck value={phone} error={phoneError} />}
+        />
         <FormInput
           label="Title Address"
           keyboardType="default"
