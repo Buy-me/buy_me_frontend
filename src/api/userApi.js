@@ -13,6 +13,7 @@ const userApi = {
       const response = await privateClient.post(userEndpoints.login, {
         ...data,
       });
+
       return { response };
     } catch (err) {
       return { err };

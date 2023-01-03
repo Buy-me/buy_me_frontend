@@ -19,7 +19,7 @@ import { setProfile } from "../../features/user/userSlice";
 
 const SignIn = ({ navigation }) => {
   const [email, setEmail] = React.useState("binhdinhreact@gmail.com");
-  const [password, setPassword] = React.useState("123456");
+  const [password, setPassword] = React.useState("20222023");
   const [emailError, setEmailError] = React.useState("");
   const [passwordError, setPasswordError] = React.useState("");
   const dispatch = useDispatch();
@@ -55,7 +55,6 @@ const SignIn = ({ navigation }) => {
       return;
     }
     getProfile();
-
     utils.utils.storeData("token", { token: response.data.token });
     ToastAndroid.show("Login successfully!", ToastAndroid.SHORT);
     navigation.navigate("Home");

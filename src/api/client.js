@@ -13,14 +13,19 @@ const privateClient = axios.create({
 
 privateClient.interceptors.request.use(async (config) => {
   const jsonValue = await AsyncStorage.getItem("token");
-  const { token } = JSON.parse(jsonValue);
+  let aToken = " ";
+
+  if (jsonValue) {
+    const { token } = JSON.parse(jsonValue);
+    aToken = token;
+  }
 
   return {
     ...config,
     headers: {
       "Content-Type": "application/json",
-      // Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7InVzZXJfaWQiOjIsInJvbGUiOiJ1c2VyIn0sImV4cCI6MTY3MjkzMTEzNywiaWF0IjoxNjcyMzI2MzM3fQ.-zj0CEEJXLSY40OMOGEwJAYv2yRbg25nba285hlpKvU`,
-      Authorization: `Bearer ${token}`,
+      // Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7InVzZXJfaWQiOjcsInJvbGUiOiJ1c2VyIn0sImV4cCI6MTY3MzMzODE2MywiaWF0IjoxNjcyNzMzMzYzfQ.MGYDVfshLABZcGXVeybIunwJbdPqICQMt0B4Qm7uUqI`,
+      Authorization: `Bearer ${aToken}`,
     },
   };
 });
@@ -32,7 +37,6 @@ privateClient.interceptors.response.use(
     return response;
   },
   (err) => {
-    // console.log(err.response.data.message);
     throw err.response.data;
   }
 );

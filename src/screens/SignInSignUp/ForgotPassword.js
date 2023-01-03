@@ -1,16 +1,10 @@
 import React from "react";
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  ToastAndroid,
-} from "react-native";
+import { View, Image, ToastAndroid } from "react-native";
 
-import { images, icons, FONTS, SIZES, COLORS } from "../../constants";
+import { icons, SIZES, COLORS } from "../../constants";
 
 import { FormInput, TextButton } from "../../component";
-import { AuthLayout } from "../";
+import AuthLayout from "./AuthLayout";
 import utils from "../../utils";
 import userApi from "../../api/userApi";
 
