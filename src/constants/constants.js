@@ -5,6 +5,7 @@ const screens = {
   cart: "Cart",
   favourite: "Favourite",
   notification: "Notification",
+  settings: "Settings",
   my_wallet: "My Wallet",
 };
 
@@ -32,7 +33,7 @@ const bottom_tabs = [
   },
   {
     id: 3,
-    label: screens.notification,
+    label: screens.settings,
   },
 ];
 
