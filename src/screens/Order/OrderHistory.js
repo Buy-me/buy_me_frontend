@@ -1,19 +1,24 @@
 import { useDrawerStatus } from "@react-navigation/drawer";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useState } from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+	FlatList,
+	Image,
+	ScrollView,
+	Text,
+	TouchableOpacity,
+	View,
+} from "react-native";
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
 	withTiming,
 } from "react-native-reanimated";
-import {
-	Header,
-	OrderCard,
-} from "../../component";
+import { Header, OrderCard } from "../../component";
 import { COLORS, dummyData, FONTS, icons, SIZES } from "../../constants";
 import orderApi from "../../api/orderApi";
 import moment from "moment";
+import { useFocusEffect } from "@react-navigation/native";
 
 const OrderHistory = ({ navigation, route }) => {
 	const isDrawerOpen = useDrawerStatus() === "open";
@@ -41,39 +46,46 @@ const OrderHistory = ({ navigation, route }) => {
 		};
 	});
 
-	const [data, setData] = useState({});
+	const [data, setData] = useState([]);
 	const [pagination, setPagination] = useState({
 		currentPage: 1,
 		pageSize: 0,
 		totalPage: 0,
 	});
-	const [loading, setLoading] = useState(false);
-	useEffect(() => {
-		const fetchData = async () => {
-			setLoading(true);
-			const { response, error } = await orderApi.getMyOrders();
-			const dataFiltered = filterData(response.data);
-			setData(dataFiltered);
-			setLoading(false);
-		};
-		fetchData();
-	}, []);
-
+	useFocusEffect(
+		useCallback(() => {
+			const fetchData = async () => {
+				const { response } = await orderApi.getMyOrders();
+				const dataFiltered = filterData(response.data);
+				setData(dataFiltered);
+			};
+			fetchData();
+		}, [])
+	);
 
 	/**
 	 * Filter data to easy display list
-	 * @param {*} data 
+	 * @param {*} data
 	 * @returns data filtered
 	 */
 	const filterData = (data) => {
-		const dataFiltered = {};
+		const dataFilteredObject = {};
 		for (const item of data) {
-			const createDate = moment(item.created_at).format('DD-MM-YYYY');
-			if (dataFiltered[`${createDate}`] == null) {
-				dataFiltered[`${createDate}`] = [item];
-			} else dataFiltered[`${createDate}`].push(item);
+			const createDate = moment(item.created_at).format("DD-MM-YYYY");
+			if (dataFilteredObject[`${createDate}`] == null) {
+				dataFilteredObject[`${createDate}`] = [item];
+			} else dataFilteredObject[`${createDate}`].push(item);
 		}
-		return dataFiltered;
+		const dataFilteredArrays = [];
+		for (const key in dataFilteredObject) {
+			if (Object.hasOwnProperty.call(dataFilteredObject, key)) {
+				dataFilteredArrays.push({
+					createDate: key,
+					data: dataFilteredObject[key],
+				});
+			}
+		}
+		return dataFilteredArrays;
 	};
 
 	const renderHeader = () => {
@@ -124,30 +136,32 @@ const OrderHistory = ({ navigation, route }) => {
 	};
 
 	const renderBody = () => {
-		const getOrderContent = () => {
-			let content = [];
-			for (const key in data) {
-				if (Object.hasOwnProperty.call(data, key)) {
-					content.push(
-						<View style={{paddingTop: 10}} key={key}>
-							<Text
-								style={{ paddingLeft: 26, ...FONTS.h3, color: COLORS.gray }}>
-								{key}
-							</Text>
-							{
-								data[key].map((item) => <OrderCard data={item} key={item.created_at} navigation={navigation} />)
-							}
-						</View>
-					);
-				}
-			}
-			return content;
+		const renderOrderContent = ({ item }) => {
+			return (
+				<View style={{ paddingTop: 10 }}>
+					<Text style={{ paddingLeft: 26, ...FONTS.h3, color: COLORS.gray }}>
+						{item.createDate}
+					</Text>
+					{item.data.map((order) => (
+						<OrderCard
+							data={order}
+							key={`Order_card-${order.id}`}
+							navigation={navigation}
+						/>
+					))}
+				</View>
+			);
 		};
 		return (
 			<>
-				<ScrollView>
-					{getOrderContent()}
-				</ScrollView>
+				<FlatList
+					data={data}
+					renderItem={renderOrderContent}
+					keyExtractor={(item) => item.createDate}
+					onEndReached={ () => {console.log("END REACH")}}
+					onEndReachedThreshold={0}
+					refreshing = {true}
+				/>
 			</>
 		);
 	};

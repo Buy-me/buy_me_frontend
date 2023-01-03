@@ -3,7 +3,7 @@ import { BackHandler, Image, Text, View } from "react-native";
 import { TextButton } from "../../component";
 import { COLORS, FONTS, images, SIZES } from "../../constants";
 
-const Success = ({ navigation }) => {
+const Success = ({ navigation, route }) => {
 	useEffect(() => {
 		const backHandler = BackHandler.addEventListener(
 			"hardwareBackPress",
@@ -53,7 +53,12 @@ const Success = ({ navigation }) => {
 					borderRadius: SIZES.radius,
 					backgroundColor: COLORS.primary,
 				}}
-				onPress={() => navigation.navigate("Delivery Status")}
+				onPress={() =>
+					navigation.navigate("Delivery Status", {
+						id: route.params?.id,
+						currentStep: 0,
+					})
+				}
 			/>
 		</View>
 	);

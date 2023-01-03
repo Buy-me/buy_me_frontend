@@ -1,7 +1,7 @@
 import privateClient from "./client";
 
 const orderEndpoints = {
-	create: "/orderes",
+	create: "/orders",
 	getMyOrders: "/my-order",
 	getOrderDetail:(id) => `/orders/${id}`,
 	updateStatus:(id) => `/orders/${id}`,

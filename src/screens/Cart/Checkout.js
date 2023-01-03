@@ -1,6 +1,5 @@
-import { useEffect } from "react";
 import { useState } from "react";
-import { Image, ScrollView, Text, View } from "react-native";
+import { Image, ScrollView, Text, ToastAndroid, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import {
 	FooterTotal,
@@ -9,23 +8,20 @@ import {
 	InfoCard,
 	TextIconButton,
 } from "../../component";
-import { COLORS, dummyData, FONTS, icons, SIZES } from "../../constants";
+import { COLORS, FONTS, icons, SIZES } from "../../constants";
+import orderApi from "../../api/orderApi";
 
 const Checkout = ({ navigation, route }) => {
 	const dispatch = useDispatch();
 	const { products, subTotal } = useSelector((state) => state.cart);
 	const { selectedAddress } = useSelector((state) => state.address);
-	const [selectedCard, setSelectedCard] = useState(null);
+	const { profile } = useSelector((state) => state.user);
 	const [pagination, setPagination] = useState({
 		currentPage: 1,
 		pageSize: 2,
 		totalPage: 2,
 	});
 	const [isCashActive, setIsCashActive] = useState(true);
-	useEffect(() => {
-		let { selectedCard } = route.params;
-		setSelectedCard(selectedCard);
-	}, []);
 
 	const renderHeader = () => {
 		return (
@@ -74,7 +70,12 @@ const Checkout = ({ navigation, route }) => {
 					icon={icons.address}
 					title='Address'
 					titleStyle={{ ...FONTS.h3 }}
-					body={["Thai Binh | 0903456782", `${selectedAddress?.address || "Please choose the delivery address"}`]}
+					body={[
+						`${profile?.first_name + profile.last_name} | ${profile.phone}`,
+						`${
+							selectedAddress?.address || "Please choose the delivery address"
+						}`,
+					]}
 					onPress={() => {
 						navigation.navigate("Address");
 					}}
@@ -83,7 +84,7 @@ const Checkout = ({ navigation, route }) => {
 					iconButtonStyle={{ display: "none" }}
 					icon={icons.alarm}
 					title='The order will be delivered in 30 minutes'
-          titleStyle={{ ...FONTS.body3 }}
+					titleStyle={{ ...FONTS.body3 }}
 				/>
 				<View style={{ paddingLeft: 56 }}>
 					<Text style={{ ...FONTS.h2 }}>Product</Text>
@@ -223,23 +224,52 @@ const Checkout = ({ navigation, route }) => {
 		});
 	};
 
-  const calculateTotal = () => {
-    let sum = 0;
-    for (const product of products) {
-      sum += product?.food_data?.price * product?.quantity;
-    }
-    return sum;
-  }
+	const checkout = () => {
+		if (!selectedAddress) {
+			ToastAndroid.show(
+				"Please choose address before checkout",
+				ToastAndroid.SHORT
+			);
+			return;
+		}
+		const formatProductItem = products?.map((item) => {
+			const foodData = item.food_data;
+			return {
+				discount: 0,
+				price: foodData?.price,
+				quantity: item.quantity,
+				food_origin: {
+					...foodData,
+				},
+			};
+		});
+		
+		orderApi
+			.createOrder({
+				total_price: subTotal,
+				name: profile?.first_name + profile.last_name,
+				title_address: selectedAddress?.title,
+				detail_address: selectedAddress?.address,
+				phone: "0394116517",
+				items: [...formatProductItem],
+			})
+			.then(({ response }) => {
+				navigation.navigate("Success", { id: response?.data });
+			})
+			.catch((err) => {
+				ToastAndroid.show(err, ToastAndroid.SHORT);
+			});
+	};
 
 	return (
 		<View style={{ flex: 1, backgroundColor: COLORS.white }}>
 			{renderHeader()}
 			{renderBody()}
 			<FooterTotal
-				subTotal={calculateTotal()}
+				subTotal={subTotal}
 				shippingFee={0.0}
-				total={calculateTotal()}
-				onPress={() => navigation.navigate("Success")}
+				total={subTotal}
+				onPress={checkout}
 			/>
 		</View>
 	);
