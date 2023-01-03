@@ -14,7 +14,6 @@ const storeData = async (key, value) => {
 const getData = async (key) => {
   try {
     const jsonValue = await AsyncStorage.getItem(key);
-    console.log("jsonValue", jsonValue);
     return jsonValue;
   } catch (e) {
     // read error

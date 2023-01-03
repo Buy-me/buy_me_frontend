@@ -158,7 +158,7 @@ const Review = ({ route, navigation }) => {
                   style={{ ...FONTS.h3, color: COLORS.darkGray }}
                   numberOfLines={2}
                 >
-                  {item.user.first_name || "N/A"}
+                  {item.user.first_name + item.user.last_name || "N/A"}
                 </Text>
                 <Rating
                   type="custom"

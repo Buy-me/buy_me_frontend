@@ -557,7 +557,7 @@ const Home = ({ type }) => {
                 onPress={() => {
                   handeClickItem(item);
                   navigation.navigate("FoodDetail");
-                  dispatch(setSelectedFood(item))
+                  dispatch(setSelectedFood(item));
                 }}
               >
                 {item.name}

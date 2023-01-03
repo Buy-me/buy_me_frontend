@@ -153,7 +153,7 @@ const Address = ({ navigation }) => {
                 style={{ ...FONTS.h3, color: COLORS.darkGray }}
                 numberOfLines={2}
               >
-                {data.item.title + " | " + data.item.title}
+                {data.item.title + " | " + data.item.phone}
               </Text>
               <Text
                 style={{ ...FONTS.body4, color: COLORS.darkGray2 }}
