@@ -22,7 +22,6 @@ const AddCard = ({ navigation, route }) => {
 	const [expiryDateError, setExpiryDateError] = useState("");
 	const [cvv, setCvv] = useState("");
 	const [cvvError, setCvvError] = useState("");
-	const [isRemember, setIsRemember] = useState("");
 
 	useEffect(() => {
 		let { selectedCard } = route.params;
@@ -45,7 +44,7 @@ const AddCard = ({ navigation, route }) => {
 	const renderHeader = () => {
 		return (
 			<Header
-				title='ADD NEW CARD'
+				title='SAVE CARD'
 				containerStyle={{
 					height: 50,
 					marginHorizontal: SIZES.padding,
@@ -205,17 +204,6 @@ const AddCard = ({ navigation, route }) => {
 							setCvv(value);
 						}}
 						appendComponent={<FormInputCheck value={cvv} error={cvvError} />}
-					/>
-				</View>
-				<View
-					style={{
-						alignItems: "flex-start",
-						marginTop: SIZES.padding,
-					}}>
-					<RadioButton
-						label='Remember this card details'
-						isSelected={isRemember}
-						onPress={() => setIsRemember(!isRemember)}
 					/>
 				</View>
 			</View>
