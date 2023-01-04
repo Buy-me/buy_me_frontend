@@ -6,24 +6,26 @@ import GrayLayout from '../../component/GrayLayout'
 import { useEffect } from 'react'
 import profileApi from '../../api/profileApi'
 import { useState } from 'react'
+import moment from 'moment/moment'
+import utils from '../../utils/Utils'
 
-const MyAccount = ({ navigation }) => {
+const MyAccount = ({ navigation, route }) => {
     const [profile, setProfile] = useState(null)
 
-    useEffect(() => {
-        (async () => {
-            const { response, err } = await profileApi.getProfile()
+    const getLatestProfile = async () => {
+        const { response, err } = await profileApi.getProfile()
+        if (err) {
+            console.log(err);
+        }
+        else {
+            const data = response.data
+            setProfile(data)
+        }
+    }
 
-            if (err) {
-                console.log(err);
-            }
-            else {
-                const data = response.data
-                console.log(data);
-                setProfile(data)
-            }
-        })()
-    }, [])
+    useEffect(() => {
+        getLatestProfile()
+    }, [route.params])
 
     const renderHeader = () => {
         return (
@@ -41,7 +43,14 @@ const MyAccount = ({ navigation }) => {
                 rightComponent={
                     <TouchableOpacity
                         style={headerStyles.rightContainer}
-                        onPress={() => navigation.navigate("EditAccount")}
+                        onPress={() => navigation.navigate("EditAccount", {
+                            firstName: profile?.first_name,
+                            lastName: profile?.last_name,
+                            phoneNumber: profile?.phone,
+                            dateOfBirth: profile?.birth_date,
+                            gender: profile?.gender,
+                            avatar: profile?.avatar
+                        })}
                     >
                         <Text style={headerStyles.rightText}>Edit</Text>
                     </TouchableOpacity>
@@ -65,7 +74,7 @@ const MyAccount = ({ navigation }) => {
                         alignSelf: "center",
                     }}>
                         <Image
-                            source={images.profile}
+                            source={{ uri: profile?.avatar.url }}
                             style={{
                                 width: 120,
                                 height: 120,
@@ -103,18 +112,8 @@ const MyAccount = ({ navigation }) => {
 
                     <GrayLayout style={{ marginTop: 15 }}>
                         <InfoRow
-                            title={"ID Card"}
-                            value={"Not updated"}
-                        />
-
-                        <LineDivider lineStyle={{
-                            backgroundColor: COLORS.gray2,
-                            marginVertical: 20
-                        }} />
-
-                        <InfoRow
                             title={"Date of Birth"}
-                            value={"Not updated"}
+                            value={profile?.birth_date ? moment(profile?.birth_date).format("DD-MM-YYYY") : constants.placeHolderInputs.string}
                         />
 
                         <LineDivider lineStyle={{
@@ -124,7 +123,7 @@ const MyAccount = ({ navigation }) => {
 
                         <InfoRow
                             title={"Gender"}
-                            value={"Male"}
+                            value={profile?.gender ? utils.capitalizeFirstLetter(profile?.gender) : constants.placeHolderInputs.string}
                         />
 
                         <LineDivider lineStyle={{
@@ -134,7 +133,7 @@ const MyAccount = ({ navigation }) => {
 
                         <InfoRow
                             title={"Joined"}
-                            value={"Not updated"}
+                            value={moment(profile?.created_at).format("DD-MM-YYYY")}
                         />
 
                         <LineDivider lineStyle={{
@@ -145,16 +144,6 @@ const MyAccount = ({ navigation }) => {
                         <InfoRow
                             title={"Email"}
                             value={profile?.email}
-                        />
-
-                        <LineDivider lineStyle={{
-                            backgroundColor: COLORS.gray2,
-                            marginVertical: 20
-                        }} />
-
-                        <InfoRow
-                            title={"Address"}
-                            value={profile?.addresses ? profile.addresses : constants.placeHolderInputs.string}
                         />
                     </GrayLayout>
                 </View>

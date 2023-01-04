@@ -1,4 +1,4 @@
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { COLORS, icons, images, SIZES } from '../../constants'
 import { FormInput, GrayLayout, Header, IconButton, TextButton } from '../../component'
@@ -7,11 +7,13 @@ import Utils from "../../utils";
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker'
 import { useEffect } from 'react'
+import profileApi from '../../api/profileApi'
+import moment from 'moment'
 
-const EditAccount = ({ navigation }) => {
+const EditAccount = ({ navigation, route }) => {
     const { utils } = Utils
 
-    // const [fullName, setFullName] = useState("")
+    const [avatarUrl, setAvatarUrl] = useState("")
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
@@ -21,10 +23,22 @@ const EditAccount = ({ navigation }) => {
     // const [email, setEmail] = useState("")
     // const [address, setAddress] = useState("")
 
-    const [errorMsg, setErrorMsg] = useState("")
+    // const [errorMsg, setErrorMsg] = useState("")
+    const [firstNameErr, setFirstNameErr] = useState("")
+    const [lastNameErr, setLastNameErr] = useState("")
+    const [phoneErr, setPhoneErr] = useState("")
+    const [dobErr, setDOBErr] = useState("")
+    const [genderErr, setGenderErr] = useState("")
 
     useEffect(() => {
+        const data = { ...route.params }
 
+        setAvatarUrl(data?.avatar.url)
+        setFirstName(data?.firstName)
+        setLastName(data?.lastName)
+        setPhoneNumber(data?.phoneNumber)
+        setDateOfBirth(new Date(data?.dateOfBirth))
+        setGender(data?.gender)
     }, [])
 
     const [showDatePicker, setShowDatePicker] = useState(false)
@@ -38,6 +52,28 @@ const EditAccount = ({ navigation }) => {
         setDateOfBirth(selectedDate)
     }
 
+    const handleSave = async () => {
+        const data = {
+            first_name: firstName,
+            last_name: lastName,
+            phone: phoneNumber,
+            gender: gender,
+            birth_date: dateOfBirth.toISOString()
+            //avatarUrl
+        }
+        const { response, err } = await profileApi.updateProfile(data)
+        
+        if (err) {
+            console.log(err);
+        }
+        else {
+            navigation.navigate("MyAccount", {
+                data
+            })
+        }
+    }
+
+    //Renderer
     const renderHeader = () => {
         return (
             <Header
@@ -75,9 +111,7 @@ const EditAccount = ({ navigation }) => {
                         backgroundColor: COLORS.primary
                     }}
                     label={"Save"}
-                    onPress={() => {
-                        navigation.goBack()
-                    }}
+                    onPress={handleSave}
                 />
             </View>
         )
@@ -90,18 +124,26 @@ const EditAccount = ({ navigation }) => {
 
             <ScrollView>
                 <View style={styles.contentContainer}>
-                    <View style={{
-                        alignSelf: "center",
-                    }}>
+                    <TouchableOpacity
+                        style={{
+                            alignSelf: "center",
+                            borderColor: COLORS.primary,
+                            borderWidth: 1,
+                            borderRadius: 10,
+                            padding: 5
+                        }}
+                    >
                         <Image
-                            source={images.profile}
+                            source={
+                                avatarUrl ? { uri: avatarUrl } : images.profile
+                            }
                             style={{
                                 width: 120,
                                 height: 120,
                                 borderRadius: 10
                             }}
                         />
-                    </View>
+                    </TouchableOpacity>
 
                     <GrayLayout style={{ marginTop: 25 }}>
                         <FormInput
@@ -111,9 +153,9 @@ const EditAccount = ({ navigation }) => {
                             inputContainerStyle={{ backgroundColor: "white" }}
                             onChange={(value) => {
                                 setFirstName(value)
-                                utils.validateInput(value, 0, setErrorMsg)
+                                utils.validateInput(value, 0, setFirstNameErr)
                             }}
-                            errorMsg={errorMsg}
+                            errorMsg={firstNameErr}
                         />
 
                         <FormInput
@@ -124,9 +166,9 @@ const EditAccount = ({ navigation }) => {
                             inputContainerStyle={{ backgroundColor: "white" }}
                             onChange={(value) => {
                                 setLastName(value)
-                                utils.validateInput(value, 0, setErrorMsg)
+                                utils.validateInput(value, 0, setLastNameErr)
                             }}
-                            errorMsg={errorMsg}
+                            errorMsg={lastNameErr}
                         />
 
                         <FormInput
@@ -140,9 +182,9 @@ const EditAccount = ({ navigation }) => {
                             }}
                             onChange={(value) => {
                                 setPhoneNumber(value)
-                                utils.validateInput(value, 0, setErrorMsg)
+                                utils.validateInput(value, 0, setPhoneErr)
                             }}
-                            errorMsg={errorMsg}
+                            errorMsg={phoneErr}
                         />
 
                         {/* <FormInput
@@ -163,18 +205,14 @@ const EditAccount = ({ navigation }) => {
 
                         <FormInput
                             label={"Date of Birth"}
-                            value={utils.convertToDateString(dateOfBirth)}
+                            value={moment(dateOfBirth).format("DD-MM-YYYY")}
                             placeholder="DD/MM/YYYY"
                             containerStyle={{ marginTop: 15 }}
                             inputContainerStyle={{
                                 backgroundColor: "white",
                                 alignItems: "center"
                             }}
-                            onChange={(value) => {
-                                console.log("alooo");
-                                utils.validateInput(value, 0, setErrorMsg)
-                            }}
-                            errorMsg={errorMsg}
+                            errorMsg={dobErr}
                             editable={false}
                             appendComponent={
                                 <IconButton
@@ -197,7 +235,7 @@ const EditAccount = ({ navigation }) => {
 
                         <FormInput
                             label={"Gender"}
-                            // value={gender}
+                            value={gender}
                             placeholder="Select gender"
                             containerStyle={{ marginTop: 15 }}
                             inputContainerStyle={{ backgroundColor: COLORS.white }}
@@ -212,7 +250,7 @@ const EditAccount = ({ navigation }) => {
                                     <Picker.Item label="Others" value="others" />
                                 </Picker>
                             }
-                            errorMsg={errorMsg}
+                            errorMsg={genderErr}
                         />
 
 
