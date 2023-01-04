@@ -6,16 +6,26 @@ import React, { useState } from 'react'
 import { CardItem, Header, IconButton, TextButton } from '../../component'
 import { COLORS, dummyData, FONTS, icons, SIZES } from '../../constants'
 import { ScrollView } from 'react-native-gesture-handler'
+import { useFocusEffect } from '@react-navigation/native'
+import { useCallback } from 'react'
+import cardApi from '../../api/cardApi'
 
-const MyCard = ({ navigation }) => {
+const MyWallet = ({ navigation }) => {
 
     const [selectedCard, setSelectedCard] = useState(null)
+    useFocusEffect(useCallback(() => {
+        const fetchData = async () => {
+            cardApi
+        }
+        
+        fetchData()
+    },[]))
 
     //Renderers
     const renderHeader = () => {
         return (
             <Header
-                title={"MY CARD"}
+                title={"MY WALLET"}
                 containerStyle={headerStyles.container}
                 leftComponent={
                     <IconButton
@@ -50,7 +60,7 @@ const MyCard = ({ navigation }) => {
     const renderAddNewCard = () => {
         return (
             <View style={{ marginTop: SIZES.padding }}>
-                <Text style={{ ...FONTS.h3 }}>Add/Update new card</Text>
+                <Text style={{ ...FONTS.h3 }}>Add new card</Text>
 
                 {dummyData.myCards.map((item, index) => (
                     <CardItem
@@ -81,7 +91,7 @@ const MyCard = ({ navigation }) => {
 									selectedCard == null ? COLORS.gray : COLORS.primary,
 							}}
 							label={
-								selectedCard?.key == "NewCard" ? "Add/Update" : "Proceed to Checkout"
+								selectedCard?.key == "NewCard" ? "Add" : "Proceed to Checkout"
 							}
 							onPress={
 								selectedCard?.key == "NewCard"
@@ -116,7 +126,7 @@ const MyCard = ({ navigation }) => {
     )
 }
 
-export default MyCard
+export default MyWallet
 
 const headerStyles = StyleSheet.create({
     container: {
