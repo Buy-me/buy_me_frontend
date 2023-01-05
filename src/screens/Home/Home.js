@@ -36,6 +36,8 @@ import {
 import foodApi from "../../api/foodApi";
 import { useNavigation } from "@react-navigation/native";
 import { useRef } from "react";
+import favouriteApi from "../../api/favouriteApi";
+import { setFavouriteProducts } from "../../features/favourite/favouriteSlice";
 
 const Section = ({ title, onPress, children }) => {
   return (
@@ -91,6 +93,15 @@ const Home = ({ type }) => {
   } = useSelector((state) => state.food);
 
   const { selectedAddress } = useSelector((state) => state.address);
+
+  const { favouriteProducts } = useSelector(state => state.favourite)
+  useEffect(() => {
+    const getFavouriteList = async () => {
+      const { response, err } = await favouriteApi.getList();
+      dispatch(setFavouriteProducts(response.data))
+    };
+    getFavouriteList()
+  }, [])
 
   //
   useEffect(() => {

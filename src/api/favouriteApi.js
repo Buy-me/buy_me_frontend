@@ -25,6 +25,16 @@ const favouriteApi = {
       return { err };
     }
   },
+  addItem: async (data) => {
+    try {
+      const response = await privateClient.post(favouriteEndpoints.add, {
+        ...data,
+      });
+      return { response };
+    } catch (err) {
+      return { err };
+    }
+  },
 };
 
 export default favouriteApi;

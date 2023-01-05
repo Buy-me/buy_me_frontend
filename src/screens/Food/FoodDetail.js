@@ -20,6 +20,8 @@ import { ScrollView } from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
 import cartApi from "../../api/cartApi";
 import { setProductsCart } from "../../features/cart/cartSlice";
+import favouriteApi from "../../api/favouriteApi";
+import { addToFavourite, removeFromFavourtie } from "../../features/favourite/favouriteSlice";
 
 const FoodDetail = ({ navigation }) => {
   const dispatch = useDispatch()
@@ -27,6 +29,17 @@ const FoodDetail = ({ navigation }) => {
   const [isFavourite, setIsFavourite] = useState(false)
 
   const { selectedFood } = useSelector(state => state.food)
+  const { favouriteProducts } = useSelector(state => state.favourite)
+
+  useEffect(() => {
+    let isFavIndex = favouriteProducts.findIndex(p => p.id === selectedFood.id)
+    if (isFavIndex > -1) {
+      setIsFavourite(true)
+    }
+    else {
+      setIsFavourite(false)
+    }
+  }, [])
 
   //Handler
   const handleAddToCart = async () => {
@@ -51,6 +64,43 @@ const FoodDetail = ({ navigation }) => {
         dispatch(setProductsCart(data))
       }
     }
+  }
+
+  const handleAddFavourite = async () => {
+    const { response, err } = await favouriteApi.addItem({
+      food_id: selectedFood.id
+    })
+    if (err) {
+      ToastAndroid.show("Cannot process the action right now!", ToastAndroid.SHORT)
+    }
+    else {
+      ToastAndroid.show("Added the product to Favourite list!", ToastAndroid.SHORT)
+      dispatch(addToFavourite(selectedFood))
+    }
+    
+  }
+
+  const handleRemoveFavourite = async () => {
+    const { response, err } = await favouriteApi.removeItem({
+      food_id: selectedFood.id
+    })
+    if (err) {
+      ToastAndroid.show("Cannot process the action right now!", ToastAndroid.SHORT)
+    }
+    else {
+      ToastAndroid.show("Removed the product from Favourite list!", ToastAndroid.SHORT)
+      dispatch(removeFromFavourtie(selectedFood.id))
+    }
+  }
+
+  const handlePressFavourite = () => {
+    if (isFavourite) {
+      handleRemoveFavourite()
+    }
+    else {
+      handleAddFavourite()
+    }
+    setIsFavourite(!isFavourite)
   }
 
   //Renderer
@@ -240,7 +290,7 @@ const FoodDetail = ({ navigation }) => {
                 textAlign: "center",
                 ...FONTS.h3,
               }}
-              onPress={() => setIsFavourite(!isFavourite)}
+              onPress={handlePressFavourite}
             />
           </View>
         </View>
