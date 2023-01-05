@@ -1,6 +1,6 @@
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { COLORS, icons, SIZES, constants, images } from '../../constants'
+import { COLORS, icons, SIZES, constants } from '../../constants'
 import { Header, IconButton, InfoRow, LineDivider } from '../../component'
 import GrayLayout from '../../component/GrayLayout'
 import { useEffect } from 'react'

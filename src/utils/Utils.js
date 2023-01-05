@@ -83,6 +83,17 @@ function validateUsername(value, setUsernameError) {
   }
 }
 
+function getFileName(str) {
+  let fileName = str.split("/").pop()
+  return fileName
+}
+
+function getFileType(str) {
+  let match = /\.(\w+)$/.exec(str);
+  let type = match ? `image/${match[1]}` : `image`
+  return type
+}
+
 const utils = {
   validateInput,
   isValidEmail,
@@ -93,6 +104,8 @@ const utils = {
   capitalizeFirstLetter,
   storeData,
   getData,
+  getFileName,
+  getFileType
 };
 
 export default utils;

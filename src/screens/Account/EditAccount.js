@@ -1,4 +1,4 @@
-import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, ToastAndroid, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { COLORS, icons, images, SIZES } from '../../constants'
 import { FormInput, GrayLayout, Header, IconButton, TextButton } from '../../component'
@@ -9,11 +9,13 @@ import { Picker } from '@react-native-picker/picker'
 import { useEffect } from 'react'
 import profileApi from '../../api/profileApi'
 import moment from 'moment'
+import * as DocumentPicker from 'expo-document-picker';
+import * as ImagePicker from "expo-image-picker"
 
 const EditAccount = ({ navigation, route }) => {
     const { utils } = Utils
 
-    const [avatarUrl, setAvatarUrl] = useState("")
+    const [avatar, setAvatar] = useState(null)
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
@@ -33,7 +35,7 @@ const EditAccount = ({ navigation, route }) => {
     useEffect(() => {
         const data = { ...route.params }
 
-        setAvatarUrl(data?.avatar.url)
+        setAvatar(data?.avatar)
         setFirstName(data?.firstName)
         setLastName(data?.lastName)
         setPhoneNumber(data?.phoneNumber)
@@ -52,24 +54,62 @@ const EditAccount = ({ navigation, route }) => {
         setDateOfBirth(selectedDate)
     }
 
-    const handleSave = async () => {
-        const data = {
-            first_name: firstName,
-            last_name: lastName,
-            phone: phoneNumber,
-            gender: gender,
-            birth_date: dateOfBirth.toISOString()
-            //avatarUrl
+    const handlePickImage = async () => {
+        // let result = await DocumentPicker.getDocumentAsync({
+        //     type: "image/*"
+        // })
+        // // console.log(result);
+        // if (result.type === "success") {
+        //     // console.log(result);
+        //     setAvatar({
+        //         ...avatar,
+        //         url: result.uri,
+        //         name: result.name
+        //     })
+        // }
+        // else {
+        //     ToastAndroid.show("Something wrong", ToastAndroid.SHORT)
+        // }
+
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+        })
+
+        if (!result.cancelled) {
+            setAvatar({
+                ...avatar,
+                url: result.uri,
+                // name: result.name
+            })
         }
-        const { response, err } = await profileApi.updateProfile(data)
-        
+    }
+
+    const handleSave = async () => {
+        // const data = {
+        //     first_name: firstName,
+        //     last_name: lastName,
+        //     phone: phoneNumber,
+        //     gender: gender,
+        //     birth_date: dateOfBirth.toISOString()
+        //     //avatar
+        // }
+        // const { response, err } = await profileApi.updateProfile(data)
+
+        // if (err) {
+        //     ToastAndroid.show("Error while updating profile!", ToastAndroid.SHORT)
+        // }
+        // else {
+        //     navigation.navigate("MyAccount", { msg: "changed!" })
+        //     ToastAndroid.show("Your profile has been updated!", ToastAndroid.SHORT)
+        // }
+
+        const { response, err } = await profileApi.uploadAvatar(avatar);
         if (err) {
             console.log(err);
         }
         else {
-            navigation.navigate("MyAccount", {
-                data
-            })
+            console.log(response);
         }
     }
 
@@ -125,6 +165,7 @@ const EditAccount = ({ navigation, route }) => {
             <ScrollView>
                 <View style={styles.contentContainer}>
                     <TouchableOpacity
+                        onPress={handlePickImage}
                         style={{
                             alignSelf: "center",
                             borderColor: COLORS.primary,
@@ -135,7 +176,7 @@ const EditAccount = ({ navigation, route }) => {
                     >
                         <Image
                             source={
-                                avatarUrl ? { uri: avatarUrl } : images.profile
+                                avatar ? { uri: avatar.url } : images.profile
                             }
                             style={{
                                 width: 120,
