@@ -101,7 +101,7 @@ const ChangePassword = ({ navigation }) => {
                         inputContainerStyle={{ backgroundColor: "white" }}
                         onChange={(value) => {
                             setCurrentPwd(value)
-                            utils.validateInput(value, 6, setErrorCurrentPwdMsg)
+                            utils.validatePassword(value, setErrorCurrentPwdMsg)
                         }}
                         appendComponent={
                             <FormInputCheck error={errorCurrentPwdMsg} value={currentPwd} />
@@ -118,7 +118,7 @@ const ChangePassword = ({ navigation }) => {
                         inputContainerStyle={{ backgroundColor: "white" }}
                         onChange={(value) => {
                             setNewPwd(value)
-                            utils.validateInput(value, 6, setErrorNewPwdMsg)
+                            utils.validatePassword(value, setErrorNewPwdMsg)
                         }}
                         appendComponent={
                             <FormInputCheck error={errorNewPwdMsg} value={newPwd} />
@@ -135,7 +135,7 @@ const ChangePassword = ({ navigation }) => {
                         inputContainerStyle={{ backgroundColor: "white" }}
                         onChange={(value) => {
                             setRetypeNewPwd(value)
-                            utils.validateInput(value, 6, setErrorRetypeMsg)
+                            utils.validatePassword(value, setErrorRetypeMsg)
                         }}
                         appendComponent={
                             <FormInputCheck error={errorRetypeMsg} value={retypeNewPwd} />

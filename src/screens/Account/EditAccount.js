@@ -1,4 +1,4 @@
-import { Image, ScrollView, StyleSheet, ToastAndroid, TouchableOpacity, View } from 'react-native'
+import { Image, Platform, ScrollView, StyleSheet, ToastAndroid, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { COLORS, icons, images, SIZES } from '../../constants'
 import { FormInput, GrayLayout, Header, IconButton, TextButton } from '../../component'
@@ -73,8 +73,10 @@ const EditAccount = ({ navigation, route }) => {
 
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
+            // allowsEditing: true,
         })
+
+        console.log(result);
 
         if (!result.cancelled) {
             setAvatar({
@@ -82,6 +84,19 @@ const EditAccount = ({ navigation, route }) => {
                 url: result.uri,
                 // name: result.name
             })
+
+            // let fileUrl = Platform.OS === "ios" ? result.uri.replace('file://', '') : result.uri
+            // let fileName = utils.getFileName(fileUrl)
+            // let fileType = utils.getFileType(fileUrl)
+            // // console.log(fileUrl);
+            // // console.log(fileType);
+
+            // const form = new FormData()
+            // form.append("file", {
+            //     uri: fileUrl,
+            //     name: fileName,
+            //     type: fileType
+            // })
         }
     }
 

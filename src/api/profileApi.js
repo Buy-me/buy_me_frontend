@@ -1,3 +1,4 @@
+import { formToJSON } from "axios";
 import { Platform } from "react-native";
 import utils from "../utils";
 import privateClient from "./client";
@@ -45,11 +46,15 @@ const profileApi = {
             type: fileType
         })
         // form.append("folder", "avatar")
+        // console.log(form["_parts"][0]);
 
-        console.log(form);
         try {
             const response = await privateClient.post(profileEndpoints.postImage, form, {
-                headers: {'Content-Type': 'multipart/form-data'}
+                headers: { 'Content-Type': 'multipart/form-data' },
+                // data: form,
+                // transformRequest: (data, error) => {
+                //     return form;
+                // }
             })
             return { response }
         }

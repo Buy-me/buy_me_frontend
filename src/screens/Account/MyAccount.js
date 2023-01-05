@@ -66,9 +66,6 @@ const MyAccount = ({ navigation, route }) => {
 
             {/* Content */}
             <ScrollView>
-
-                <Text onPress={() => navigation.navigate("ChangePassword")}>Change password</Text>
-
                 <View style={styles.contentContainer}>
                     <View style={{
                         alignSelf: "center",
