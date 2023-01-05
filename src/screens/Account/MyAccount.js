@@ -71,7 +71,7 @@ const MyAccount = ({ navigation, route }) => {
                         alignSelf: "center",
                     }}>
                         <Image
-                            source={{ uri: profile?.avatar.url }}
+                            source={{ uri: profile?.avatar.url || profile?.avatar.uri }}
                             style={{
                                 width: 120,
                                 height: 120,
