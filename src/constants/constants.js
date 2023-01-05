@@ -5,8 +5,14 @@ const screens = {
   cart: "Cart",
   favourite: "Favourite",
   notification: "Notification",
+  settings: "Settings",
   my_wallet: "My Wallet",
 };
+
+const placeHolderInputs = {
+  string: "Not updated",
+  number: 0
+}
 
 const bottom_tabs = [
   {
@@ -27,7 +33,7 @@ const bottom_tabs = [
   },
   {
     id: 3,
-    label: screens.notification,
+    label: screens.settings,
   },
 ];
 
@@ -134,4 +140,5 @@ export default {
   ratings,
   tags,
   track_order_status,
+  placeHolderInputs
 };

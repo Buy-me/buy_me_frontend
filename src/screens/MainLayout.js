@@ -33,8 +33,9 @@ import Home from "./Home/Home";
 import { useRef } from "react";
 import Search from "./Search/Search";
 import Favourite from "./Favourite/Favourite";
-import Notification from "./Notification/Notification";
+// import Notification from "./Notification/Notification";
 import { useState } from "react";
+import Settings from "./Setting/Settings";
 
 const TabButton = ({
   label,
@@ -196,18 +197,18 @@ const MainLayout = ({ navigation }) => {
       favouriteTabColor.value = withTiming(COLORS.white, { duration: 500 });
     }
 
-    if (selectedTab == constants.screens.notification) {
+    if (selectedTab == constants.screens.settings) {
       flatListRef?.current?.scrollToIndex({
         index: 3,
         animated: false,
       });
-      notificationTabFlex.value = withTiming(4, { duration: 500 });
-      notificationTabColor.value = withTiming(COLORS.primary, {
+      settingTabFlex.value = withTiming(4, { duration: 500 });
+      settingTabColor.value = withTiming(COLORS.primary, {
         duration: 500,
       });
     } else {
-      notificationTabFlex.value = withTiming(1, { duration: 500 });
-      notificationTabColor.value = withTiming(COLORS.white, { duration: 500 });
+      settingTabFlex.value = withTiming(1, { duration: 500 });
+      settingTabColor.value = withTiming(COLORS.white, { duration: 500 });
     }
   }, [selectedTab]);
 
@@ -219,8 +220,8 @@ const MainLayout = ({ navigation }) => {
   // const cartTabColor = useSharedValue(COLORS.white);
   const favouriteTabFlex = useSharedValue(1);
   const favouriteTabColor = useSharedValue(COLORS.white);
-  const notificationTabFlex = useSharedValue(1);
-  const notificationTabColor = useSharedValue(COLORS.white);
+  const settingTabFlex = useSharedValue(1);
+  const settingTabColor = useSharedValue(COLORS.white);
 
   // reanimated
 
@@ -264,14 +265,14 @@ const MainLayout = ({ navigation }) => {
       backgroundColor: favouriteTabColor.value,
     };
   });
-  const notificationFlexStyle = useAnimatedStyle(() => {
+  const settingFlexStyle = useAnimatedStyle(() => {
     return {
-      flex: notificationTabFlex.value,
+      flex: settingTabFlex.value,
     };
   });
-  const notificationColorStyle = useAnimatedStyle(() => {
+  const settingColorStyle = useAnimatedStyle(() => {
     return {
-      backgroundColor: notificationTabColor.value,
+      backgroundColor: settingTabColor.value,
     };
   });
 
@@ -364,8 +365,8 @@ const MainLayout = ({ navigation }) => {
                 )}
                 {/* {item.label == constants.screens.cart && <CartTab />} */}
                 {item.label == constants.screens.favourite && <Favourite />}
-                {item.label == constants.screens.notification && (
-                  <Notification />
+                {item.label == constants.screens.settings && (
+                  <Settings />
                 )}
               </View>
             );
@@ -449,13 +450,13 @@ const MainLayout = ({ navigation }) => {
             />
 
             <TabButton
-              label={constants.screens.notification}
-              icon={icons.notification}
-              isFocused={selectedTab === constants.screens.notification}
-              outerContainerStyle={notificationFlexStyle}
-              innerContainerStyle={notificationColorStyle}
+              label={constants.screens.settings}
+              icon={icons.setting}
+              isFocused={selectedTab === constants.screens.settings}
+              outerContainerStyle={settingFlexStyle}
+              innerContainerStyle={settingColorStyle}
               onPress={() =>
-                dispatch(setSelectedTab(constants.screens.notification))
+                dispatch(setSelectedTab(constants.screens.settings))
               }
             />
           </View>
