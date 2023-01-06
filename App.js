@@ -25,6 +25,7 @@ import ForgotPassword from "./src/screens/SignInSignUp/ForgotPassword";
 
 import OrderHistory from "./src/screens/Order/OrderHistory";
 import OrderDetail from "./src/screens/Order/OrderDetail";
+import CardDetail from "./src/screens/Card/CardDetail";
 
 const Stack = createNativeStackNavigator();
 
@@ -77,6 +78,7 @@ const App = () => {
             options={{ gestureEnabled: false }}
           />
           <Stack.Screen name="Order Detail" component={OrderDetail} />
+          <Stack.Screen name="Card Detail" component={CardDetail} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

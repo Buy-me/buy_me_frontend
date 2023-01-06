@@ -13,16 +13,12 @@ import {
 import { COLORS, FONTS, icons, images, SIZES } from "../../constants";
 import Utils from "../../utils";
 
-const AddCard = ({ navigation, route }) => {
+const CardDetail = ({ navigation, route }) => {
 	const [selectedCard, setSelectedCard] = useState(null);
 	const [cardNumber, setCardNumber] = useState("");
-	const [cardNumberError, setCardNumberError] = useState("");
 	const [cardName, setCardName] = useState("");
-	const [cardNameError, setCardNameError] = useState("");
 	const [expiryDate, setExpiryDate] = useState("");
-	const [expiryDateError, setExpiryDateError] = useState("");
 	const [cvv, setCvv] = useState("");
-	const [cvvError, setCvvError] = useState("");
 
 	useEffect(() => {
 		let { selectedCard } = route.params;
@@ -35,23 +31,10 @@ const AddCard = ({ navigation, route }) => {
 		setSelectedCard(selectedCard);
 	}, []);
 
-	function isEnableAddCard() {
-		return (
-			cardNumber != "" &&
-			cardName != "" &&
-			expiryDate != "" &&
-			cvv != "" &&
-			cardNumberError == "" &&
-			cardNameError == "" &&
-			expiryDateError == "" &&
-			cvvError == ""
-		);
-	}
-
 	const renderHeader = () => {
 		return (
 			<Header
-				title='SAVE CARD'
+				title='CARD DETAIL'
 				containerStyle={{
 					height: 50,
 					marginHorizontal: SIZES.padding,
@@ -143,22 +126,8 @@ const AddCard = ({ navigation, route }) => {
 			<View style={{ marginTop: SIZES.padding * 2 }}>
 				<FormInput
 					label='Card Number'
-					keyboardType='number-pad'
-					maxLength={19}
 					value={cardNumber}
-					onChange={(value) => {
-						setCardNumber(
-							value
-								.replace(/\s/g, "")
-								.replace(/(\d{4})/g, "$1 ")
-								.trim()
-						);
-						utils.validateInput(value, 19, setCardNumberError);
-					}}
-					errorMsg={cardNumberError}
-					appendComponent={
-						<FormInputCheck value={cardNumber} error={cardNumberError} />
-					}
+          editable={false}
 				/>
 
 				<FormInput
@@ -167,14 +136,7 @@ const AddCard = ({ navigation, route }) => {
 					containerStyle={{
 						marginTop: SIZES.radius,
 					}}
-					onChange={(value) => {
-						utils.validateInput(value, 1, setCardNameError);
-						setCardName(value);
-					}}
-					errorMsg={cardNameError}
-					appendComponent={
-						<FormInputCheck value={cardName} error={cardNameError} />
-					}
+          editable={false}
 				/>
 
 				<View
@@ -186,68 +148,21 @@ const AddCard = ({ navigation, route }) => {
 						label='Expire Date'
 						value={expiryDate}
 						placeholder='MM/YY'
-						maxLength={5}
 						containerStyle={{
 							flex: 1,
 						}}
-						onChange={(value) => {
-							utils.validateInput(value, 5, setExpiryDateError);
-							setExpiryDate(value);
-						}}
-						appendComponent={
-							<FormInputCheck value={expiryDate} error={expiryDateError} />
-						}
+            editable={false}
 					/>
 					<FormInput
 						label='CVV'
 						value={cvv}
-						maxLength={3}
 						containerStyle={{
 							flex: 1,
 							marginLeft: SIZES.radius,
 						}}
-						onChange={(value) => {
-							utils.validateInput(value, 3, setCvvError);
-							setCvv(value);
-						}}
-						appendComponent={<FormInputCheck value={cvv} error={cvvError} />}
+            editable={false}
 					/>
 				</View>
-			</View>
-		);
-	};
-	const saveCard = () => {
-		cardApi.addCard({
-			name: cardName,
-			number: cardNumber,
-			cvv: cvv,
-			expire_date: expiryDate,
-			type_card: selectedCard.type_card,
-		})
-		.then(() => {
-			navigation.goBack();
-		});
-	}
-	const renderFooter = () => {
-		return (
-			<View
-				style={{
-					paddingTop: SIZES.radius,
-					paddingBottom: SIZES.padding,
-					paddingHorizontal: SIZES.padding,
-				}}>
-				<TextButton
-					label='Add Card'
-					disabled={!isEnableAddCard()}
-					buttonStyle={{
-						height: 60,
-						borderRadius: SIZES.radius,
-						backgroundColor: isEnableAddCard()
-							? COLORS.primary
-							: COLORS.transparentPrimary,
-					}}
-					onPress={saveCard}
-				/>
 			</View>
 		);
 	};
@@ -267,9 +182,8 @@ const AddCard = ({ navigation, route }) => {
 				{renderCard()}
 				{renderForm()}
 			</KeyboardAwareScrollView>
-			{renderFooter()}
 		</View>
 	);
 };
 
-export default AddCard;
+export default CardDetail;

@@ -157,27 +157,27 @@ const cardsIcon = {
 const allCards = [
   {
       id: 1,
-      name: "Apple Pay",
+      type_card: "Apple Pay",
       icon: require("../assets/icons/apple.png")
   },
   {
       id: 2,
-      name: "Visa",
+      type_card: "Visa",
       icon: require("../assets/icons/visa.png"),
   },
   {
       id: 3,
-      name: "PayPal",
+      type_card: "PayPal",
       icon: require("../assets/icons/paypal.png"),
   },
   {
       id: 4,
-      name: "Google Pay",
+      type_card: "Google Pay",
       icon: require("../assets/icons/google.png"),
   },
   {
       id: 5,
-      name: "Master Card",
+      type_card: "Master Card",
       icon: require("../assets/icons/mastercard.png"),
   },
 ]

@@ -2,7 +2,7 @@ import privateClient from "./client";
 
 const orderEndpoints = {
 	create: "/orders",
-	getMyOrders: "/my-order",
+	getMyOrders: (limit, page) => `/my-order?limit=${limit}&page=${page}`,
 	getOrderDetail:(id) => `/orders/${id}`,
 	updateStatus:(id) => `/orders/${id}`,
 	delete: (id) => `/orders/${id}`,
@@ -20,9 +20,9 @@ const orderApi = {
 		}
 	},
 
-	getMyOrders: async () => {
+	getMyOrders: async (limit = 10,page = 1) => {
 		try {
-			const response = await privateClient.get(orderEndpoints.getMyOrders);
+			const response = await privateClient.get(orderEndpoints.getMyOrders(limit, page));
 			return { response };
 		} catch (err) {
 			return { err };

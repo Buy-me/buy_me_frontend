@@ -1,14 +1,7 @@
 import { useDrawerStatus } from "@react-navigation/drawer";
 import { useCallback, useEffect } from "react";
 import { useState } from "react";
-import {
-	FlatList,
-	Image,
-	ScrollView,
-	Text,
-	TouchableOpacity,
-	View,
-} from "react-native";
+import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
@@ -48,20 +41,47 @@ const OrderHistory = ({ navigation, route }) => {
 
 	const [data, setData] = useState([]);
 	const [pagination, setPagination] = useState({
-		currentPage: 1,
-		pageSize: 0,
-		totalPage: 0,
+		cursor: "",
+		limit: 1,
+		next_cursor: "",
+		page: 1,
+		total: 2,
 	});
+	const [isRefresh, setIsRefresh] = useState(false)
+
 	useFocusEffect(
 		useCallback(() => {
 			const fetchData = async () => {
-				const { response } = await orderApi.getMyOrders();
+				const { response } = await orderApi.getMyOrders(pagination.limit, pagination.page);
 				const dataFiltered = filterData(response.data);
 				setData(dataFiltered);
+				setPagination(response.paging);
 			};
 			fetchData();
 		}, [])
 	);
+
+	const loadMore = () => {
+		const fetchData = async () => {
+			const { response } = await orderApi.getMyOrders(pagination.limit, pagination.page + 1);
+			const dataFiltered = filterData(response.data);
+			// Group by create date
+			dataFiltered.forEach((ele1) => {
+				for (const ele2 of data) {
+					if(ele1.createDate === ele2.createDate) {
+						ele1.data = [...ele2.data, ...ele1.data]
+					}
+				}
+			})
+			setData(dataFiltered);
+			setPagination(response.paging);
+			setIsRefresh(false);
+		};
+		if(pagination.page < Math.ceil(pagination.total / pagination.limit)) {
+			setIsRefresh(true);
+			fetchData();
+		}
+	};
 
 	/**
 	 * Filter data to easy display list
@@ -97,7 +117,7 @@ const OrderHistory = ({ navigation, route }) => {
 					alignItems: "center",
 					marginTop: 40,
 				}}
-				title='Order History'
+				title='ORDER HISTORY'
 				leftComponent={
 					<TouchableOpacity
 						style={{
@@ -158,9 +178,9 @@ const OrderHistory = ({ navigation, route }) => {
 					data={data}
 					renderItem={renderOrderContent}
 					keyExtractor={(item) => item.createDate}
-					onEndReached={ () => {console.log("END REACH")}}
+					onEndReached={loadMore}
 					onEndReachedThreshold={0}
-					refreshing = {true}
+					refreshing={isRefresh}
 				/>
 			</>
 		);

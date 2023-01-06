@@ -9,7 +9,7 @@ const OrderDetail = ({ route, navigation }) => {
 	const renderHeader = () => {
 		return (
 			<Header
-				title='Order detail'
+				title='ORDER DETAIL'
 				containerStyle={{
 					height: 50,
 					marginHorizontal: SIZES.padding,

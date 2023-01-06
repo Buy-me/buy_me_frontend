@@ -8,16 +8,20 @@ import { COLORS, dummyData, FONTS, icons, SIZES } from "../../constants";
 import { ScrollView } from "react-native-gesture-handler";
 import { useEffect } from "react";
 import cardApi from "../../api/cardApi";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback } from "react";
 
 const MyCard = ({ navigation }) => {
 	const [selectedCard, setSelectedCard] = useState(null);
 	const [data, setData] = useState([]);
 
-	useEffect(() => {
+	useFocusEffect(
+		useCallback(() => {
 		cardApi.getMyCard().then(({ response }) => {
 			setData(response.data);
+			setSelectedCard(null)
 		});
-	});
+	},[]));
 
 	//Renderers
 	const renderHeader = () => {
@@ -60,30 +64,32 @@ const MyCard = ({ navigation }) => {
 	};
 
 	const renderAddNewCard = () => {
-        // Reduce the loop
-        const haveLoopInfo = {}
+		// Reduce the loop
+		const haveLoopInfo = {};
 		return (
 			<View style={{ marginTop: SIZES.padding }}>
 				<Text style={{ ...FONTS.h3 }}>Save card</Text>
 
 				{dummyData.allCards.map((item, index) => {
-                    if(!haveLoopInfo[item.name]) {
-                        data.forEach((element) => {
-                            if (element.type_card === item.name) {
-                                haveLoopInfo[item.name] = true;
-                                item = { ...element, ...item };
-                            }
-                        });
-                    }
+					let isNewCard = true;
+					if (!haveLoopInfo[item.type_card]) {
+						data.forEach((element) => {
+							if (element.type_card === item.type_card) {
+								haveLoopInfo[item.type_card] = true;
+								item = { ...element, ...item };
+								isNewCard = false
+							}
+						});
+					}
 					return (
 						<CardItem
-							key={`NewCard-${item.id}`}
+							key={`SaveCard-${item.id}`}
 							item={item}
 							isSelected={
 								`${selectedCard?.key}-${selectedCard?.id}` ==
-								`NewCard-${item.id}`
+								`SaveCard-${item.id}`
 							}
-							onPress={() => setSelectedCard({ ...item, key: "NewCard" })}
+							onPress={() => setSelectedCard({ ...item, key: "SaveCard" }, )}
 						/>
 					);
 				})}
@@ -108,10 +114,10 @@ const MyCard = ({ navigation }) => {
 							selectedCard == null ? COLORS.gray : COLORS.primary,
 					}}
 					label={
-						selectedCard?.key == "NewCard" ? "Save" : "Proceed to Checkout"
+						selectedCard?.key == "SaveCard" ? "Save" : "Proceed to Checkout"
 					}
 					onPress={
-						selectedCard?.key == "NewCard"
+						selectedCard?.key == "SaveCard"
 							? () => navigation.navigate("Add Card", { selectedCard })
 							: () => navigation.navigate("Checkout", { selectedCard })
 					}
