@@ -112,24 +112,20 @@ const tags = [
 
 const track_order_status = [
   {
-    title: "Order Confirmed",
-    sub_title: "Your order has been received",
+    title: "Order Pending",
+    sub_title: "Your order is waiting for confirmed",
   },
   {
-    title: "Order Prepared",
-    sub_title: "Your order has been prepared",
+    title: "Order preparing",
+    sub_title: "Your order is being prepared",
   },
   {
-    title: "Delivery in Progress",
+    title: "On the way",
     sub_title: "Hang on! Your food is on the way",
   },
   {
     title: "Delivered",
     sub_title: "Enjoy your meal!",
-  },
-  {
-    title: "Rate Us",
-    sub_title: "Help us improve our service",
   },
 ];
 

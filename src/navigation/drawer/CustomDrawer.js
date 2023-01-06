@@ -2,14 +2,13 @@ import React from "react";
 import { View } from "react-native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
-import { MainLayout } from "../../screens";
+import { MainLayout, MyWallet, OrderHistory } from "../../screens";
 import { COLORS } from "../../constants";
 import { setSelectedTab } from "../../features/tab/tabSlice";
 
 import { useDispatch, useSelector } from "react-redux";
 
 import CustomDrawerContent from "./CustomDrawerContent";
-import OrderHistory from "../../screens/Order/OrderHistory";
 
 const Drawer = createDrawerNavigator();
 
@@ -56,6 +55,9 @@ const CustomDrawer = () => {
         </Drawer.Screen>
         <Drawer.Screen name="Order History">
           {(props) => <OrderHistory {...props} />}
+        </Drawer.Screen>
+        <Drawer.Screen name="My Wallet">
+          {(props) => <MyWallet {...props} />}
         </Drawer.Screen>
       </Drawer.Navigator>
     </View>

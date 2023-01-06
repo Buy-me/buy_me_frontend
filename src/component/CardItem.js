@@ -19,7 +19,7 @@ const CardItem = ({ item, isSelected, onPress }) => {
         />
       </View>
 
-      <Text style={styles.text}>{item.name}</Text>
+      <Text style={styles.text}>{item.type_card}</Text>
 
       <View
         style={{

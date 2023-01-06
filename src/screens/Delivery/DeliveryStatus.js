@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { Image, ScrollView, Text, View } from "react-native";
 import {
-  Header,
-  LineDivider,
-  TextButton,
-  TextIconButton,
+	Header,
+	LineDivider,
+	TextButton,
+	TextIconButton,
 } from "../../component";
 import { COLORS, constants, FONTS, icons, SIZES } from "../../constants";
 
-const DeliveryStatus = ({ navigation }) => {
-	const [currentStep, setCurrentStep] = useState(2);
+const DeliveryStatus = ({ navigation, route }) => {
+	const { id, currentStep, isGoBack } = route.params || 0;
 	const renderHeader = () => {
 		return (
 			<Header
@@ -41,8 +41,8 @@ const DeliveryStatus = ({ navigation }) => {
 						marginBottom: 20,
 						paddingHorizontal: SIZES.padding,
 					}}>
-					<Text style={{ ...FONTS.h3 }}>Track Order</Text>
-					<Text style={{ color: COLORS.gray, ...FONTS.body3 }}>NY012345</Text>
+					<Text style={{ ...FONTS.h3 }}>Order ID</Text>
+					<Text style={{ color: COLORS.gray, ...FONTS.body3 }}>{id}</Text>
 				</View>
 				<LineDivider
 					lineStyle={{
@@ -123,45 +123,31 @@ const DeliveryStatus = ({ navigation }) => {
 					marginTop: SIZES.radius,
 					marginBottom: SIZES.padding,
 				}}>
-				{currentStep < constants.track_order_status.length - 1 && (
-						<TextButton
-						buttonStyle={{
-							borderRadius: SIZES.base,
-							backgroundColor: COLORS.lightGray2,
-							height: 55
-						}}
-						label='Cancel'
-						labelStyle={{
-							color: COLORS.primary,
-						}}
-						onPress={() => navigation.navigate("Home")}
-					/>
-				)}
-
-				{currentStep == constants.track_order_status.length - 1 && (
-					<TextButton
-						buttonContainerStyle={{
-							height: 55,
-							borderRadius: SIZES.base,
-						}}
-						label='DONE'
-						onPress={() => navigation.navigate("Home")}
-					/>
-				)}
+				<TextButton
+					buttonStyle={{
+						borderRadius: SIZES.base,
+						backgroundColor: COLORS.lightOrange4,
+						height: 55,
+					}}
+					label='Done'
+					labelStyle={{
+						color: COLORS.primary,
+					}}
+					onPress={() => isGoBack ? navigation.goBack() : navigation.navigate("Home")}
+				/>
 			</View>
 		);
 	};
 
-  return (
-    <View
-      style={{
-        flex: 1,
-        paddingHorizontal: SIZES.padding,
-        backgroundColor: COLORS.white,
-      }}
-    >
-      {/* Header */}
-      {renderHeader()}
+	return (
+		<View
+			style={{
+				flex: 1,
+				paddingHorizontal: SIZES.padding,
+				backgroundColor: COLORS.white,
+			}}>
+			{/* Header */}
+			{renderHeader()}
 
 			{/* Track Order */}
 			<ScrollView showsVerticalScrollIndicator={false}>

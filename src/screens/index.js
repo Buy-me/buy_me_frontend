@@ -29,6 +29,10 @@ import ChangePassword from "./Account/ChangePassword";
 
 import Address from "./Address/Address";
 
+import OrderHistory from "./Order/OrderHistory"
+
+import MyWallet from "./Card/MyWallet";
+
 export {
   MainLayout,
   AuthLayout,
@@ -42,4 +46,6 @@ export {
   EditAccount,
   ChangePassword,
   Address,
+  OrderHistory,
+  MyWallet
 };

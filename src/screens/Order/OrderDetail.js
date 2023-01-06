@@ -1,21 +1,7 @@
-import { useState } from "react";
-import { Image, ScrollView, Text, View } from "react-native";
-import {
-	FooterTotal,
-	Header,
-	IconButton,
-	LineDivider,
-	TextButton,
-	TextIconButton,
-} from "../../component";
-import {
-	COLORS,
-	COLORS_STATUS,
-	constants,
-	FONTS,
-	icons,
-	SIZES,
-} from "../../constants";
+import moment from "moment";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { FooterTotal, Header, IconButton, LineDivider } from "../../component";
+import { COLORS, COLORS_STATUS, FONTS, icons, SIZES } from "../../constants";
 
 const OrderDetail = ({ route, navigation }) => {
 	const data = route.params;
@@ -23,7 +9,7 @@ const OrderDetail = ({ route, navigation }) => {
 	const renderHeader = () => {
 		return (
 			<Header
-				title='Order detail'
+				title='ORDER DETAIL'
 				containerStyle={{
 					height: 50,
 					marginHorizontal: SIZES.padding,
@@ -50,11 +36,33 @@ const OrderDetail = ({ route, navigation }) => {
 					/>
 				}
 				rightComponent={
-					<View
+					<TouchableOpacity
 						style={{
-							width: 40,
+							alignItems: "center",
+							justifyContent: "center",
+							width: 80,
+							borderWidth: 1,
+							borderRadius: SIZES.radius,
+							borderColor: COLORS.gray2,
 						}}
-					/>
+						onPress={() => navigation.navigate("Delivery Status", {
+							id: data.id,
+							// State start from 0
+							currentStep: data.status - 1,
+							isGoBack: true,
+						})}
+						>
+						<Text
+							style={{
+								fontFamily: "Poppins-SemiBold",
+								fontSize: 16,
+								lineHeight: 16,
+								color: COLORS.primary,
+								textAlignVertical: "center",
+							}}>
+							Check Status
+						</Text>
+					</TouchableOpacity>
 				}
 			/>
 		);
@@ -104,7 +112,7 @@ const OrderDetail = ({ route, navigation }) => {
 		return (
 			<View
 				style={{
-					marginTop: SIZES.padding,
+					marginTop: SIZES.radius,
 					paddingTop: SIZES.padding,
 					borderRadius: SIZES.radius,
 					borderWidth: 2,
@@ -165,7 +173,13 @@ const OrderDetail = ({ route, navigation }) => {
 						paddingHorizontal: SIZES.padding,
 					}}>
 					<Text style={{ ...FONTS.h3 }}>Address</Text>
-					<Text style={{ color: COLORS.gray, ...FONTS.body3, maxWidth: "50%", textAlign: "right" }}>
+					<Text
+						style={{
+							color: COLORS.gray,
+							...FONTS.body3,
+							maxWidth: "50%",
+							textAlign: "right",
+						}}>
 						{data.detail_address}
 					</Text>
 				</View>
@@ -179,7 +193,7 @@ const OrderDetail = ({ route, navigation }) => {
 					}}>
 					<Text style={{ ...FONTS.h3 }}>Create date</Text>
 					<Text style={{ color: COLORS.gray, ...FONTS.body3 }}>
-						{new Date(data.created_at).toDateString()}
+						{moment(data.created_at).format("DD-MM-YYYY")}
 					</Text>
 				</View>
 
@@ -230,16 +244,18 @@ const OrderDetail = ({ route, navigation }) => {
 			{renderHeader()}
 
 			{/* Track Order */}
-			<ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
-				<View style={{ flex: 1}}>
+			<ScrollView
+				showsVerticalScrollIndicator={false}
+				contentContainerStyle={{ flexGrow: 1 }}>
+				<View style={{ flex: 1 }}>
 					{renderOrderDetail()}
-					<View style={{position: "absolute", bottom: 0, left: 0, right: 0}}>
-					<FooterTotal
-						subTotal={data.total_price}
-						shippingFee={0.0}
-						total={data.total_price}
-						visible={false}
-					/>
+					<View style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}>
+						<FooterTotal
+							subTotal={data.total_price}
+							shippingFee={0.0}
+							total={data.total_price}
+							visible={false}
+						/>
 					</View>
 				</View>
 			</ScrollView>
