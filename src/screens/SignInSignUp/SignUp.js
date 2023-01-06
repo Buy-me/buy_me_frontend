@@ -41,7 +41,7 @@ const SignUp = ({ navigation }) => {
       email: email,
       password: password,
       first_name: username,
-      last_name: username,
+      last_name: "",
     });
     if (err) {
       alert(utils.utils.capitalizeFirstLetter(err.message));

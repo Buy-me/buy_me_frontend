@@ -30,7 +30,7 @@ const StepperInput = ({ containerStyle, value = 1, onAdd, onMinus }) => {
       />
 
       <View style={styles.textView}>
-        <Text style={{ ...FONTS.h2 }}>{value}</Text>
+        <Text style={{ ...FONTS.h2, fontSize: 18 }}>{value}</Text>
       </View>
 
       <IconButton

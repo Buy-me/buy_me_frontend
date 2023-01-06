@@ -53,6 +53,7 @@ const note = require("../assets/icons/note.png");
 const recent = require("../assets/icons/recent.png");
 const review = require("../assets/icons/review.png");
 const user = require("../assets/icons/user.png");
+const padlock = require("../assets/icons/padlock.png")
 
 export default {
 
@@ -159,4 +160,5 @@ export default {
   category,
   note,
   recent,
+  padlock
 };

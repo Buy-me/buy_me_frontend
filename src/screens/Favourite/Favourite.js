@@ -1,7 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { useEffect } from "react";
-import { useState } from "react";
 import {
   Image,
   StyleSheet,
@@ -11,23 +10,24 @@ import {
   View,
 } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import cartApi from "../../api/cartApi";
 import favouriteApi from "../../api/favouriteApi";
-import { IconButton, StepperInput } from "../../component";
-import { COLORS, dummyData, FONTS, icons, SIZES } from "../../constants";
+import { IconButton } from "../../component";
+import { COLORS, FONTS, icons, SIZES } from "../../constants";
+import { setFavouriteProducts } from "../../features/favourite/favouriteSlice";
 import utils from "../../utils";
 
 const Favourite = () => {
-  const [myFavouriteList, setMyFavouriteList] = useState([]);
+  // const [myFavouriteList, setMyFavouriteList] = useState([]);
   const navigation = useNavigation();
+  const dispatch = useDispatch()
+  const { favouriteProducts } = useSelector(state => state.favourite)
 
   useEffect(() => {
     const getFavouriteList = async () => {
       const { response, err } = await favouriteApi.getList();
-      // dispatch(setCategories(response.data));
-      // console.log("list favourite", response.data);
-      setMyFavouriteList(response.data);
+      dispatch(setFavouriteProducts(response.data))
     };
     getFavouriteList();
   }, []);
@@ -66,14 +66,14 @@ const Favourite = () => {
       );
 
       const list = await favouriteApi.getList();
-      setMyFavouriteList(list.response.data);
+      dispatch(setFavouriteProducts(list.response.data));
     };
     removeItem();
   };
   const renderFavouriteList = () => {
     return (
       <SwipeListView
-        data={myFavouriteList}
+        data={favouriteProducts}
         keyExtractor={(item) => `${item.id}`}
         contentContainerStyle={{
           marginTop: SIZES.radius,

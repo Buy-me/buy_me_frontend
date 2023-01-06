@@ -66,13 +66,28 @@ function validateEmail(value, setEmailError) {
 }
 
 function validatePassword(value, setPasswordError) {
-	if (value == "") {
-		setPasswordError("");
-	} else if (value.length < 6) {
-		setPasswordError("Password must be 6 characters");
-	} else {
-		setPasswordError("");
-	}
+  // const re = /^(?=.*\d)(?=.*[a-zA-Z])([a-zA-Z0-9]+){6,}$/
+  const re = /^(?=.*\d)[A-Za-z\d]{6,}$/
+
+  if (value.length < 6) {
+    setPasswordError("Password must be 6 characters");
+  } 
+  else {
+    if (re.test(value)) {
+      setPasswordError("");
+    }
+    else {
+      setPasswordError("Password must have at least 1 number")
+    }
+  }
+  
+  // if (value == "") {
+  //   setPasswordError("");
+  // } else if (value.length < 6) {
+  //   setPasswordError("Password must be 6 characters");
+  // } else {
+  //   setPasswordError("");
+  // }
 }
 
 function validateUsername(value, setUsernameError) {
@@ -85,16 +100,29 @@ function validateUsername(value, setUsernameError) {
 	}
 }
 
+function getFileName(str) {
+  let fileName = str.split("/").pop()
+  return fileName
+}
+
+function getFileType(str) {
+  let match = /\.(\w+)$/.exec(str);
+  let type = match ? `image/${match[1]}` : `image`
+  return type
+}
+
 const utils = {
-	validateInput,
-	isValidEmail,
-	validateEmail,
-	validateUsername,
-	validatePassword,
-	convertToDateString,
-	capitalizeFirstLetter,
-	storeData,
-	getData,
+  validateInput,
+  isValidEmail,
+  validateEmail,
+  validateUsername,
+  validatePassword,
+  convertToDateString,
+  capitalizeFirstLetter,
+  storeData,
+  getData,
+  getFileName,
+  getFileType
 };
 
 export default utils;

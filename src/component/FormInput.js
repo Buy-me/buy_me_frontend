@@ -31,12 +31,14 @@ const FormInput = ({
     <View style={{ ...containerStyle }}>
       <View
         style={{
-          flexDirection: "row",
+          flexDirection: "column",
           justifyContent: "space-between",
         }}
       >
         <Text style={{ color: COLORS.darkGray, ...FONTS.body3 }}>{label}</Text>
-        <Text style={{ color: COLORS.red, ...FONTS.body3 }}>{errorMsg}</Text>
+        {errorMsg &&
+          <Text style={{ color: COLORS.red, ...FONTS.body4 }}>{errorMsg}</Text>
+        }
       </View>
       <View
         style={{
