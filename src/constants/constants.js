@@ -4,7 +4,7 @@ const screens = {
   search: "Search",
   cart: "Cart",
   favourite: "Favourite",
-  notification: "Notification",
+  notification: "My Address",
   settings: "Settings",
   my_wallet: "My Wallet",
 };

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Image, ScrollView, Text, ToastAndroid, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -22,6 +22,12 @@ const Checkout = ({ navigation, route }) => {
 		totalPage: 2,
 	});
 	const [isCashActive, setIsCashActive] = useState(true);
+	const [selectedCard, setSelectedCard] = useState(null);
+
+	useEffect(() => {
+		let { selectedCard } = route.params;
+		setSelectedCard(selectedCard);
+	}, []);
 
 	const renderHeader = () => {
 		return (
@@ -252,6 +258,7 @@ const Checkout = ({ navigation, route }) => {
 				detail_address: selectedAddress?.address,
 				phone: "0394116517",
 				items: [...formatProductItem],
+				type: isCashActive ? "COD" : selectedCard.type_card,
 			})
 			.then(({ response }) => {
 				navigation.navigate("Success", { id: response?.data });

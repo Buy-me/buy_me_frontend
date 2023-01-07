@@ -42,7 +42,7 @@ const OrderHistory = ({ navigation, route }) => {
 	const [data, setData] = useState([]);
 	const [pagination, setPagination] = useState({
 		cursor: "",
-		limit: 1,
+		limit: 10,
 		next_cursor: "",
 		page: 1,
 		total: 2,
@@ -64,12 +64,15 @@ const OrderHistory = ({ navigation, route }) => {
 	const loadMore = () => {
 		const fetchData = async () => {
 			const { response } = await orderApi.getMyOrders(pagination.limit, pagination.page + 1);
-			const dataFiltered = filterData(response.data);
+			let dataFiltered = filterData(response.data);
 			// Group by create date
 			dataFiltered.forEach((ele1) => {
 				for (const ele2 of data) {
 					if(ele1.createDate === ele2.createDate) {
 						ele1.data = [...ele2.data, ...ele1.data]
+					}
+					else {
+						dataFiltered = [ele2, ...dataFiltered]
 					}
 				}
 			})
