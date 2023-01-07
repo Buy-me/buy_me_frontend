@@ -26,6 +26,7 @@ const InfoCard = ({
 							...FONTS.body3,
 							paddingTop: 8,
 							textAlign: "left",
+							maxWidth: "95%"
 						}}>
 						{text}
 					</Text>

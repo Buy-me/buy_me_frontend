@@ -191,6 +191,25 @@ const OrderDetail = ({ route, navigation }) => {
 						marginBottom: 15,
 						paddingHorizontal: SIZES.padding,
 					}}>
+					<Text style={{ ...FONTS.h3 }}>Payment method</Text>
+					<Text
+						style={{
+							color: COLORS.gray,
+							...FONTS.body3,
+							maxWidth: "50%",
+							textAlign: "right",
+						}}>
+						{data.type}
+					</Text>
+				</View>
+				<View
+					style={{
+						flexDirection: "row",
+						alignItems: "center",
+						justifyContent: "space-between",
+						marginBottom: 15,
+						paddingHorizontal: SIZES.padding,
+					}}>
 					<Text style={{ ...FONTS.h3 }}>Create date</Text>
 					<Text style={{ color: COLORS.gray, ...FONTS.body3 }}>
 						{moment(data.created_at).format("DD-MM-YYYY")}
