@@ -18,7 +18,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { useSelector, useDispatch } from "react-redux";
-import { Header } from "../component";
+import { CartQuantityButton, Header } from "../component";
 import {
   COLORS,
   constants,
@@ -318,23 +318,7 @@ const MainLayout = ({ navigation }) => {
           </TouchableOpacity>
         }
         rightComponent={
-          <TouchableOpacity
-            style={{
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: SIZES.radius,
-            }}
-            onPress={() => navigation.navigate("Review")}
-          >
-            <Image
-              source={dummyData.myProfile?.profile_image}
-              style={{
-                height: 40,
-                width: 40,
-                borderRadius: SIZES.radius,
-              }}
-            />
-          </TouchableOpacity>
+          <CartQuantityButton onPress={() => navigation.navigate("MyCart")} />
         }
       />
       {/* Content */}

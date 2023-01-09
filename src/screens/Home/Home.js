@@ -487,6 +487,16 @@ const Home = ({ type }) => {
     );
   };
 
+  const handleLoadMore = () => {
+
+    if (pagination.page === pagination.total){
+      
+    }
+    setPagination({
+      page: pagination.page + 1
+    })
+  }
+
   if (type == constants.screens.home) {
     content = (
       <View>
@@ -530,6 +540,7 @@ const Home = ({ type }) => {
         keyExtractor={(item) => `${item.id}`}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={content}
+        onEndReached={handleLoadMore}
         ListFooterComponent={
           <View
             style={{
