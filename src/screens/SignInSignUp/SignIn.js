@@ -19,7 +19,7 @@ import { setProfile } from "../../features/user/userSlice";
 
 const SignIn = ({ navigation }) => {
   const [email, setEmail] = React.useState("binhdinhreact@gmail.com");
-  const [password, setPassword] = React.useState("123456");
+  const [password, setPassword] = React.useState("20222023");
   const [emailError, setEmailError] = React.useState("");
   const [passwordError, setPasswordError] = React.useState("");
   const dispatch = useDispatch();
@@ -65,6 +65,7 @@ const SignIn = ({ navigation }) => {
       screenName="signin"
       title="Let's Sign You In"
       subtitle="Welcome back, you've been missed."
+      showFooter={true}
       chidren={
         <View
           style={{

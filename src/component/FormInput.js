@@ -28,7 +28,13 @@ const FormInput = ({
   multiline,
 }) => {
   return (
-    <View style={{ ...containerStyle }}>
+    <View
+      style={{
+        ...containerStyle,
+        borderBottomWidth: 1,
+        borderColor: COLORS.lightGray1,
+      }}
+    >
       <View
         style={{
           flexDirection: "column",
@@ -36,9 +42,9 @@ const FormInput = ({
         }}
       >
         <Text style={{ color: COLORS.darkGray, ...FONTS.body3 }}>{label}</Text>
-        {errorMsg &&
+        {errorMsg && (
           <Text style={{ color: COLORS.red, ...FONTS.body4 }}>{errorMsg}</Text>
-        }
+        )}
       </View>
       <View
         style={{
@@ -59,7 +65,10 @@ const FormInput = ({
             onPress={editable ? null : Keyboard.dismiss}
           >
             <TextInput
-              style={{ flex: 1, ...inputStyle }}
+              style={{
+                flex: 1,
+                ...inputStyle,
+              }}
               value={value}
               placeholder={placeholder}
               secureTextEntry={secureTextEntry}

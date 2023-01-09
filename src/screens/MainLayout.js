@@ -149,6 +149,10 @@ const MainLayout = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
+    if (!selectedTab) {
+      return;
+    }
+
     if (selectedTab == constants.screens.home) {
       flatListRef?.current?.scrollToIndex({
         index: 0,
@@ -345,6 +349,15 @@ const MainLayout = ({ navigation }) => {
           scrollEnabled={false}
           pagingEnabled
           snapToAlignment="center"
+          onScrollToIndexFailed={(info) => {
+            const wait = new Promise((resolve) => setTimeout(resolve, 500));
+            wait.then(() => {
+              flatListRef.current?.scrollToIndex({
+                index: 0,
+                animated: false,
+              });
+            });
+          }}
           snapToInterval={SIZES.padding}
           showsHorizontalScrollIndicator={false}
           data={constants.bottom_tabs}
@@ -365,9 +378,7 @@ const MainLayout = ({ navigation }) => {
                 )}
                 {/* {item.label == constants.screens.cart && <CartTab />} */}
                 {item.label == constants.screens.favourite && <Favourite />}
-                {item.label == constants.screens.settings && (
-                  <Settings />
-                )}
+                {item.label == constants.screens.settings && <Settings />}
               </View>
             );
           }}

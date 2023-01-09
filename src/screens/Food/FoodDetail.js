@@ -1,11 +1,6 @@
 import { Image, StyleSheet, Text, ToastAndroid, View } from "react-native";
 import React, { useEffect } from "react";
-import {
-  COLORS,
-  FONTS,
-  icons,
-  SIZES,
-} from "../../constants";
+import { COLORS, FONTS, icons, SIZES } from "../../constants";
 import {
   CartQuantityButton,
   Header,
@@ -21,87 +16,127 @@ import { useDispatch, useSelector } from "react-redux";
 import cartApi from "../../api/cartApi";
 import { setProductsCart } from "../../features/cart/cartSlice";
 import favouriteApi from "../../api/favouriteApi";
-import { addToFavourite, removeFromFavourtie } from "../../features/favourite/favouriteSlice";
+import {
+  addToFavourite,
+  removeFromFavourtie,
+} from "../../features/favourite/favouriteSlice";
+import foodApi from "../../api/foodApi";
+import { useIsFocused } from "@react-navigation/native";
 
-const FoodDetail = ({ navigation }) => {
-  const dispatch = useDispatch()
+const getCategoryname = (categories, food) => {
+  const item = categories.find((element) => element.id === food?.category_id);
+  return item?.name || "All";
+};
+const FoodDetail = ({ navigation, route }) => {
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+  // const [catego]
   const [foodQuantity, setFoodQuantity] = useState(1);
-  const [isFavourite, setIsFavourite] = useState(false)
+  const [isFavourite, setIsFavourite] = useState(false);
+  const [selectedFood, setSelectedFood] = useState(null);
+  const { foodId } = route.params;
 
-  const { selectedFood } = useSelector(state => state.food)
-  const { favouriteProducts } = useSelector(state => state.favourite)
+  const { favouriteProducts } = useSelector((state) => state.favourite);
+  const { categories } = useSelector((state) => state.category);
 
   useEffect(() => {
-    let isFavIndex = favouriteProducts.findIndex(p => p.id === selectedFood.id)
+    if (isFocused === true) {
+      const getFood = async () => {
+        const { response, err } = await foodApi.get(foodId);
+
+        if (err) {
+          alert(utils.utils.capitalizeFirstLetter(err.message));
+          return;
+        }
+
+        console.log(response.data);
+        setSelectedFood(response.data);
+      };
+      getFood();
+    }
+  }, [foodId, isFocused]);
+
+  useEffect(() => {
+    let isFavIndex = favouriteProducts.findIndex((p) => p.id === foodId);
     if (isFavIndex > -1) {
-      setIsFavourite(true)
+      setIsFavourite(true);
+    } else {
+      setIsFavourite(false);
     }
-    else {
-      setIsFavourite(false)
-    }
-  }, [])
+  }, []);
 
   //Handler
   const handleAddToCart = async () => {
     const { response, err } = await cartApi.addToCart({
-      food_id: selectedFood.id,
-      quantity: foodQuantity
-    })
+      food_id: foodId,
+      quantity: foodQuantity,
+    });
 
     if (err) {
-      ToastAndroid.show("This product is already added in the cart!", ToastAndroid.SHORT)
-    }
-    else {
-      ToastAndroid.show("Product has been added!", ToastAndroid.SHORT)
+      console.log("errr");
+      ToastAndroid.show(
+        "This product is already added in the cart!",
+        ToastAndroid.SHORT
+      );
+    } else {
+      console.log("okk");
+      ToastAndroid.show("Product has been added!", ToastAndroid.SHORT);
       //update my cart
-      const { response, err } = await cartApi.getMyCart()
+      const { response, err } = await cartApi.getMyCart();
       if (err) {
         console.log(err);
-      }
-      else {
-        const data = response.data
+      } else {
+        const data = response.data;
         //update for redux store
-        dispatch(setProductsCart(data))
+        dispatch(setProductsCart(data));
       }
     }
-  }
+  };
 
   const handleAddFavourite = async () => {
     const { response, err } = await favouriteApi.addItem({
-      food_id: selectedFood.id
-    })
+      food_id: foodId,
+    });
     if (err) {
-      ToastAndroid.show("Cannot process the action right now!", ToastAndroid.SHORT)
+      ToastAndroid.show(
+        "Cannot process the action right now!",
+        ToastAndroid.SHORT
+      );
+    } else {
+      ToastAndroid.show(
+        "Added the product to Favourite list!",
+        ToastAndroid.SHORT
+      );
+      dispatch(addToFavourite(selectedFood));
     }
-    else {
-      ToastAndroid.show("Added the product to Favourite list!", ToastAndroid.SHORT)
-      dispatch(addToFavourite(selectedFood))
-    }
-    
-  }
+  };
 
   const handleRemoveFavourite = async () => {
     const { response, err } = await favouriteApi.removeItem({
-      food_id: selectedFood.id
-    })
+      food_id: foodId,
+    });
     if (err) {
-      ToastAndroid.show("Cannot process the action right now!", ToastAndroid.SHORT)
+      ToastAndroid.show(
+        "Cannot process the action right now!",
+        ToastAndroid.SHORT
+      );
+    } else {
+      ToastAndroid.show(
+        "Removed the product from Favourite list!",
+        ToastAndroid.SHORT
+      );
+      dispatch(removeFromFavourtie(foodId));
     }
-    else {
-      ToastAndroid.show("Removed the product from Favourite list!", ToastAndroid.SHORT)
-      dispatch(removeFromFavourtie(selectedFood.id))
-    }
-  }
+  };
 
   const handlePressFavourite = () => {
     if (isFavourite) {
-      handleRemoveFavourite()
+      handleRemoveFavourite();
+    } else {
+      handleAddFavourite();
     }
-    else {
-      handleAddFavourite()
-    }
-    setIsFavourite(!isFavourite)
-  }
+    setIsFavourite(!isFavourite);
+  };
 
   //Renderer
   const renderHeader = () => {
@@ -118,15 +153,16 @@ const FoodDetail = ({ navigation }) => {
           />
         }
         rightComponent={
-          <CartQuantityButton
-            onPress={() => navigation.navigate("MyCart")}
-          />
+          <CartQuantityButton onPress={() => navigation.navigate("MyCart")} />
         }
       />
     );
   };
 
   const renderDetails = () => {
+    if (!selectedFood) {
+      return null;
+    }
     return (
       <View
         style={{
@@ -184,7 +220,7 @@ const FoodDetail = ({ navigation }) => {
           </View>
 
           <Image
-            source={{ uri: selectedFood?.images.url }}
+            source={{ uri: selectedFood?.images?.url }}
             resizeMode="contain"
             style={{
               height: 170,
@@ -196,10 +232,12 @@ const FoodDetail = ({ navigation }) => {
         {/* Food Info */}
         <View style={{ marginTop: SIZES.padding }}>
           {/* Name and description */}
-          <View style={{
-            flexDirection: "column",
-            // alignItems: "center"
-          }}>
+          <View
+            style={{
+              flexDirection: "column",
+              // alignItems: "center"
+            }}
+          >
             <Text
               style={{
                 ...FONTS.h1,
@@ -213,7 +251,7 @@ const FoodDetail = ({ navigation }) => {
               containerStyle={{
                 alignItems: "center",
                 paddingVertical: 5,
-                paddingHorizontal: 0
+                paddingHorizontal: 0,
               }}
               icon={icons.star}
               iconPosition="LEFT"
@@ -222,7 +260,7 @@ const FoodDetail = ({ navigation }) => {
                 width: 15,
                 height: 15,
               }}
-              label={selectedFood?.rating.toFixed(1)}
+              label={selectedFood?.rating?.toFixed(1)}
               labelStyle={{ color: COLORS.gray }}
             />
           </View>
@@ -243,17 +281,24 @@ const FoodDetail = ({ navigation }) => {
             containerStyle={{
               flex: 1,
               height: 40,
-              marginTop: 15
+              marginTop: 15,
             }}
             icon={icons.note}
             iconStyle={{ tintColor: COLORS.transparentPrimray }}
-            label="Add note..."
+            label="Write Review"
             labelStyle={{
               flex: 1,
-              color: COLORS.transparentBlack1,
+              color: COLORS.darkGray2,
               textAlign: "left",
               marginLeft: 10,
               ...FONTS.h3,
+            }}
+            onPress={() => {
+              /* 1. Navigate to the Details route with params */
+              navigation.navigate("Review", {
+                foodId: foodId,
+                // otherParam: "anything you want here",
+              });
             }}
           />
 
@@ -268,7 +313,7 @@ const FoodDetail = ({ navigation }) => {
               value={foodQuantity}
               onAdd={() => setFoodQuantity(foodQuantity + 1)}
               onMinus={() => {
-                if (foodQuantity > 1) setFoodQuantity(foodQuantity - 1)
+                if (foodQuantity > 1) setFoodQuantity(foodQuantity - 1);
               }}
             />
 
@@ -340,7 +385,7 @@ const FoodDetail = ({ navigation }) => {
           iconPosition="LEFT"
           icon={icons.category}
           iconStyle={{ tintColor: COLORS.black }}
-          label={"Coffee"} //TODO: CHANGE
+          label={getCategoryname(categories, selectedFood)} //TODO: CHANGE
         />
 
         {/* shipping */}
@@ -393,7 +438,7 @@ const FoodDetail = ({ navigation }) => {
             borderRadius: SIZES.radius,
             backgroundColor: COLORS.primary,
             justifyContent: "space-between",
-            alignItems: "center"
+            alignItems: "center",
           }}
           label={"Add to Cart"}
           labelStyle={{

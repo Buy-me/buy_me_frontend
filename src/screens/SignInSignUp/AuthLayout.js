@@ -10,6 +10,7 @@ const AuthLayout = ({
   subtitle,
   screenName,
   titleContainerStyle,
+  showFooter,
   chidren,
 }) => {
   return (
@@ -21,6 +22,7 @@ const AuthLayout = ({
       style={{
         flex: 1,
         paddingVertical: SIZES.padding,
+        marginTop: showFooter ? 0 : -60,
       }}
     >
       <KeyboardAwareScrollView

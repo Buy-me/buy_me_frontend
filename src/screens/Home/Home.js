@@ -24,7 +24,6 @@ import FilterModal from "./FilterModal";
 import {
   setSelectedCategory,
   setCategories,
-  setSelectedMenuType,
 } from "../../features/category/categorySlice";
 import {
   setFoods,
@@ -59,9 +58,7 @@ const Section = ({ title, onPress, children }) => {
               ...FONTS.body3,
               textDecorationLine: "underline",
             }}
-          >
-            Show All
-          </Text>
+          ></Text>
         </TouchableOpacity>
       </View>
       {/* Content */}
@@ -70,42 +67,96 @@ const Section = ({ title, onPress, children }) => {
   );
 };
 
+const DEFAULT_PAGINATION = {
+  total_items: 3,
+  total: 1,
+  page: 1,
+  limit: 3,
+};
+
 const Home = ({ type }) => {
   const navigation = useNavigation();
   const [showFilterModal, setShowFilterModal] = useState(false);
+  const [pagination, setPagination] = useState(DEFAULT_PAGINATION);
+  const [populars, setPopulars] = useState([]);
+  const [selectedMenuType, setSelectedMenuType] = useState({
+    id: 1,
+    name: "Newest",
+    sort: "id desc",
+  });
+  const [filters, setFilters] = useState({
+    search: "",
+    minPrice: 0,
+    maxPrice: 0,
+    rating: 0,
+  });
   const [search, setSearch] = useState("");
   let content;
 
   //Redux Category
   const dispatch = useDispatch();
-  const { selectedCategory, categories, selectedMenuType } = useSelector(
+  const { selectedCategory, categories } = useSelector(
     (state) => state.category
   );
   // Redux Food
-  const {
-    populars,
-    recommends,
-    selectedFood,
-    foods,
-    rating,
-    prices,
-    isLoading,
-  } = useSelector((state) => state.food);
+  const { foods, rating, prices } = useSelector((state) => state.food);
 
   const { selectedAddress } = useSelector((state) => state.address);
 
-  const { favouriteProducts } = useSelector(state => state.favourite)
+  useEffect(() => {
+    const getFoods = async () => {
+      const { response, err } = await foodApi.getList(
+        pagination,
+        filters,
+        selectedCategory?.id || 0,
+        selectedMenuType.sort
+      );
+
+      if (err) {
+        // enqueueSnackbar(err.message, {
+        //   variant: "error",
+        // });
+        console.log(err.message);
+        return;
+      }
+      //  dispatch(setIsLoading(false));
+      //  dispatch(setFoods(response.data));
+      //  dispatch(setRecommends(response.data));
+      //  dispatch(setPopulars(response.data));
+      dispatch(setFoods(response.data));
+      setPagination({ ...response.paging, total_items: response.data.length });
+    };
+
+    getFoods();
+  }, [
+    pagination.page,
+    pagination.limit,
+    pagination.total,
+    filters.search,
+    filters.maxPrice,
+    filters.minPrice,
+    filters.rating,
+    selectedCategory,
+    selectedMenuType,
+  ]);
+
   useEffect(() => {
     const getFavouriteList = async () => {
       const { response, err } = await favouriteApi.getList();
-      dispatch(setFavouriteProducts(response.data))
+      dispatch(setFavouriteProducts(response.data));
     };
-    getFavouriteList()
-  }, [])
+    getFavouriteList();
+  }, []);
 
-  //
   useEffect(() => {
-    handleChangeCategory(selectedCategory, selectedMenuType);
+    const getPopularList = async () => {
+      const { response, err } = await foodApi.getPopularList();
+
+      console.log(err);
+      console.log(response.data);
+      setPopulars(response.data);
+    };
+    getPopularList();
   }, []);
 
   // handle render category first time
@@ -117,67 +168,30 @@ const Home = ({ type }) => {
     getCategories();
   }, []);
 
-  const handleChangeCategory = (category, menuType) => {
-    // console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++");
-    // console.log(category, menuType);
-    // console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++");
-
-    const getFoods = async () => {
-      const { response, err } = await foodApi.getList({
-        sort: menuType.sort,
-        categoryId: category?.id,
-        minPrice: prices[0],
-        maxPrice: prices[1],
-        rating: rating,
-        search: search,
-      });
-      // console.log(response.data.length);
-      dispatch(setIsLoading(false));
-      dispatch(setFoods(response.data));
-      dispatch(setRecommends(response.data));
-      dispatch(setPopulars(response.data));
-    };
-    getFoods();
-  };
-
   const handleFilter = () => {
-    const getFoods = async () => {
-      const { response, err } = await foodApi.getList({
-        sort: selectedMenuType.sort,
-        categoryId: selectedCategory?.id,
-        minPrice: prices[0],
-        maxPrice: prices[1],
-        rating: rating,
-        search: search,
-      });
-
-      dispatch(setIsLoading(false));
-
-      dispatch(setFoods(response.data));
-      dispatch(setRecommends(response.data));
-      dispatch(setPopulars(response.data));
-    };
-    getFoods();
+    setPagination(DEFAULT_PAGINATION);
+    setFilters({
+      minPrice: prices[0],
+      maxPrice: prices[1],
+      rating: rating,
+      search: search,
+    });
   };
 
   const handleResetFilter = () => {
-    const getFoods = async () => {
-      const { response, err } = await foodApi.getList({
-        sort: selectedMenuType.sort,
-        categoryId: selectedCategory?.id,
-        search: search,
-      });
-
-      dispatch(setIsLoading(false));
-
-      dispatch(setFoods(response.data));
-      dispatch(setRecommends(response.data));
-      dispatch(setPopulars(response.data));
-    };
-    getFoods();
+    setPagination(DEFAULT_PAGINATION);
+    setFilters({
+      minPrice: prices[0],
+      maxPrice: prices[1],
+      rating: rating,
+      search: search,
+    });
   };
+
   const handeClickItem = (item) => {
-    dispatch(setSelectedFood(item));
+    navigation.navigate("FoodDetail", {
+      foodId: item.id,
+    });
   };
 
   const renderMenuTypes = () => {
@@ -200,8 +214,7 @@ const Home = ({ type }) => {
                   index == dummyData.menu.length - 1 ? SIZES.padding : 0,
               }}
               onPress={() => {
-                dispatch(setSelectedMenuType(item));
-                handleChangeCategory(selectedCategory, item);
+                setSelectedMenuType(item);
               }}
             >
               <Text
@@ -222,59 +235,59 @@ const Home = ({ type }) => {
     );
   };
 
-  const renderRecommendedSection = () => {
-    return (
-      <Section
-        title="Recommended"
-        onPress={() => console.log("Show All Recommended")}
-      >
-        {recommends.length != 0 ? (
-          <FlatList
-            data={recommends}
-            keyExtractor={(item) => `${item.id}`}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            renderItem={({ item, index }) => (
-              <HorizontalFoodCard
-                containerStyle={{
-                  height: 160,
-                  width: SIZES.width * 0.85,
-                  marginVertical: 10,
-                  marginLeft: index == 0 ? SIZES.padding : 18,
-                  marginRight:
-                    index == recommends.length - 1 ? SIZES.padding : 0,
-                  paddingRight: SIZES.radius,
-                  alignItems: "center",
-                  borderColor: COLORS.lightGray1,
-                  borderWidth: 1,
-                }}
-                imageStyle={{
-                  marginLeft: 15,
-                  marginRight: 10,
-                  borderRadius: SIZES.radius,
-                  height: 130,
-                  width: 130,
-                  alignSelf: "center",
-                }}
-                item={item}
-                onPress={() => handeClickItem(item)}
-              />
-            )}
-          />
-        ) : (
-          <View
-            style={{
-              marginHorizontal: SIZES.padding,
-            }}
-          >
-            <Text style={{ ...FONTS.body4 }}>
-              No items found. Please chose the orther category or try again
-            </Text>
-          </View>
-        )}
-      </Section>
-    );
-  };
+  // const renderRecommendedSection = () => {
+  //   return (
+  //     <Section
+  //       title="Latest"
+  //       onPress={() => console.log("Show All Recommended")}
+  //     >
+  //       {recommends.length != 0 ? (
+  //         <FlatList
+  //           data={recommends}
+  //           keyExtractor={(item) => `${item.id}`}
+  //           horizontal
+  //           showsHorizontalScrollIndicator={false}
+  //           renderItem={({ item, index }) => (
+  //             <HorizontalFoodCard
+  //               containerStyle={{
+  //                 height: 160,
+  //                 width: SIZES.width * 0.85,
+  //                 marginVertical: 10,
+  //                 marginLeft: index == 0 ? SIZES.padding : 18,
+  //                 marginRight:
+  //                   index == recommends.length - 1 ? SIZES.padding : 0,
+  //                 paddingRight: SIZES.radius,
+  //                 alignItems: "center",
+  //                 borderColor: COLORS.lightGray1,
+  //                 borderWidth: 1,
+  //               }}
+  //               imageStyle={{
+  //                 marginLeft: 15,
+  //                 marginRight: 10,
+  //                 borderRadius: SIZES.radius,
+  //                 height: 130,
+  //                 width: 130,
+  //                 alignSelf: "center",
+  //               }}
+  //               item={item}
+  //               onPress={() => handeClickItem(item)}
+  //             />
+  //           )}
+  //         />
+  //       ) : (
+  //         <View
+  //           style={{
+  //             marginHorizontal: SIZES.padding,
+  //           }}
+  //         >
+  //           <Text style={{ ...FONTS.body4 }}>
+  //             No items found. Please chose the orther category or try again
+  //           </Text>
+  //         </View>
+  //       )}
+  //     </Section>
+  //   );
+  // };
 
   const renderPopularSection = () => {
     return (
@@ -327,10 +340,6 @@ const Home = ({ type }) => {
           <TouchableOpacity
             onPress={() => {
               dispatch(setSelectedCategory(item));
-              handleChangeCategory(
-                { id: item.id, name: item.name },
-                selectedMenuType
-              );
             }}
             style={{
               flexDirection: "row",
@@ -390,6 +399,8 @@ const Home = ({ type }) => {
           paddingHorizontal: SIZES.radius,
           borderRadius: SIZES.radius,
           backgroundColor: COLORS.lightGray2,
+          borderColor: COLORS.lightGray1,
+          borderWidth: 1,
         }}
       >
         {/* Icons */}
@@ -486,7 +497,7 @@ const Home = ({ type }) => {
         {/*  Popular */}
         {renderPopularSection()}
         {/*  Recommended */}
-        {renderRecommendedSection()}
+        {/* {renderRecommendedSection()} */}
 
         {renderMenuTypes()}
       </View>
@@ -514,69 +525,63 @@ const Home = ({ type }) => {
       )}
 
       {/* Flat List */}
-      {isLoading ? (
-        <View>
-          <Text>Spinner</Text>
-        </View>
-      ) : (
-        <FlatList
-          data={foods}
-          keyExtractor={(item) => `${item.id}`}
-          showsVerticalScrollIndicator={false}
-          ListHeaderComponent={content}
-          ListFooterComponent={
-            <View
-              style={{
-                height: 150,
-              }}
-            >
-              {foods.length == 0 ? (
-                <View
-                  style={{
-                    marginHorizontal: SIZES.padding,
-                  }}
-                >
-                  <Text style={{ ...FONTS.body4 }}>
-                    No items found. Please chose the orther category or try
-                    again
-                  </Text>
-                </View>
-              ) : (
-                <View></View>
-              )}
-            </View>
-          }
-          renderItem={({ item, index }) => {
-            return (
-              <HorizontalFoodCard
-                containerStyle={{
-                  height: 130,
-                  alignItems: "center",
+      <FlatList
+        data={foods}
+        keyExtractor={(item) => `${item.id}`}
+        showsVerticalScrollIndicator={false}
+        ListHeaderComponent={content}
+        ListFooterComponent={
+          <View
+            style={{
+              height: 150,
+            }}
+          >
+            {foods.length == 0 ? (
+              <View
+                style={{
                   marginHorizontal: SIZES.padding,
-                  marginBottom: SIZES.radius,
-                  borderColor: COLORS.lightGray1,
-                  borderWidth: 1,
-                }}
-                imageStyle={{
-                  alignSelf: "center",
-                  height: 110,
-                  width: 110,
-                  marginHorizontal: 10,
-                  borderRadius: SIZES.radius,
-                }}
-                item={item}
-                onPress={() => {
-                  handeClickItem(item);
-                  navigation.navigate("FoodDetail");
-                  dispatch(setSelectedFood(item));
                 }}
               >
-                {item.name}
-              </HorizontalFoodCard>
-            );
-          }}
-        />
-      )}
+                <Text style={{ ...FONTS.body4 }}>
+                  No items found. Please chose the orther category or try again
+                </Text>
+              </View>
+            ) : (
+              <View></View>
+            )}
+          </View>
+        }
+        renderItem={({ item, index }) => {
+          return (
+            <HorizontalFoodCard
+              containerStyle={{
+                height: 130,
+                alignItems: "center",
+                marginHorizontal: SIZES.padding,
+                marginBottom: SIZES.radius,
+                borderColor: COLORS.lightGray1,
+                borderWidth: 1,
+              }}
+              imageStyle={{
+                alignSelf: "center",
+                height: 110,
+                width: 110,
+                marginHorizontal: 10,
+                borderRadius: SIZES.radius,
+              }}
+              item={item}
+              onPress={() => {
+                handeClickItem(item);
+                navigation.navigate("FoodDetail", {
+                  foodId: item.id,
+                });
+              }}
+            >
+              {item.name}
+            </HorizontalFoodCard>
+          );
+        }}
+      />
     </View>
   );
 };

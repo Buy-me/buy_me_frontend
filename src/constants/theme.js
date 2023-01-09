@@ -19,8 +19,10 @@ export const COLORS = {
   gray2: "#BBBDC1",
   gray3: "#CFD0D7",
   gray4: "#3c3c4359",
+  lightGray: "#FFFFFF",
   lightGray1: "#DDDDDD",
   lightGray2: "#F5F5F8",
+  lightGray3: "#000000",
   white2: "#FBFBFB",
   white: "#FFFFFF",
   black: "#000000",
@@ -104,8 +106,8 @@ export const COLORS_STATUS = {
   },
   cancel: {
     color: COLORS.red,
-  }
-}
+  },
+};
 
 const appTheme = { COLORS, SIZES, FONTS, COLORS_STATUS };
 

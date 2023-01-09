@@ -19,6 +19,39 @@ const foodApi = {
           max_price: params.maxPrice || 0,
           rating: params.rating || 0,
           search: params.search || "",
+          limit: 3,
+        },
+      });
+      return { response };
+    } catch (err) {
+      return { err };
+    }
+  },
+  getList: async (pagination, filters, categoryId, sort) => {
+    try {
+      const response = await privateClient.get(foodEndpoints.list, {
+        params: {
+          limit: pagination.limit,
+          page: pagination.page,
+          search: filters.search,
+          rating: filters.rating,
+          min_price: filters.minPrice,
+          max_price: filters.maxPrice,
+          category_id: categoryId || 0,
+          sort: sort,
+        },
+      });
+      return { response };
+    } catch (err) {
+      return { err };
+    }
+  },
+  getPopularList: async () => {
+    try {
+      const response = await privateClient.get(foodEndpoints.list, {
+        params: {
+          limit: 4,
+          sort: "updated_at desc",
         },
       });
       return { response };

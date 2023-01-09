@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
   Image,
   TouchableOpacity,
   ToastAndroid,
+  Keyboard,
 } from "react-native";
 
 import { images, icons, FONTS, SIZES, COLORS } from "../../constants";
@@ -16,14 +17,14 @@ import utils from "../../utils";
 import userApi from "../../api/userApi";
 
 const SignUp = ({ navigation }) => {
-  const [email, setEmail] = React.useState("binhdinhreact@gmail.com");
-  const [username, setUsername] = React.useState("thaibinhdeptrai");
-  const [password, setPassword] = React.useState("123456");
+  const [email, setEmail] = React.useState("");
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
   const [emailError, setEmailError] = React.useState("");
   const [usernameError, setUsernameError] = React.useState("");
   const [passwordError, setPasswordError] = React.useState("");
-
   const [showPass, setShowPass] = React.useState(false);
+  const [showFooter, setShowFooter] = useState(true);
 
   function isEnabledSignUp() {
     return (
@@ -35,13 +36,25 @@ const SignUp = ({ navigation }) => {
       passwordError == ""
     );
   }
+  useEffect(() => {
+    const keyboardShowListener = Keyboard.addListener("keyboardDidShow", () => {
+      setShowFooter(false);
+    });
+    const keyboardHideListener = Keyboard.addListener("keyboardDidHide", () => {
+      setShowFooter(true);
+    });
 
+    () => {
+      keyboardShowListener.remove();
+      keyboardHideListener.remove();
+    };
+  }, []);
   const handleResgister = async () => {
     const { err } = await userApi.register({
       email: email,
       password: password,
-      first_name: username,
-      last_name: "",
+      first_name: "",
+      last_name: username,
     });
     if (err) {
       alert(utils.utils.capitalizeFirstLetter(err.message));
@@ -56,6 +69,7 @@ const SignUp = ({ navigation }) => {
       screenName="signup"
       title="Getting Started"
       subtitle="Create an account to continue!"
+      showFooter={showFooter}
       chidren={
         <View
           style={{
@@ -69,6 +83,7 @@ const SignUp = ({ navigation }) => {
             label="Email"
             keyboardType="email-address"
             autoCompleteType="email"
+            placeholder={"Email"}
             value={email}
             onChange={(value) => {
               // Validate email
@@ -109,7 +124,7 @@ const SignUp = ({ navigation }) => {
           ></View>
           {/* Username */}
           <FormInput
-            label="Username"
+            label="Name"
             keyboardType="username"
             autoCompleteType="username"
             value={username}
@@ -117,6 +132,7 @@ const SignUp = ({ navigation }) => {
               utils.utils.validateUsername(value, setUsernameError);
               setUsername(value);
             }}
+            placeholder="Name"
             errorMsg={usernameError}
             appendComponent={
               <View
@@ -143,6 +159,7 @@ const SignUp = ({ navigation }) => {
           {/* Password */}
           <FormInput
             label="Password"
+            placeholder={"Password"}
             secureTextEntry={!showPass}
             autoCompleteType="password"
             containerStyle={{

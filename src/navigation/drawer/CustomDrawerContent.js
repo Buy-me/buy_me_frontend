@@ -140,19 +140,27 @@ const CustomDrawerContent = ({ navigation, setSelectedTab, selectedTab }) => {
               backgroundColor: COLORS.lightGray1,
             }}
           ></View>
-          <CustomDrawerItem label={"Track Your Order"} icon={icons.location} onPress={() => navigation.navigate("Order History")} />
-          <CustomDrawerItem label={"My Cart"} icon={icons.coupon} onPress={() => navigation.navigate("MyCart")}/>
+          <CustomDrawerItem
+            label={"Track Your Order"}
+            icon={icons.location}
+            onPress={() => navigation.navigate("Order History")}
+          />
+          <CustomDrawerItem
+            label={"My Cart"}
+            icon={icons.coupon}
+            onPress={() => navigation.navigate("MyCart")}
+          />
           <CustomDrawerItem
             label={"Settings"}
             icon={icons.setting}
             onPress={() => navigation.navigate("MyAccount")}
           />
-          <CustomDrawerItem
+          {/* <CustomDrawerItem
             label={"Invite a  Friend"}
             icon={icons.profile}
             onPress={() => navigation.navigate("ChangePassword")}
           />
-          <CustomDrawerItem label={"Help Center"} icon={icons.help} />
+          <CustomDrawerItem label={"Help Center"} icon={icons.help} /> */}
         </View>
 
         {/* Logout */}

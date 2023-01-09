@@ -23,7 +23,7 @@ const VerticalFoodCard = ({ containerStyle, item, onPress }) => {
         }}
       >
         {/* Calories */}
-        <View
+        {/* <View
           style={{
             flex: 1,
             flexDirection: "row",
@@ -44,7 +44,7 @@ const VerticalFoodCard = ({ containerStyle, item, onPress }) => {
           >
             {item.calories || 100} Calories
           </Text>
-        </View>
+        </View> */}
 
         {/* Favourite */}
         {/* <Image

@@ -21,23 +21,24 @@ import utils from "../../utils";
 const Favourite = () => {
   // const [myFavouriteList, setMyFavouriteList] = useState([]);
   const navigation = useNavigation();
-  const dispatch = useDispatch()
-  const { favouriteProducts } = useSelector(state => state.favourite)
+  const dispatch = useDispatch();
+  const { favouriteProducts } = useSelector((state) => state.favourite);
 
   useEffect(() => {
     const getFavouriteList = async () => {
       const { response, err } = await favouriteApi.getList();
-      dispatch(setFavouriteProducts(response.data))
+      dispatch(setFavouriteProducts(response.data));
     };
     getFavouriteList();
   }, []);
 
   const handleAddToCart = (item) => {
     const addTocart = async () => {
-      const { response, err } = await cartApi.addItemToCart({
+      const { response, err } = await cartApi.addToCart({
         food_id: item.id,
         quantity: 1,
       });
+
       if (err) {
         alert(utils.utils.capitalizeFirstLetter(err.message));
         return;

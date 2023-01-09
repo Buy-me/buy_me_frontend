@@ -35,6 +35,7 @@ const ForgotPassword = ({ navigation }) => {
     <AuthLayout
       screenName="signin"
       title="Forgot your password ?"
+      showFooter={true}
       subtitle="Enter your email address to retrieve your password"
       chidren={
         <View
